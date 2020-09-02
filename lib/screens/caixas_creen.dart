@@ -3,6 +3,7 @@ import 'package:meu_caixa_flutter/components/notacontainer.dart';
 import 'package:meu_caixa_flutter/contantes.dart';
 
 class CaixaScreen extends StatelessWidget {
+  static String screenId = 'caixa_screen';
   @override
   Widget build(BuildContext context) {
     return Scaffold(

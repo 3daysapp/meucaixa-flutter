@@ -18,3 +18,9 @@ const kDefaultTextFieldStyle = InputDecoration(
   contentPadding: EdgeInsets.all(10), // Espaçamento entre bordas e texto
   border: OutlineInputBorder(), // Essa borda é a que você procura
 );
+
+const Color kRichBlackColor = Color(0xFF011627);
+const Color kRadicalRedColor = Color(0xFFFF3366);
+const Color kTiffanyBlueColor = Color(0xFF2EC4B6);
+const Color kCulturedColor = Color(0xFFF6F7F8);
+const Color kCarolinaColor = Color(0xFF20A4F3);
