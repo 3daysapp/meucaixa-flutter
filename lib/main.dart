@@ -2,14 +2,16 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:meu_caixa_flutter/screens/welcome_screen.dart';
 import 'routes.dart';
+import 'dart:ui' as ui;
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
+  final Future<FirebaseApp> _initialization = Firebase.initializeApp();
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: Firebase.initializeApp(),
+      future: _initialization,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           return MaterialApp(
@@ -18,27 +20,15 @@ class MyApp extends StatelessWidget {
           );
         } else {
           return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  'Aguarde, carregando!',
-                  style: TextStyle(
-                    fontSize: 20,
-                  ),
+            child: Container(
+              color: Colors.white,
+              child: SizedBox(
+                height: 100,
+                width: 100,
+                child: CircularProgressIndicator(
+                  backgroundColor: Colors.lightBlueAccent,
                 ),
-                SizedBox(
-                  height: 20,
-                ),
-                SizedBox(
-                  height: 100,
-                  width: 100,
-                  child: CircularProgressIndicator(
-                    backgroundColor: Colors.lightBlueAccent,
-                  ),
-                ),
-              ],
+              ),
             ),
           );
         }
