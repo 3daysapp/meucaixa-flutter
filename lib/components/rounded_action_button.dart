@@ -10,11 +10,11 @@ class RoundedActionButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+      padding: EdgeInsets.symmetric(vertical: 5, horizontal: 20),
       child: Material(
-        color: color,
-        borderRadius: BorderRadius.circular(30),
-        elevation: 5,
+        color: color == null ? Theme.of(context).primaryColor : color,
+        borderRadius: BorderRadius.circular(10),
+        elevation: 0,
         child: MaterialButton(
           onPressed: callback,
           minWidth: 200,

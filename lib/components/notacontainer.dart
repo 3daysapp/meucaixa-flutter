@@ -29,7 +29,7 @@ class _NotaContainerState extends State<NotaContainer> {
         margin: EdgeInsets.all(5),
         decoration: BoxDecoration(
           shape: BoxShape.rectangle,
-          color: Colors.grey,
+          color: Theme.of(context).secondaryHeaderColor,
           borderRadius: BorderRadius.circular(10),
         ),
         child: Column(

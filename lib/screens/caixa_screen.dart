@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:meu_caixa_flutter/components/notacontainer.dart';
 import 'package:meu_caixa_flutter/contantes.dart';
+import '../components/display_alert.dart';
 
 class CaixaScreen extends StatelessWidget {
   static String screenId = 'caixa_screen';
@@ -52,166 +53,192 @@ class _CaixaScreenBody extends State<CaixaScreenBody> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Container(
-              color: Colors.white,
-              child: TextFormField(
-                onChanged: (value) {
-                  setState(() {
-                    if (value == null || value.length == 0) {
-                      widget._caixa = '0.00';
-                    } else {
-                      widget._caixa = value.replaceAll(',', '.');
-                    }
-                    calculaTotal();
-                  });
-                },
-                style: TextStyle(
-                  color: Colors.black,
-                ),
-                decoration: kDefaultTextFieldStyle.copyWith(
-                  labelText: 'Valor de abertura do caixa',
-                  labelStyle: TextStyle(
+    return WillPopScope(
+      onWillPop: () {
+        return showDialog(
+              context: context,
+              builder: (context) => new AlertDialog(
+                title: new Text('Aviso'),
+                content: new Text('Deseja realmente sair do app?'),
+                actions: <Widget>[
+                  FlatButton(
+                    onPressed: () => Navigator.of(context).pop(false),
+                    child: Text("Não"),
+                  ),
+                  SizedBox(height: 16),
+                  FlatButton(
+                    onPressed: () => Navigator.of(context).pop(true),
+                    child: Text("Sim"),
+                  ),
+                ],
+              ),
+            ) ??
+            false;
+      },
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Container(
+                color: Colors.white,
+                child: TextFormField(
+                  keyboardType: TextInputType.numberWithOptions(
+                    decimal: true,
+                  ),
+                  onChanged: (value) {
+                    setState(() {
+                      if (value == null || value.length == 0) {
+                        widget._caixa = '0.00';
+                      } else {
+                        widget._caixa = value.replaceAll(',', '.');
+                      }
+                      calculaTotal();
+                    });
+                  },
+                  style: TextStyle(
                     color: Colors.black,
                   ),
-                  suffix: Text('R\$'),
+                  decoration: kDefaultTextFieldStyle.copyWith(
+                    labelText: 'Valor de abertura do caixa',
+                    labelStyle: TextStyle(
+                      color: Colors.black,
+                    ),
+                    suffix: Text('R\$'),
+                  ),
                 ),
               ),
             ),
-          ),
-          Row(
-            children: [
-              NotaContainer(
-                label: 'Notas de 2R\$',
-                adicionaNotaFunc: () {
-                  setState(() {
-                    widget._notas2++;
-                    calculaTotal();
-                  });
-                },
-                removeNotaFunc: () {
-                  if (widget._notas2 > 0) {
+            Row(
+              children: [
+                NotaContainer(
+                  label: 'Notas de 2R\$',
+                  adicionaNotaFunc: () {
                     setState(() {
-                      widget._notas2--;
+                      widget._notas2++;
                       calculaTotal();
                     });
-                  }
-                },
-                quantidade: widget._notas2,
-              ),
-              NotaContainer(
-                label: 'Notas de 5R\$',
-                adicionaNotaFunc: () {
-                  setState(() {
-                    widget._notas5++;
-                    calculaTotal();
-                  });
-                },
-                removeNotaFunc: () {
-                  if (widget._notas5 > 0) {
+                  },
+                  removeNotaFunc: () {
+                    if (widget._notas2 > 0) {
+                      setState(() {
+                        widget._notas2--;
+                        calculaTotal();
+                      });
+                    }
+                  },
+                  quantidade: widget._notas2,
+                ),
+                NotaContainer(
+                  label: 'Notas de 5R\$',
+                  adicionaNotaFunc: () {
                     setState(() {
-                      widget._notas5--;
+                      widget._notas5++;
                       calculaTotal();
                     });
-                  }
-                },
-                quantidade: widget._notas5,
-              ),
-            ],
-          ),
-          Row(
-            children: [
-              NotaContainer(
-                label: 'Notas de 10R\$',
-                adicionaNotaFunc: () {
-                  setState(() {
-                    widget._notas10++;
-                    calculaTotal();
-                  });
-                },
-                removeNotaFunc: () {
-                  if (widget._notas10 > 0) {
-                    setState(() {
-                      widget._notas10--;
-                      calculaTotal();
-                    });
-                  }
-                },
-                quantidade: widget._notas10,
-              ),
-              NotaContainer(
-                label: 'Notas de 20R\$',
-                adicionaNotaFunc: () {
-                  setState(() {
-                    widget._notas20++;
-                    calculaTotal();
-                  });
-                },
-                removeNotaFunc: () {
-                  if (widget._notas20 > 0) {
-                    setState(() {
-                      widget._notas20--;
-                      calculaTotal();
-                    });
-                  }
-                },
-                quantidade: widget._notas20,
-              ),
-            ],
-          ),
-          Row(
-            children: [
-              NotaContainer(
-                label: 'Notas de 50R\$',
-                adicionaNotaFunc: () {
-                  setState(() {
-                    widget._notas50++;
-                    calculaTotal();
-                  });
-                },
-                removeNotaFunc: () {
-                  if (widget._notas50 > 0) {
-                    setState(() {
-                      widget._notas50--;
-                      calculaTotal();
-                    });
-                  }
-                },
-                quantidade: widget._notas50,
-              ),
-              NotaContainer(
-                label: 'Notas de 100R\$',
-                adicionaNotaFunc: () {
-                  setState(() {
-                    widget._notas100++;
-                    calculaTotal();
-                  });
-                },
-                removeNotaFunc: () {
-                  if (widget._notas100 > 0) {
-                    setState(() {
-                      widget._notas100--;
-                      calculaTotal();
-                    });
-                  }
-                },
-                quantidade: widget._notas100,
-              ),
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              'Total: ${widget._total} R\$',
-              style: kDefaultTotaisTextStyle,
+                  },
+                  removeNotaFunc: () {
+                    if (widget._notas5 > 0) {
+                      setState(() {
+                        widget._notas5--;
+                        calculaTotal();
+                      });
+                    }
+                  },
+                  quantidade: widget._notas5,
+                ),
+              ],
             ),
-          )
-        ],
+            Row(
+              children: [
+                NotaContainer(
+                  label: 'Notas de 10R\$',
+                  adicionaNotaFunc: () {
+                    setState(() {
+                      widget._notas10++;
+                      calculaTotal();
+                    });
+                  },
+                  removeNotaFunc: () {
+                    if (widget._notas10 > 0) {
+                      setState(() {
+                        widget._notas10--;
+                        calculaTotal();
+                      });
+                    }
+                  },
+                  quantidade: widget._notas10,
+                ),
+                NotaContainer(
+                  label: 'Notas de 20R\$',
+                  adicionaNotaFunc: () {
+                    setState(() {
+                      widget._notas20++;
+                      calculaTotal();
+                    });
+                  },
+                  removeNotaFunc: () {
+                    if (widget._notas20 > 0) {
+                      setState(() {
+                        widget._notas20--;
+                        calculaTotal();
+                      });
+                    }
+                  },
+                  quantidade: widget._notas20,
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                NotaContainer(
+                  label: 'Notas de 50R\$',
+                  adicionaNotaFunc: () {
+                    setState(() {
+                      widget._notas50++;
+                      calculaTotal();
+                    });
+                  },
+                  removeNotaFunc: () {
+                    if (widget._notas50 > 0) {
+                      setState(() {
+                        widget._notas50--;
+                        calculaTotal();
+                      });
+                    }
+                  },
+                  quantidade: widget._notas50,
+                ),
+                NotaContainer(
+                  label: 'Notas de 100R\$',
+                  adicionaNotaFunc: () {
+                    setState(() {
+                      widget._notas100++;
+                      calculaTotal();
+                    });
+                  },
+                  removeNotaFunc: () {
+                    if (widget._notas100 > 0) {
+                      setState(() {
+                        widget._notas100--;
+                        calculaTotal();
+                      });
+                    }
+                  },
+                  quantidade: widget._notas100,
+                ),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                'Total: ${widget._total} R\$',
+                style: kDefaultTotaisTextStyle,
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

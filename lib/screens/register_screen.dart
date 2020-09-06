@@ -14,23 +14,26 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
+  final _formKey = GlobalKey<FormState>();
   FirebaseAuth auth = FirebaseAuth.instance;
   void registerUser() async {
-    toggleSpinner();
-    try {
-      await auth.createUserWithEmailAndPassword(
-          email: userEmail, password: userPassword);
-      User user = auth.currentUser;
-      await user.updateProfile(displayName: username);
+    if (_formKey.currentState.validate()) {
       toggleSpinner();
-      Navigator.pushNamed(context, CaixaScreen.screenId);
-    } on FirebaseAuthException catch (e) {
-      toggleSpinner();
-      if (e.code == 'weak-password') {
-      } else if (e.code == 'email-already-in-use') {}
-    } catch (e) {
-      toggleSpinner();
-      print(e);
+      try {
+        await auth.createUserWithEmailAndPassword(
+            email: userEmail, password: userPassword);
+        User user = auth.currentUser;
+        await user.updateProfile(displayName: username);
+        toggleSpinner();
+        Navigator.pushNamed(context, CaixaScreen.screenId);
+      } on FirebaseAuthException catch (e) {
+        toggleSpinner();
+        if (e.code == 'weak-password') {
+        } else if (e.code == 'email-already-in-use') {}
+      } catch (e) {
+        toggleSpinner();
+        print(e);
+      }
     }
   }
 
@@ -51,18 +54,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
         body: ModalProgressHUD(
           inAsyncCall: showSpinner,
           child: Container(
-            color: kRichBlackColor,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(
-                  height: 200,
-                  width: 200,
-                  child: Hero(
-                    tag: 'logo',
-                    child: Image(
-                      image: AssetImage('images/meucaixa-logo.png'),
+                Flexible(
+                  child: SizedBox(
+                    height: 200,
+                    width: 200,
+                    child: Hero(
+                      tag: 'logo',
+                      child: Image(
+                        image: AssetImage('images/meucaixa-logo.png'),
+                      ),
                     ),
                   ),
                 ),
@@ -75,6 +79,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                 ),
                 Form(
+                  key: _formKey,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -83,47 +88,66 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         callback: (newValue) {
                           userEmail = newValue;
                         },
-                        color: Colors.white,
                         hintText: 'Seu e-mail',
                         icon: Icons.email,
                         inputType: TextInputType.emailAddress,
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return "Por favor, informe seu email!";
+                          } else {
+                            return null;
+                          }
+                        },
                       ),
                       DefaultTextField(
                         callback: (newValue) {
                           userPassword = newValue;
                         },
-                        color: Colors.white,
                         hintText: 'Sua senha',
                         obscureText: true,
                         icon: Icons.vpn_key,
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return "Por favor, informe uma senha!";
+                          } else {
+                            return null;
+                          }
+                        },
                       ),
                       DefaultTextField(
                         callback: (newValue) {
                           username = newValue;
                         },
-                        color: Colors.white,
                         hintText: 'Seu nome',
+                        inputAction: TextInputAction.done,
                         icon: Icons.person,
-                      ),
-                      RoundedActionButton(
-                        color: Colors.green,
-                        label: 'Cadastrar',
-                        callback: () {
-                          print('Clicou no botão');
-                          setState(() {
-                            registerUser();
-                          });
-                        },
-                      ),
-                      RoundedActionButton(
-                        color: kRadicalRedColor,
-                        label: 'Cancelar',
-                        callback: () {
-                          Navigator.pop(context);
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return "Por favor, informe seu nome!";
+                          } else {
+                            return null;
+                          }
                         },
                       ),
                     ],
                   ),
+                ),
+                RoundedActionButton(
+                  color: Colors.green,
+                  label: 'Cadastrar',
+                  callback: () {
+                    print('Clicou no botão');
+                    setState(() {
+                      registerUser();
+                    });
+                  },
+                ),
+                RoundedActionButton(
+                  color: kRadicalRedColor,
+                  label: 'Cancelar',
+                  callback: () {
+                    Navigator.pop(context);
+                  },
                 ),
               ],
             ),
