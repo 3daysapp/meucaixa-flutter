@@ -6,11 +6,13 @@ class DefaultTextField extends StatelessWidget {
   final IconData icon;
   final bool obscureText;
   final Color color;
+  final TextInputType inputType;
   DefaultTextField(
       {this.callback,
       this.obscureText = false,
       this.color = Colors.white,
       this.icon,
+      this.inputType = TextInputType.text,
       @required this.hintText});
 
   @override
@@ -20,6 +22,7 @@ class DefaultTextField extends StatelessWidget {
       child: TextFormField(
         onChanged: callback,
         obscureText: obscureText,
+        keyboardType: TextInputType.emailAddress,
         decoration: InputDecoration(
           hintText: hintText,
           filled: true,
