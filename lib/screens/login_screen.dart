@@ -5,6 +5,7 @@ import 'package:meu_caixa_flutter/components/rounded_action_button.dart';
 import 'package:meu_caixa_flutter/screens/caixa_screen.dart';
 import 'package:meu_caixa_flutter/screens/register_screen.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../components/display_alert.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -16,13 +17,20 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   FirebaseAuth _auth = FirebaseAuth.instance;
+  SharedPreferences _prefs;
   void signIn() async {
     toggleSpinner();
     try {
       UserCredential user = await _auth.signInWithEmailAndPassword(
           email: _userEmail, password: _userPassword);
       if (user != null) {
+        if (saveUserEmail) {
+          _prefs.setBool('shouldSaveUserEmail', saveUserEmail);
+          _prefs.setString('userEmail', _userEmail);
+        }
         toggleSpinner();
+        _userEmail = "";
+        _userPassword = "";
         Navigator.pushNamed(context, CaixaScreen.screenId);
       } else {
         toggleSpinner();
@@ -59,6 +67,30 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
+  @override
+  void initState() {
+    super.initState();
+    loadSharedPrefences();
+  }
+
+  void loadSharedPrefences() async {
+    _prefs = await SharedPreferences.getInstance();
+    loadUserEmail();
+  }
+
+  void loadUserEmail() async {
+    if (_prefs.containsKey('shouldSaveUserEmail')) {
+      setState(() {
+        saveUserEmail = _prefs.getBool('shouldSaveUserEmail');
+      });
+      if (saveUserEmail) {
+        setState(() {
+          _userEmail = _prefs.getString('userEmail');
+        });
+      }
+    }
+  }
+
   void toggleSpinner() {
     setState(() {
       _showSpinner = !_showSpinner;
@@ -68,6 +100,7 @@ class _LoginScreenState extends State<LoginScreen> {
   String _userEmail;
   String _userPassword;
   bool _showSpinner = false;
+  bool saveUserEmail = false;
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
@@ -102,6 +135,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         hintText: 'Seu email',
                         inputType: TextInputType.emailAddress,
                         icon: Icons.email,
+                        initialValue: _userEmail,
                         callback: (newValue) {
                           _userEmail = newValue;
                         },
@@ -129,6 +163,22 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ],
                   ),
+                ),
+                Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Checkbox(
+                        value: saveUserEmail,
+                        onChanged: (newValue) async {
+                          setState(() {
+                            saveUserEmail = newValue;
+                          });
+                        },
+                      ),
+                    ),
+                    Text('Lembrar email'),
+                  ],
                 ),
                 RoundedActionButton(
                   callback: () {

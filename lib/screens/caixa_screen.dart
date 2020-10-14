@@ -1,21 +1,47 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_masked_text/flutter_masked_text.dart';
+import 'package:meu_caixa_flutter/components/default_text_field.dart';
 import 'package:meu_caixa_flutter/components/notacontainer.dart';
 import 'package:meu_caixa_flutter/contantes.dart';
-import '../components/display_alert.dart';
+import 'package:meu_caixa_flutter/screens/add_expense_screen.dart';
 
 class CaixaScreen extends StatelessWidget {
   static String screenId = 'caixa_screen';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      floatingActionButton: FloatActionButtonAddDespesas(),
       appBar: AppBar(
-        title: Center(
-          child: Text(
-            'Meu caixa',
-          ),
+        title: Text(
+          'Caixa',
         ),
       ),
       body: CaixaScreenBody(),
+    );
+  }
+}
+
+class FloatActionButtonAddDespesas extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return FloatingActionButton(
+      onPressed: () {
+        showModalBottomSheet(
+            context: context,
+            builder: (context) => SingleChildScrollView(
+                  padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).viewInsets.bottom),
+                  child: AddExpenseScreen(),
+                ));
+      },
+      child: Icon(
+        Icons.add,
+        color: Colors.white,
+        size: 45,
+      ),
+      backgroundColor: kRadicalRedColor,
+      tooltip: 'Adiciona uma nova despesa ao caixa',
     );
   }
 }
@@ -29,6 +55,8 @@ class CaixaScreenBody extends StatefulWidget {
   int _notas100 = 0;
   String _caixa;
   String _total = '0.00';
+  String _scielo = '0.00';
+  String _stelo = '0.00';
 
   @override
   _CaixaScreenBody createState() => _CaixaScreenBody();
@@ -41,14 +69,41 @@ class _CaixaScreenBody extends State<CaixaScreenBody> {
     if (widget._caixa != null) {
       caixa = double.parse(widget._caixa);
     }
+    double scielo = scieloController.numberValue;
+    double stelo = steloController.numberValue;
+    print(widget._scielo);
     total += widget._notas2 * 2;
     total += widget._notas5 * 5;
     total += widget._notas10 * 10;
     total += widget._notas20 * 20;
     total += widget._notas50 * 50;
     total += widget._notas100 * 100;
+    total += scielo;
+    total += stelo;
     total += caixa;
     widget._total = total.toStringAsFixed(2);
+    print(widget._total);
+  }
+
+  var scieloController =
+      MoneyMaskedTextController(decimalSeparator: ',', thousandSeparator: '.');
+  var steloController =
+      MoneyMaskedTextController(decimalSeparator: ',', thousandSeparator: '.');
+
+  void decreaseNoteAmount(note) {
+    setState(() {
+      note--;
+      calculaTotal();
+    });
+  }
+
+  void increaseNoteAmount(note) {
+    if (note > 0) {
+      setState(() {
+        note++;
+        calculaTotal();
+      });
+    }
   }
 
   @override
@@ -79,37 +134,26 @@ class _CaixaScreenBody extends State<CaixaScreenBody> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Container(
-                color: Colors.white,
-                child: TextFormField(
-                  keyboardType: TextInputType.numberWithOptions(
-                    decimal: true,
-                  ),
-                  onChanged: (value) {
-                    setState(() {
-                      if (value == null || value.length == 0) {
-                        widget._caixa = '0.00';
-                      } else {
-                        widget._caixa = value.replaceAll(',', '.');
-                      }
-                      calculaTotal();
-                    });
-                  },
-                  style: TextStyle(
-                    color: Colors.black,
-                  ),
-                  decoration: kDefaultTextFieldStyle.copyWith(
-                    labelText: 'Valor de abertura do caixa',
-                    labelStyle: TextStyle(
-                      color: Colors.black,
-                    ),
-                    suffix: Text('R\$'),
-                  ),
-                ),
-              ),
-            ),
+            DefaultTextField(
+                horizontalPadding: 10,
+                hintText: 'Cartão Scielo',
+                controller: scieloController,
+                callback: (value) {
+                  setState(() {
+                    widget._scielo = value;
+                    calculaTotal();
+                  });
+                }),
+            DefaultTextField(
+                horizontalPadding: 10,
+                hintText: 'Cartão Stelo',
+                controller: steloController,
+                callback: (value) {
+                  setState(() {
+                    widget._stelo = value;
+                    calculaTotal();
+                  });
+                }),
             Row(
               children: [
                 NotaContainer(
@@ -235,6 +279,21 @@ class _CaixaScreenBody extends State<CaixaScreenBody> {
               child: Text(
                 'Total: ${widget._total} R\$',
                 style: kDefaultTotaisTextStyle,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(5.0),
+              child: RaisedButton(
+                onPressed: () {},
+                child: Text(
+                  'Salvar Caixa',
+                  style: TextStyle(
+                    fontSize: 18,
+                  ),
+                ),
+                color: Colors.green,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5)),
               ),
             )
           ],

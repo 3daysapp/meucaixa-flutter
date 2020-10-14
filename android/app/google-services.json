@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "430756463775",
+    "firebase_url": "https://meucaixa-30f8c.firebaseio.com",
+    "project_id": "meucaixa-30f8c",
+    "storage_bucket": "meucaixa-30f8c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:430756463775:android:88ea0cc197a1c8bb1d8eaa",
+        "android_client_info": {
+          "package_name": "br.com.alvarocda.meucaixa.meucaixa"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "430756463775-h4o16qqbqn51rsj0gh70vje5jn7m0ap5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCVGMCDLbgbeAOZG8lMhxvy7B1C14eO_Rw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "430756463775-h4o16qqbqn51rsj0gh70vje5jn7m0ap5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

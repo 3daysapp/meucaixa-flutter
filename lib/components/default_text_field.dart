@@ -9,24 +9,32 @@ class DefaultTextField extends StatelessWidget {
   final TextInputType inputType;
   final Function validator;
   final TextInputAction inputAction;
+  final double horizontalPadding;
+  final String initialValue;
+  final controller;
   DefaultTextField(
       {this.callback,
       this.obscureText = false,
       this.icon,
+      this.horizontalPadding = 20,
       this.inputAction = TextInputAction.next,
       this.inputType = TextInputType.text,
-      this.validator = null,
+      this.initialValue,
+      this.validator,
+      this.controller,
       @required this.hintText});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+      padding: EdgeInsets.symmetric(vertical: 5, horizontal: horizontalPadding),
       child: TextFormField(
+        initialValue: initialValue,
         onChanged: callback,
         obscureText: obscureText,
-        keyboardType: TextInputType.emailAddress,
+        keyboardType: inputType,
         validator: validator,
+        controller: controller,
         textInputAction: inputAction,
         onFieldSubmitted: (_) => {
           if (inputAction == TextInputAction.next)

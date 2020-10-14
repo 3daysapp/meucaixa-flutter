@@ -51,105 +51,107 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: ModalProgressHUD(
-          inAsyncCall: showSpinner,
-          child: Container(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Flexible(
-                  child: SizedBox(
-                    height: 200,
-                    width: 200,
-                    child: Hero(
-                      tag: 'logo',
-                      child: Image(
-                        image: AssetImage('images/meucaixa-logo.png'),
+        body: Center(
+          child: SingleChildScrollView(
+            child: ModalProgressHUD(
+              inAsyncCall: showSpinner,
+              child: Container(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      height: 200,
+                      width: 200,
+                      child: Hero(
+                        tag: 'logo',
+                        child: Image(
+                          image: AssetImage('images/meucaixa-logo.png'),
+                        ),
                       ),
                     ),
-                  ),
-                ),
-                Text(
-                  'Meu Caixa - Cadastro',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 25,
-                  ),
-                ),
-                Form(
-                  key: _formKey,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      DefaultTextField(
-                        callback: (newValue) {
-                          userEmail = newValue;
-                        },
-                        hintText: 'Seu e-mail',
-                        icon: Icons.email,
-                        inputType: TextInputType.emailAddress,
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return "Por favor, informe seu email!";
-                          } else {
-                            return null;
-                          }
-                        },
+                    Text(
+                      'Meu Caixa - Cadastro',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 25,
                       ),
-                      DefaultTextField(
-                        callback: (newValue) {
-                          userPassword = newValue;
-                        },
-                        hintText: 'Sua senha',
-                        obscureText: true,
-                        icon: Icons.vpn_key,
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return "Por favor, informe uma senha!";
-                          } else {
-                            return null;
-                          }
-                        },
+                    ),
+                    Form(
+                      key: _formKey,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          DefaultTextField(
+                            callback: (newValue) {
+                              userEmail = newValue;
+                            },
+                            hintText: 'Seu e-mail',
+                            icon: Icons.email,
+                            inputType: TextInputType.emailAddress,
+                            validator: (value) {
+                              if (value.isEmpty) {
+                                return "Por favor, informe seu email!";
+                              } else {
+                                return null;
+                              }
+                            },
+                          ),
+                          DefaultTextField(
+                            callback: (newValue) {
+                              userPassword = newValue;
+                            },
+                            hintText: 'Sua senha',
+                            obscureText: true,
+                            icon: Icons.vpn_key,
+                            validator: (value) {
+                              if (value.isEmpty) {
+                                return "Por favor, informe uma senha!";
+                              } else {
+                                return null;
+                              }
+                            },
+                          ),
+                          DefaultTextField(
+                            callback: (newValue) {
+                              username = newValue;
+                            },
+                            hintText: 'Seu nome',
+                            inputAction: TextInputAction.done,
+                            icon: Icons.person,
+                            validator: (value) {
+                              if (value.isEmpty) {
+                                return "Por favor, informe seu nome!";
+                              } else {
+                                return null;
+                              }
+                            },
+                          ),
+                        ],
                       ),
-                      DefaultTextField(
-                        callback: (newValue) {
-                          username = newValue;
-                        },
-                        hintText: 'Seu nome',
-                        inputAction: TextInputAction.done,
-                        icon: Icons.person,
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return "Por favor, informe seu nome!";
-                          } else {
-                            return null;
-                          }
-                        },
-                      ),
-                    ],
-                  ),
+                    ),
+                    RoundedActionButton(
+                      color: Colors.green,
+                      label: 'Cadastrar',
+                      callback: () {
+                        print('Clicou no botão');
+                        setState(() {
+                          registerUser();
+                        });
+                      },
+                    ),
+                    RoundedActionButton(
+                      color: kRadicalRedColor,
+                      label: 'Cancelar',
+                      callback: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ],
                 ),
-                RoundedActionButton(
-                  color: Colors.green,
-                  label: 'Cadastrar',
-                  callback: () {
-                    print('Clicou no botão');
-                    setState(() {
-                      registerUser();
-                    });
-                  },
-                ),
-                RoundedActionButton(
-                  color: kRadicalRedColor,
-                  label: 'Cancelar',
-                  callback: () {
-                    Navigator.pop(context);
-                  },
-                ),
-              ],
+              ),
             ),
           ),
         ),
