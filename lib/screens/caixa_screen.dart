@@ -28,12 +28,10 @@ class FloatActionButtonAddDespesas extends StatelessWidget {
     return FloatingActionButton(
       onPressed: () {
         showModalBottomSheet(
-            context: context,
-            builder: (context) => SingleChildScrollView(
-                  padding: EdgeInsets.only(
-                      bottom: MediaQuery.of(context).viewInsets.bottom),
-                  child: AddExpenseScreen(),
-                ));
+          backgroundColor: Color(0x00FFFFFF),
+          context: context,
+          builder: (context) => AddExpenseScreen(),
+        );
       },
       child: Icon(
         Icons.add,
