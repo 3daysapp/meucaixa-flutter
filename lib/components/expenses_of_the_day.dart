@@ -1,22 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:meu_caixa_flutter/models/data/expense_data.dart';
 import 'package:meu_caixa_flutter/models/expense.dart';
-import 'package:provider/provider.dart';
 
 class ExpensesOfTheDay extends StatefulWidget {
+  final List<Expense> expenseList;
+  ExpensesOfTheDay({this.expenseList});
   @override
   _ExpensesOfTheDayState createState() => _ExpensesOfTheDayState();
 }
 
 class _ExpensesOfTheDayState extends State<ExpensesOfTheDay> {
-  List<Expense> _expenses = [];
   @override
   Widget build(BuildContext context) {
-    return Consumer<ExpenseData>(builder: (context, expenseData, child) {
-      return ListView.builder(itemBuilder: (context, index) {
-        final expense = expenseData.expenseList[index];
-        return ExpenseItemState(expense: expense);
-      });
+    return ListView.builder(itemBuilder: (context, index) {
+      final expense = widget.expenseList[index];
+      return ExpenseItemState(expense: expense);
     });
   }
 }

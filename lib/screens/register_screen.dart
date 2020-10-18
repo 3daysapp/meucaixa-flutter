@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:meu_caixa_flutter/screens/caixa_screen.dart';
+import 'package:meu_caixa_flutter/screens/main_screen.dart';
 import '../components/rounded_action_button.dart';
 import '../components/default_text_field.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
@@ -25,7 +26,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         User user = auth.currentUser;
         await user.updateProfile(displayName: username);
         toggleSpinner();
-        Navigator.pushNamed(context, CaixaScreen.screenId);
+        Navigator.pushNamed(context, MainScreen.screenId);
       } on FirebaseAuthException catch (e) {
         toggleSpinner();
         if (e.code == 'weak-password') {

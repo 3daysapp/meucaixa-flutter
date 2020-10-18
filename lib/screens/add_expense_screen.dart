@@ -5,21 +5,18 @@ import 'package:meu_caixa_flutter/contantes.dart';
 import 'package:meu_caixa_flutter/components/default_text_field.dart';
 import 'package:meu_caixa_flutter/models/data/expense_data.dart';
 import 'package:meu_caixa_flutter/models/expense.dart';
-import 'package:provider/provider.dart';
 
 class AddExpenseScreen extends StatelessWidget {
   static String screenId = 'add_expense_screen';
   var descriptionController = TextEditingController();
-  void addExpense(BuildContext context, Expense expense) {
-    Provider.of<ExpenseData>(context, listen: false).addExpenseToList(expense);
-  }
+  ExpenseData expenseData = ExpenseData();
+  void addExpense(BuildContext context, Expense expense) {}
 
   @override
   Widget build(BuildContext context) {
     var valueController = MoneyMaskedTextController(
         thousandSeparator: '.', decimalSeparator: ',');
     return Container(
-      height: 260,
       padding: EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: Colors.grey.shade800,
@@ -58,7 +55,7 @@ class AddExpenseScreen extends StatelessWidget {
                   Expense expense = Expense();
                   expense.value = valueController.numberValue;
                   expense.description = descriptionController.text;
-                  addExpense(context, expense);
+                  Navigator.pop(context, expense);
                 },
                 color: kRadicalRedColor,
                 elevation: 5,

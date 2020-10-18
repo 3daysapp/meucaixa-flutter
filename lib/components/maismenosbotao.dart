@@ -14,7 +14,7 @@ class MaisMenosBotao extends StatelessWidget {
       ),
       elevation: 6,
       shape: CircleBorder(),
-      fillColor: icon == Icons.add ? Colors.green : Colors.red,
+      fillColor: icon == Icons.add ? Colors.green : Colors.redAccent,
       constraints: BoxConstraints.tightFor(
         width: 36,
         height: 36,

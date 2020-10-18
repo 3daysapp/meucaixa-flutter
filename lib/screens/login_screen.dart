@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:meu_caixa_flutter/components/default_text_field.dart';
 import 'package:meu_caixa_flutter/components/rounded_action_button.dart';
 import 'package:meu_caixa_flutter/screens/caixa_screen.dart';
+import 'package:meu_caixa_flutter/screens/main_screen.dart';
 import 'package:meu_caixa_flutter/screens/register_screen.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -31,7 +32,7 @@ class _LoginScreenState extends State<LoginScreen> {
         toggleSpinner();
         _userEmail = "";
         _userPassword = "";
-        Navigator.pushNamed(context, CaixaScreen.screenId);
+        Navigator.pushNamed(context, MainScreen.screenId);
       } else {
         toggleSpinner();
         showAlertDialog(
