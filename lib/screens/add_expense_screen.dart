@@ -3,13 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:meu_caixa_flutter/contantes.dart';
 import 'package:meu_caixa_flutter/components/default_text_field.dart';
-import 'package:meu_caixa_flutter/models/data/expense_data.dart';
 import 'package:meu_caixa_flutter/models/expense.dart';
 
 class AddExpenseScreen extends StatelessWidget {
   static String screenId = 'add_expense_screen';
   var descriptionController = TextEditingController();
-  ExpenseData expenseData = ExpenseData();
   void addExpense(BuildContext context, Expense expense) {}
 
   @override

@@ -1,7 +1,7 @@
 import 'package:meu_caixa_flutter/interfaces/i_repository.dart';
-import 'package:meu_caixa_flutter/models/caixa.dart';
+import 'package:meu_caixa_flutter/models/cash_registry.dart';
 
-class CaixaRepository implements IRepository<Caixa> {
+class CaixaRepository implements IRepository<CashRegistry> {
   @override
   Future add<Caixa>(Caixa entity) {
     // TODO: implement add

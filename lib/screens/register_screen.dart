@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:meu_caixa_flutter/screens/caixa_screen.dart';
+import 'package:meu_caixa_flutter/screens/cash_registry_screen.dart';
 import 'package:meu_caixa_flutter/screens/main_screen.dart';
 import '../components/rounded_action_button.dart';
 import '../components/default_text_field.dart';

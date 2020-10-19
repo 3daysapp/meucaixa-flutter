@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:meu_caixa_flutter/components/default_text_field.dart';
 import 'package:meu_caixa_flutter/components/rounded_action_button.dart';
-import 'package:meu_caixa_flutter/screens/caixa_screen.dart';
+import 'package:meu_caixa_flutter/screens/cash_registry_screen.dart';
 import 'package:meu_caixa_flutter/screens/main_screen.dart';
 import 'package:meu_caixa_flutter/screens/register_screen.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
