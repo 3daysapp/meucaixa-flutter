@@ -6,9 +6,7 @@ import 'package:meu_caixa_flutter/components/default_text_field.dart';
 import 'package:meu_caixa_flutter/models/expense.dart';
 
 class AddExpenseScreen extends StatelessWidget {
-  static String screenId = 'add_expense_screen';
   var descriptionController = TextEditingController();
-  void addExpense(BuildContext context, Expense expense) {}
 
   @override
   Widget build(BuildContext context) {

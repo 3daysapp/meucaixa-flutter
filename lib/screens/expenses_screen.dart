@@ -70,7 +70,8 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
               ),
               FlatButton(
                 onPressed: () {
-                  Navigator.of(context).pushNamed(CreditCardScreen.screenId);
+                  Navigator.of(context).pushNamed(CreditCardScreen.screenId,
+                      arguments: expenseList);
                 },
                 child: Row(
                   mainAxisSize: MainAxisSize.min,

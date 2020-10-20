@@ -1,4 +1,4 @@
 class CreditCardMachine {
   String name;
-  double value;
+  String uid;
 }

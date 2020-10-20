@@ -19,26 +19,52 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   FirebaseAuth _auth = FirebaseAuth.instance;
   SharedPreferences _prefs;
+  String _userEmail;
+  String _userPassword;
+  bool _showSpinner = false;
+  bool saveUserEmail = false;
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+
   void signIn() async {
-    toggleSpinner();
-    try {
-      UserCredential user = await _auth.signInWithEmailAndPassword(
-          email: _userEmail, password: _userPassword);
-      if (user != null) {
-        if (saveUserEmail) {
-          _prefs.setBool('shouldSaveUserEmail', saveUserEmail);
-          _prefs.setString('userEmail', _userEmail);
+    if (_formKey.currentState.validate()) {
+      _userEmail = emailController.text;
+      _userPassword = passwordController.text;
+      toggleSpinner();
+      try {
+        UserCredential user = await _auth.signInWithEmailAndPassword(
+            email: _userEmail, password: _userPassword);
+        if (user != null) {
+          if (saveUserEmail) {
+            _prefs.setBool('shouldSaveUserEmail', saveUserEmail);
+            _prefs.setString('userEmail', _userEmail);
+          }
+          toggleSpinner();
+          _userEmail = "";
+          _userPassword = "";
+          Navigator.of(context)
+              .pushNamedAndRemoveUntil(MainScreen.screenId, (route) => false);
+        } else {
+          toggleSpinner();
+          showAlertDialog(
+              context: context,
+              title: 'Erro',
+              message: 'Usuário ou senha incorretos',
+              actions: [
+                FlatButton(
+                  child: Text('OK'),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                )
+              ]);
         }
-        toggleSpinner();
-        _userEmail = "";
-        _userPassword = "";
-        Navigator.pushNamed(context, MainScreen.screenId);
-      } else {
-        toggleSpinner();
+      } on FirebaseAuthException catch (e) {
         showAlertDialog(
             context: context,
             title: 'Erro',
-            message: 'Usuário ou senha incorretos',
+            message: 'Usuário ou senha incorretos.',
             actions: [
               FlatButton(
                 child: Text('OK'),
@@ -47,24 +73,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 },
               )
             ]);
+        toggleSpinner();
+      } catch (e) {
+        toggleSpinner();
+        print(e);
       }
-    } on FirebaseAuthException catch (e) {
-      showAlertDialog(
-          context: context,
-          title: 'Erro',
-          message: 'Usuário ou senha incorretos.',
-          actions: [
-            FlatButton(
-              child: Text('OK'),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            )
-          ]);
-      toggleSpinner();
-    } catch (e) {
-      toggleSpinner();
-      print(e);
     }
   }
 
@@ -74,22 +87,29 @@ class _LoginScreenState extends State<LoginScreen> {
     loadSharedPrefences();
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+    _userPassword = null;
+    _userPassword = null;
+  }
+
   void loadSharedPrefences() async {
     _prefs = await SharedPreferences.getInstance();
     loadUserEmail();
   }
 
   void loadUserEmail() async {
-    if (_prefs.containsKey('shouldSaveUserEmail')) {
-      setState(() {
+    setState(() {
+      if (_prefs.containsKey('shouldSaveUserEmail')) {
         saveUserEmail = _prefs.getBool('shouldSaveUserEmail');
-      });
-      if (saveUserEmail) {
-        setState(() {
+        if (saveUserEmail) {
           _userEmail = _prefs.getString('userEmail');
-        });
+        }
       }
-    }
+    });
   }
 
   void toggleSpinner() {
@@ -98,11 +118,6 @@ class _LoginScreenState extends State<LoginScreen> {
     });
   }
 
-  String _userEmail;
-  String _userPassword;
-  bool _showSpinner = false;
-  bool saveUserEmail = false;
-  final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -136,10 +151,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         hintText: 'Seu email',
                         inputType: TextInputType.emailAddress,
                         icon: Icons.email,
-                        initialValue: _userEmail,
-                        callback: (newValue) {
-                          _userEmail = newValue;
-                        },
+                        controller: emailController,
                         validator: (value) {
                           if (value.isEmpty) {
                             return 'Por favor, informe seu email';
@@ -152,9 +164,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         icon: Icons.vpn_key,
                         obscureText: true,
                         inputAction: TextInputAction.done,
-                        callback: (newValue) {
-                          _userPassword = newValue;
-                        },
+                        controller: passwordController,
                         validator: (value) {
                           if (value.isEmpty) {
                             return 'Por favor, informe sua senha';
