@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:meu_caixa_flutter/components/expense_card.dart';
+import 'package:meu_caixa_flutter/models/cash_registry.dart';
 import 'package:meu_caixa_flutter/models/expense.dart';
 import 'package:meu_caixa_flutter/screens/add_expense_screen.dart';
 import 'package:meu_caixa_flutter/screens/credit_cards_screen.dart';
@@ -14,6 +15,7 @@ class ExpenseScreen extends StatefulWidget {
 
 class _ExpenseScreenState extends State<ExpenseScreen> {
   List<Expense> expenseList = [];
+  CashRegistry cashRegistry = CashRegistry();
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -22,6 +24,7 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
           title: Text("Lançamento de despesas"),
           centerTitle: true,
         ),
+        // TODO Implementar o canPop para impedir que o usuário saia sem querer do lançamento do caixa
         body: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
@@ -70,8 +73,13 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
               ),
               FlatButton(
                 onPressed: () {
-                  Navigator.of(context).pushNamed(CreditCardScreen.screenId,
-                      arguments: expenseList);
+                  cashRegistry.expenseList = expenseList;
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          CreditCardScreen(cashRegistry: cashRegistry),
+                    ),
+                  );
                 },
                 child: Row(
                   mainAxisSize: MainAxisSize.min,

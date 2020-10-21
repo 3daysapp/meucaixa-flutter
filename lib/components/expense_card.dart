@@ -5,9 +5,13 @@ import 'package:meu_caixa_flutter/models/expense.dart';
 class ExpenseCard extends StatelessWidget {
   final Expense expense;
   final Function callback;
+  final bool finalResult;
   final controller =
       MoneyMaskedTextController(decimalSeparator: ',', thousandSeparator: '.');
-  ExpenseCard({@required this.expense, @required this.callback});
+  ExpenseCard(
+      {@required this.expense,
+      @required this.callback,
+      this.finalResult = false});
 
   @override
   Widget build(BuildContext context) {
