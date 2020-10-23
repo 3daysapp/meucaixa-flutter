@@ -2,9 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
 import 'package:meu_caixa_flutter/components/menu_item.dart';
-import 'package:meu_caixa_flutter/screens/cash_registry_screen.dart';
 import 'package:meu_caixa_flutter/screens/expenses_screen.dart';
 import 'package:meu_caixa_flutter/screens/login_screen.dart';
+import 'package:meu_caixa_flutter/screens/provider_screen.dart';
 
 class MainScreen extends StatelessWidget {
   static String screenId = 'mainScreen';
@@ -34,6 +34,7 @@ class MainScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    int numberOfTimesPressedBackButton = 0;
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -69,6 +70,19 @@ class MainScreen extends StatelessWidget {
                         height: 80,
                         color: Colors.blueAccent,
                         action: () {},
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: MenuItem(
+                        icon: Icons.add_business_outlined,
+                        label: 'Fornecedores',
+                        height: 80,
+                        color: Colors.teal,
+                        action: () {
+                          Navigator.of(context)
+                              .pushNamed(ProviderScreen.screenId);
+                        },
                       ),
                     ),
                     Padding(

@@ -1,7 +1,7 @@
-import 'package:flutter/cupertino.dart';
+import 'package:meu_caixa_flutter/models/provider.dart';
 
 class Expense {
-  String id;
   String description;
   double value;
+  Provider provider;
 }

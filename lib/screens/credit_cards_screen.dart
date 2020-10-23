@@ -23,7 +23,6 @@ class _CreditCardScreenState extends State<CreditCardScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _firestore = FirebaseFirestore.instance;
   }

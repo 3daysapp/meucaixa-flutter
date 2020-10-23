@@ -19,6 +19,8 @@ const kDefaultTextFieldStyle = InputDecoration(
   border: OutlineInputBorder(), // Essa borda é a que você procura
 );
 
+const kDefaultResultTextStyle = TextStyle(fontSize: 18);
+
 const Color kRichBlackColor = Color(0xFF011627);
 const Color kRadicalRedColor = Color(0xFFFF3366);
 const Color kTiffanyBlueColor = Color(0xFF2EC4B6);

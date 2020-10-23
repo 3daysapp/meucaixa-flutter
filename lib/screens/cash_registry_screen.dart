@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_masked_text/flutter_masked_text.dart';
+import 'package:meu_caixa_flutter/components/default_text_field.dart';
 import 'package:meu_caixa_flutter/components/expense_card.dart';
 import 'package:meu_caixa_flutter/components/notacontainer.dart';
 import 'package:meu_caixa_flutter/contantes.dart';
@@ -20,15 +22,25 @@ class CashRegistryScreen extends StatefulWidget {
 
 class _CashRegistryScreenState extends State<CashRegistryScreen> {
   void calculaTotal() {
-    widget.cashRegistry.calculate();
+    widget.cashRegistry.calculateMoney();
   }
+
+  MoneyMaskedTextController cashRegistryOpenValueController;
 
   @override
   void initState() {
     super.initState();
+    cashRegistryOpenValueController = MoneyMaskedTextController(
+        decimalSeparator: ',', thousandSeparator: '.');
     setState(() {
       calculaTotal();
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    cashRegistryOpenValueController.dispose();
   }
 
   @override
@@ -46,6 +58,12 @@ class _CashRegistryScreenState extends State<CashRegistryScreen> {
               children: [
                 NotaContainer(
                   label: 'Notas de 2R\$',
+                  onChanged: (value) {
+                    setState(() {
+                      widget.cashRegistry.note2 = int.tryParse(value) ?? 0;
+                      calculaTotal();
+                    });
+                  },
                   adicionaNotaFunc: () {
                     setState(() {
                       widget.cashRegistry.note2++;
@@ -60,10 +78,24 @@ class _CashRegistryScreenState extends State<CashRegistryScreen> {
                       });
                     }
                   },
+                  clearQuantity: () {
+                    setState(() {
+                      widget.cashRegistry.note2 = 0;
+                      calculaTotal();
+                    });
+                  },
                   quantidade: widget.cashRegistry.note2,
                 ),
                 NotaContainer(
                   label: 'Notas de 5R\$',
+                  onChanged: (value) {
+                    setState(
+                      () {
+                        widget.cashRegistry.note5 = int.tryParse(value) ?? 0;
+                        calculaTotal();
+                      },
+                    );
+                  },
                   adicionaNotaFunc: () {
                     setState(() {
                       widget.cashRegistry.note5++;
@@ -78,6 +110,12 @@ class _CashRegistryScreenState extends State<CashRegistryScreen> {
                       });
                     }
                   },
+                  clearQuantity: () {
+                    setState(() {
+                      widget.cashRegistry.note5 = 0;
+                      calculaTotal();
+                    });
+                  },
                   quantidade: widget.cashRegistry.note5,
                 ),
               ],
@@ -86,6 +124,14 @@ class _CashRegistryScreenState extends State<CashRegistryScreen> {
               children: [
                 NotaContainer(
                   label: 'Notas de 10R\$',
+                  onChanged: (value) {
+                    setState(
+                      () {
+                        widget.cashRegistry.note10 = int.tryParse(value) ?? 0;
+                        calculaTotal();
+                      },
+                    );
+                  },
                   adicionaNotaFunc: () {
                     setState(() {
                       widget.cashRegistry.note10++;
@@ -100,10 +146,24 @@ class _CashRegistryScreenState extends State<CashRegistryScreen> {
                       });
                     }
                   },
+                  clearQuantity: () {
+                    setState(() {
+                      widget.cashRegistry.note10 = 0;
+                      calculaTotal();
+                    });
+                  },
                   quantidade: widget.cashRegistry.note10,
                 ),
                 NotaContainer(
                   label: 'Notas de 20R\$',
+                  onChanged: (value) {
+                    setState(
+                      () {
+                        widget.cashRegistry.note20 = int.tryParse(value) ?? 0;
+                        calculaTotal();
+                      },
+                    );
+                  },
                   adicionaNotaFunc: () {
                     setState(() {
                       widget.cashRegistry.note20++;
@@ -118,6 +178,12 @@ class _CashRegistryScreenState extends State<CashRegistryScreen> {
                       });
                     }
                   },
+                  clearQuantity: () {
+                    setState(() {
+                      widget.cashRegistry.note20 = 0;
+                      calculaTotal();
+                    });
+                  },
                   quantidade: widget.cashRegistry.note20,
                 ),
               ],
@@ -126,6 +192,12 @@ class _CashRegistryScreenState extends State<CashRegistryScreen> {
               children: [
                 NotaContainer(
                   label: 'Notas de 50R\$',
+                  onChanged: (value) {
+                    setState(() {
+                      widget.cashRegistry.note50 = int.tryParse(value) ?? 0;
+                      calculaTotal();
+                    });
+                  },
                   adicionaNotaFunc: () {
                     setState(() {
                       widget.cashRegistry.note50++;
@@ -140,10 +212,22 @@ class _CashRegistryScreenState extends State<CashRegistryScreen> {
                       });
                     }
                   },
+                  clearQuantity: () {
+                    setState(() {
+                      widget.cashRegistry.note50 = 0;
+                      calculaTotal();
+                    });
+                  },
                   quantidade: widget.cashRegistry.note50,
                 ),
                 NotaContainer(
                   label: 'Notas de 100R\$',
+                  onChanged: (value) {
+                    setState(() {
+                      widget.cashRegistry.note100 = int.tryParse(value) ?? 0;
+                      calculaTotal();
+                    });
+                  },
                   adicionaNotaFunc: () {
                     setState(() {
                       widget.cashRegistry.note100++;
@@ -158,6 +242,12 @@ class _CashRegistryScreenState extends State<CashRegistryScreen> {
                       });
                     }
                   },
+                  clearQuantity: () {
+                    setState(() {
+                      widget.cashRegistry.note100 = 0;
+                      calculaTotal();
+                    });
+                  },
                   quantidade: widget.cashRegistry.note100,
                 ),
               ],
@@ -168,6 +258,15 @@ class _CashRegistryScreenState extends State<CashRegistryScreen> {
                 'Total: ${widget.cashRegistry.totalMoney.toStringAsFixed(2)} R\$',
                 style: kDefaultTotaisTextStyle,
               ),
+            ),
+            DefaultTextField(
+              hintText: "Valor de abertura do caixa hoje",
+              horizontalPadding: 5,
+              controller: cashRegistryOpenValueController,
+              callback: (_) {
+                widget.cashRegistry.openValue =
+                    cashRegistryOpenValueController.numberValue;
+              },
             ),
             Padding(
               padding: const EdgeInsets.all(5.0),

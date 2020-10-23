@@ -29,7 +29,8 @@ class ExpenseCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(expense.description.toUpperCase()),
+                  Text(
+                      '${expense.description.toUpperCase()} ${expense.provider != null ? '- ${expense.provider.name}' : ''}'),
                   Text('R\$ ${controller.value.text}'),
                 ],
               ),

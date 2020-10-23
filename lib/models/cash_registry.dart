@@ -31,7 +31,7 @@ class CashRegistry {
     }
   }
 
-  void _calculateMoney() {
+  void calculateMoney() {
     totalMoney = 0;
     totalMoney += note2 * 2;
     totalMoney += note5 * 5;
@@ -44,10 +44,11 @@ class CashRegistry {
   void calculate() {
     _calculateExpenses();
     _calculateCreditCardMachines();
-    _calculateMoney();
+    calculateMoney();
     total = 0;
     total += totalMoney;
     total += totalCreditCardMachine;
+    total += openValue;
     total -= totalExpenses;
   }
 }

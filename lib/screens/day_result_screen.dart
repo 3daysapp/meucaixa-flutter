@@ -1,14 +1,21 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
+import 'package:meu_caixa_flutter/components/display_alert.dart';
+import 'package:meu_caixa_flutter/components/normal_card.dart';
+import 'package:meu_caixa_flutter/contantes.dart';
 import 'package:meu_caixa_flutter/models/cash_registry.dart';
 import 'package:meu_caixa_flutter/models/credit_card_machine.dart';
 import 'package:meu_caixa_flutter/models/expense.dart';
 import 'package:intl/intl.dart';
+import 'package:meu_caixa_flutter/screens/main_screen.dart';
+import 'package:meu_caixa_flutter/utils/user_utils.dart';
 
 class DayResultScreen extends StatelessWidget {
   static String screenId = "DayResultScreen";
   final CashRegistry cashRegistry;
+  final _firestore = FirebaseFirestore.instance;
   DayResultScreen({@required this.cashRegistry});
 
   List<Widget> getExpenseContainerList() {
@@ -23,6 +30,81 @@ class DayResultScreen extends StatelessWidget {
     return expList;
   }
 
+  Future<void> saveCashRegistry(BuildContext context) async {
+    try {
+      DocumentReference reference =
+          await _firestore.collection("cashRegistryHistory").add({
+        "userId": UserUtils.getCurrentUser().uid,
+        "date": cashRegistry.date,
+        "openValue": cashRegistry.openValue,
+        "totalCreditCardMachine": cashRegistry.totalCreditCardMachine,
+        "totalExpenses": cashRegistry.totalExpenses,
+        "totalMoney": cashRegistry.totalMoney,
+        "total": cashRegistry.total
+      });
+      await _saveExpenses(reference);
+      await _saveCreditCardMachines(reference);
+      showAlertDialog(
+        context: context,
+        message: "Caixa salvo com sucesso.",
+        title: "Sucesso",
+        actions: [
+          FlatButton(
+              onPressed: () {
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                    MainScreen.screenId, (route) => false);
+              },
+              child: Text("OK")),
+        ],
+      );
+    } catch (e) {
+      showAlertDialog(
+        context: context,
+        message:
+            "Falha ao salvar o caixa, por favor, tente novamente mais tarde",
+        title: "Erro",
+        actions: [
+          FlatButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text("OK")),
+        ],
+      );
+    }
+  }
+
+  Future<void> _saveExpenses(DocumentReference reference) {
+    for (Expense expense in cashRegistry.expenseList) {
+      _firestore
+          .collection("cashRegistryHistory")
+          .doc(reference.id)
+          .collection("expenses")
+          .add({
+        "description": expense.description,
+        "value": expense.value,
+        "cashRegistryId": reference.id,
+        "providerName": expense.provider.name,
+        "providerId": expense.provider.id
+      });
+    }
+  }
+
+  Future<void> _saveCreditCardMachines(DocumentReference reference) async {
+    for (CreditCardMachine creditCardMachine
+        in cashRegistry.creditCardMachineList) {
+      _firestore
+          .collection("cashRegistryHistory")
+          .doc(reference.id)
+          .collection("creditCardMachine")
+          .add({
+        "name": creditCardMachine.name,
+        "value": creditCardMachine.controller.text,
+        "cashRegistryId": reference.id
+      });
+    }
+  }
+
   List<Widget> getCreditCardMachineContainerList() {
     List<Widget> creditCardMachineContainerList = [];
     for (CreditCardMachine cardMachine in cashRegistry.creditCardMachineList) {
@@ -34,6 +116,7 @@ class DayResultScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    cashRegistry.calculate();
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -65,60 +148,65 @@ class DayResultScreen extends StatelessWidget {
                 NormalCard(
                   title: "Total",
                   trailing: "R\$ ${cashRegistry.totalMoney.toStringAsFixed(2)}",
+                  color: Colors.green,
+                ),
+                NormalCard(
+                  title: "Caixa aberto com",
+                  trailing: "R\$ ${cashRegistry.openValue.toStringAsFixed(2)}",
+                  color: Colors.green,
                 ),
                 CardTitle(
                     title: "Resultado do dia",
                     color: cashRegistry.total > 0
                         ? Colors.green
                         : Colors.redAccent),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Text(
-                        "Máquinas de cartão: ${cashRegistry.totalCreditCardMachine.toStringAsFixed(2)} R\$"),
-                    Text(
-                        "Dinheiro: ${cashRegistry.totalMoney.toStringAsFixed(2)} R\$"),
-                    Text(
-                        "Despesas:  ${cashRegistry.totalExpenses.toStringAsFixed(2)} R\$"),
-                    SizedBox(
-                      height: 1,
-                      width: 80,
-                      child: Container(
-                        color: Colors.white,
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                        "Máquinas de cartão:  R\$ ${cashRegistry.totalCreditCardMachine.toStringAsFixed(2)}",
+                        style: kDefaultResultTextStyle,
                       ),
-                    ),
-                    Text("Lucro: ${cashRegistry.total.toStringAsFixed(2)} R\$"),
-                  ],
-                )
+                      Text(
+                        "Dinheiro:  R\$ ${cashRegistry.totalMoney.toStringAsFixed(2)}",
+                        style: kDefaultResultTextStyle,
+                      ),
+                      Text(
+                        "Abertura do caixa:  R\$ ${cashRegistry.openValue.toStringAsFixed(2)}",
+                        style: kDefaultResultTextStyle,
+                      ),
+                      Text(
+                        "Despesas:  R\$ ${cashRegistry.totalExpenses.toStringAsFixed(2)}",
+                        style: kDefaultResultTextStyle,
+                      ),
+                      SizedBox(
+                        height: 1,
+                        width: 80,
+                        child: Container(
+                          color: Colors.white,
+                        ),
+                      ),
+                      Text(
+                        "Lucro:  R\$ ${cashRegistry.total.toStringAsFixed(2)}",
+                        style: kDefaultResultTextStyle,
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: RaisedButton(
+                    onPressed: () async {
+                      await saveCashRegistry(context);
+                    },
+                    color: Colors.green,
+                    child: Text("Fechar o caixa"),
+                  ),
+                ),
               ],
             ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class NormalCard extends StatelessWidget {
-  final String title;
-  final String trailing;
-
-  NormalCard({@required this.title, @required this.trailing});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 5),
-      child: Card(
-        color: Colors.green,
-        child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(title),
-              Text(trailing),
-            ],
           ),
         ),
       ),
@@ -187,7 +275,6 @@ class ExpenseResultCard extends StatelessWidget {
 
   final Expense exp;
   final MoneyMaskedTextController mask;
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -201,6 +288,7 @@ class ExpenseResultCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(exp.description.toUpperCase()),
+                exp.provider != null ? Text(exp.provider.name) : Text(''),
                 Text('R\$ ${mask.value.text}')
               ],
             ),

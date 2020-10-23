@@ -7,6 +7,8 @@ import 'maismenosbotao.dart';
 class NotaContainer extends StatefulWidget {
   final Function adicionaNotaFunc;
   final Function removeNotaFunc;
+  final Function onChanged;
+  final Function clearQuantity;
   final String label;
   int quantidade = 0;
 
@@ -14,6 +16,8 @@ class NotaContainer extends StatefulWidget {
       {@required this.adicionaNotaFunc,
       @required this.removeNotaFunc,
       @required this.quantidade,
+      @required this.onChanged,
+      @required this.clearQuantity,
       @required this.label});
 
   @override
@@ -21,8 +25,10 @@ class NotaContainer extends StatefulWidget {
 }
 
 class _NotaContainerState extends State<NotaContainer> {
+  TextEditingController controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    controller.text = widget.quantidade.toString();
     return Expanded(
       child: Container(
         height: 120,
@@ -45,11 +51,22 @@ class _NotaContainerState extends State<NotaContainer> {
                 MaisMenosBotao(
                   icon: Icons.remove,
                   onPressed: widget.removeNotaFunc,
+                  onLongPress: widget.clearQuantity,
                 ),
-                Text(
-                  widget.quantidade.toString(),
-                  style: kDefaultQuantidadeLabelTextStyle,
+                SizedBox(
+                  width: 60,
+                  child: TextField(
+                    keyboardType: TextInputType.number,
+                    onChanged: widget.onChanged,
+                    controller: controller,
+                    textAlign: TextAlign.center,
+                    style: kDefaultQuantidadeLabelTextStyle,
+                  ),
                 ),
+                // Text(
+                //   widget.quantidade.toString(),
+                //   style: kDefaultQuantidadeLabelTextStyle,
+                // ),
                 MaisMenosBotao(
                   icon: Icons.add,
                   onPressed: widget.adicionaNotaFunc,
