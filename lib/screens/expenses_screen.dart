@@ -6,6 +6,7 @@ import 'package:meu_caixa_flutter/models/expense.dart';
 import 'package:meu_caixa_flutter/screens/add_expense_screen.dart';
 import 'package:meu_caixa_flutter/screens/credit_cards_screen.dart';
 import 'package:meu_caixa_flutter/screens/main_screen.dart';
+import 'package:meu_caixa_flutter/utils/user_utils.dart';
 
 class ExpenseScreen extends StatefulWidget {
   static String screenId = 'ExpenseScreen';
@@ -39,11 +40,13 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
                   onPressed: () => Navigator.of(context).pop(false),
                 ),
                 RaisedButton(
-                  child: Text('SIM'),
-                  color: Colors.redAccent,
-                  onPressed: () => Navigator.pushNamedAndRemoveUntil(
-                      context, MainScreen.screenId, (route) => false),
-                ),
+                    child: Text('SIM'),
+                    color: Colors.redAccent,
+                    onPressed: () {
+                      UserUtils.logout();
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, MainScreen.screenId, (route) => false);
+                    }),
               ],
             ),
           ),

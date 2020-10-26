@@ -9,4 +9,9 @@ class UserUtils {
       return null;
     }
   }
+
+  static Future<void> logout() async {
+    final _auth = FirebaseAuth.instance;
+    await _auth.signOut();
+  }
 }

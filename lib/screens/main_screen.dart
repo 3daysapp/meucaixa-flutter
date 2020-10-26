@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
 import 'package:meu_caixa_flutter/components/menu_item.dart';
+import 'package:meu_caixa_flutter/contantes.dart';
 import 'package:meu_caixa_flutter/screens/expenses_screen.dart';
 import 'package:meu_caixa_flutter/screens/login_screen.dart';
 import 'package:meu_caixa_flutter/screens/provider_screen.dart';
@@ -102,7 +103,11 @@ class MainScreen extends StatelessWidget {
               ),
               Container(
                 child: Column(
-                  children: [Text("0.1"), Text("18/10/2020")],
+                  children: [
+                    Text(
+                        '$majorVersion.$minorVersion.$patchVersion.$buildNumber'),
+                    Text(releaseDate)
+                  ],
                 ),
               )
             ],

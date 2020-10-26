@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:meu_caixa_flutter/components/default_text_field.dart';
-import 'package:meu_caixa_flutter/components/expense_card.dart';
 import 'package:meu_caixa_flutter/components/notacontainer.dart';
 import 'package:meu_caixa_flutter/contantes.dart';
 import 'package:meu_caixa_flutter/models/cash_registry.dart';
-import 'package:meu_caixa_flutter/models/credit_card_machine.dart';
 import 'package:meu_caixa_flutter/models/expense.dart';
 import 'package:meu_caixa_flutter/screens/add_expense_screen.dart';
 import 'package:meu_caixa_flutter/screens/day_result_screen.dart';

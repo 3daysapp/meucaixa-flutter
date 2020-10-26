@@ -5,6 +5,7 @@ import 'package:meu_caixa_flutter/components/rounded_action_button.dart';
 import 'package:meu_caixa_flutter/screens/cash_registry_screen.dart';
 import 'package:meu_caixa_flutter/screens/main_screen.dart';
 import 'package:meu_caixa_flutter/screens/register_screen.dart';
+import 'package:meu_caixa_flutter/utils/user_utils.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../components/display_alert.dart';
@@ -18,7 +19,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   FirebaseAuth _auth = FirebaseAuth.instance;
-  SharedPreferences _prefs;
+  Future<SharedPreferences> _prefs;
   String _userEmail;
   String _userPassword;
   bool _showSpinner = false;
@@ -28,6 +29,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
 
   void signIn() async {
+    final sharedPrefs = await _prefs;
     if (_formKey.currentState.validate()) {
       _userEmail = emailController.text;
       _userPassword = passwordController.text;
@@ -37,9 +39,10 @@ class _LoginScreenState extends State<LoginScreen> {
             email: _userEmail, password: _userPassword);
         if (user != null) {
           if (saveUserEmail) {
-            _prefs.setBool('shouldSaveUserEmail', saveUserEmail);
-            _prefs.setString('userEmail', _userEmail);
+            sharedPrefs.setBool('shouldSaveUserEmail', saveUserEmail);
+            sharedPrefs.setString('userEmail', _userEmail);
           }
+          sharedPrefs.setBool("alreadyHasUser", true);
           toggleSpinner();
           _userEmail = "";
           _userPassword = "";
@@ -96,17 +99,18 @@ class _LoginScreenState extends State<LoginScreen> {
     _userPassword = null;
   }
 
-  void loadSharedPrefences() async {
-    _prefs = await SharedPreferences.getInstance();
+  void loadSharedPrefences() {
+    _prefs = SharedPreferences.getInstance();
     loadUserEmail();
   }
 
   void loadUserEmail() async {
+    final sharedPrefs = await _prefs;
     setState(() {
-      if (_prefs.containsKey('shouldSaveUserEmail')) {
-        saveUserEmail = _prefs.getBool('shouldSaveUserEmail');
+      if (sharedPrefs.containsKey('shouldSaveUserEmail')) {
+        saveUserEmail = sharedPrefs.getBool('shouldSaveUserEmail');
         if (saveUserEmail) {
-          _userEmail = _prefs.getString('userEmail');
+          emailController.text = sharedPrefs.getString('userEmail');
         }
       }
     });
@@ -178,7 +182,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 Row(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      padding: const EdgeInsets.only(left: 8),
                       child: Checkbox(
                         value: saveUserEmail,
                         onChanged: (newValue) async {
