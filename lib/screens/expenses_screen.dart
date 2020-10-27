@@ -43,9 +43,8 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
                     child: Text('SIM'),
                     color: Colors.redAccent,
                     onPressed: () {
-                      UserUtils.logout();
                       Navigator.pushNamedAndRemoveUntil(
-                          context, MainScreen.screenId, (route) => false);
+                          context, MainScreen.screenId, (route) => true);
                     }),
               ],
             ),

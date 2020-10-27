@@ -10,7 +10,6 @@ class WelcomeScreen extends StatelessWidget {
   static String screenId = 'welcome_screen';
 
   Widget _initialPage;
-
   Future<FirebaseApp> _getFirebaseConnection(BuildContext context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (prefs.containsKey("alreadyHasUser")) {
