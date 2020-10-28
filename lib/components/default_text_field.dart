@@ -5,16 +5,16 @@ import 'package:flutter/material.dart';
 ///
 ///
 class DefaultTextField extends StatelessWidget {
-  final Function callback;
+  final Function(String) callback;
   final String hintText;
   final IconData icon;
   final bool obscureText;
   final TextInputType inputType;
-  final Function validator;
+  final String Function(String) validator;
   final TextInputAction inputAction;
   final double horizontalPadding;
   final String initialValue;
-  final controller;
+  final TextEditingController controller;
 
   ///
   ///
@@ -50,16 +50,9 @@ class DefaultTextField extends StatelessWidget {
         validator: validator,
         controller: controller,
         textInputAction: inputAction,
-        onFieldSubmitted: (_) => {
-          if (inputAction == TextInputAction.next)
-            {
-              FocusScope.of(context).nextFocus(),
-            }
-          else
-            {
-              FocusScope.of(context).unfocus(),
-            }
-        },
+        onFieldSubmitted: (_) => inputAction == TextInputAction.next
+            ? FocusScope.of(context).nextFocus()
+            : FocusScope.of(context).unfocus(),
         decoration: InputDecoration(
           border: OutlineInputBorder(),
           labelText: hintText,

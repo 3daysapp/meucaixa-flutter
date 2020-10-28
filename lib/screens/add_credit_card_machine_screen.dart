@@ -11,7 +11,7 @@ import 'package:meu_caixa_flutter/utils/user_utils.dart';
 ///
 ///
 class AddCreditCardMachineScreen extends StatelessWidget {
-  final _firestore = FirebaseFirestore.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final CreditCardMachine creditCardMachine = CreditCardMachine();
 
