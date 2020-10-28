@@ -283,7 +283,7 @@ class _CashRegistryScreenState extends State<CashRegistryScreen> {
               padding: const EdgeInsets.all(8.0),
               child: Text(
                 'Total: ${widget.cashRegistry.totalMoney.toStringAsFixed(2)} R\$',
-                style: kDefaultTotaisTextStyle,
+                style: kDefaultTotalTextStyle,
               ),
             ),
             DefaultTextField(

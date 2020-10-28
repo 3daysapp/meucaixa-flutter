@@ -77,7 +77,7 @@ class _NotaContainerState extends State<NotaContainer> {
                     onChanged: widget.onChanged,
                     controller: controller,
                     textAlign: TextAlign.center,
-                    style: kDefaultQuantidadeLabelTextStyle,
+                    style: kDefaultQuantityLabelTextStyle,
                   ),
                 ),
                 // Text(

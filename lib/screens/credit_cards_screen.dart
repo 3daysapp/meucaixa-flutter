@@ -99,7 +99,7 @@ class _CreditCardScreenState extends State<CreditCardScreen> {
             child: Container(
               child: Column(
                 children: [
-                  StreamBuilder(
+                  StreamBuilder<QuerySnapshot>(
                     stream: _firestore
                         .collection('creditCardMachines')
                         .where(
@@ -116,18 +116,20 @@ class _CreditCardScreenState extends State<CreditCardScreen> {
                         );
                       }
 
-                      final machinesSnapshot = snapshot.data.docs;
+                      final List<QueryDocumentSnapshot> machines =
+                          snapshot.data.docs;
                       creditCardMachineList = [];
                       widget.cashRegistry.creditCardMachineList = [];
 
-                      for (var machine in machinesSnapshot.reversed) {
-                        var m = machine.data(); // TODO - Qual é o tipo?
+                      for (QueryDocumentSnapshot machine in machines.reversed) {
+                        Map<String, dynamic> machineData =
+                            machine.data(); // TODO - Qual é o tipo?
 
                         final CreditCardMachine creditCardMachine =
                             CreditCardMachine();
 
-                        if (m['name'] != null) {
-                          creditCardMachine.name = m['name'];
+                        if (machineData['name'] != null) {
+                          creditCardMachine.name = machineData['name'];
 
                           creditCardMachine.controller =
                               MoneyMaskedTextController(
@@ -135,7 +137,7 @@ class _CreditCardScreenState extends State<CreditCardScreen> {
                             decimalSeparator: ',',
                           );
 
-                          print(m);
+                          print(machineData);
 
                           final defaultTextField = DefaultTextField(
                             hintText: creditCardMachine.name,
