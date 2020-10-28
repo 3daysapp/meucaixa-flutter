@@ -3,18 +3,26 @@ import 'package:flutter/material.dart';
 ///
 ///
 ///
-class MaisMenosBotao extends StatelessWidget {
+enum PlusSubButtonType {
+  PLUS,
+  SUB,
+}
+
+///
+///
+///
+class PlusSubButton extends StatelessWidget {
   final Function onPressed;
   final Function onLongPress;
-  final IconData icon;
+  final PlusSubButtonType type;
 
   ///
   ///
   ///
-  const MaisMenosBotao({
+  const PlusSubButton({
     Key key,
     @required this.onPressed,
-    @required this.icon,
+    @required this.type,
     this.onLongPress,
   }) : super(key: key);
 
@@ -26,17 +34,27 @@ class MaisMenosBotao extends StatelessWidget {
     return RawMaterialButton(
       onPressed: onPressed,
       onLongPress: onLongPress,
-      child: Icon(
-        icon,
-        color: Colors.black,
-      ),
+      child: _icon(),
       elevation: 6,
       shape: CircleBorder(),
-      fillColor: icon == Icons.add ? Colors.green : Colors.redAccent,
+      fillColor: _color(),
       constraints: BoxConstraints.tightFor(
         width: 36,
         height: 36,
       ),
     );
   }
+
+  ///
+  ///
+  ///
+  Icon _icon() => type == PlusSubButtonType.PLUS
+      ? Icon(Icons.add, color: Colors.black)
+      : Icon(Icons.remove, color: Colors.black);
+
+  ///
+  ///
+  ///
+  Color _color() =>
+      type == PlusSubButtonType.PLUS ? Colors.green : Colors.redAccent;
 }
