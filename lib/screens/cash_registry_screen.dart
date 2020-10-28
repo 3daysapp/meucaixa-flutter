@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:meu_caixa_flutter/components/default_text_field.dart';
-import 'package:meu_caixa_flutter/components/notacontainer.dart';
+import 'package:meu_caixa_flutter/components/cash_container.dart';
 import 'package:meu_caixa_flutter/contantes.dart';
 import 'package:meu_caixa_flutter/models/cash_registry.dart';
 import 'package:meu_caixa_flutter/models/expense.dart';
@@ -40,7 +40,7 @@ class _CashRegistryScreenState extends State<CashRegistryScreen> {
   ///
   ///
   void calculaTotal() {
-    widget.cashRegistry.calculateMoney();
+    widget.cashRegistry.totalMoney;
   }
 
   ///
@@ -54,7 +54,7 @@ class _CashRegistryScreenState extends State<CashRegistryScreen> {
       thousandSeparator: '.',
     );
     setState(() {
-      calculaTotal();
+      widget.cashRegistry.totalMoney;
     });
   }
 
@@ -80,212 +80,97 @@ class _CashRegistryScreenState extends State<CashRegistryScreen> {
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
+          children: <Widget>[
             Row(
-              children: [
-                NotaContainer(
+              children: <Widget>[
+                CashContainer(
                   label: 'Notas de 2R\$',
-                  onChanged: (value) {
+                  initialValue: widget.cashRegistry.note2,
+                  onChanged: (int value) {
                     setState(() {
-                      widget.cashRegistry.note2 = int.tryParse(value) ?? 0;
+                      widget.cashRegistry.note2 = value;
                       calculaTotal();
                     });
                   },
-                  adicionaNotaFunc: () {
-                    setState(() {
-                      widget.cashRegistry.note2++;
-                      calculaTotal();
-                    });
-                  },
-                  removeNotaFunc: () {
-                    if (widget.cashRegistry.note2 > 0) {
-                      setState(() {
-                        widget.cashRegistry.note2--;
-                        calculaTotal();
-                      });
-                    }
-                  },
-                  clearQuantity: () {
-                    setState(() {
-                      widget.cashRegistry.note2 = 0;
-                      calculaTotal();
-                    });
-                  },
-                  quantidade: widget.cashRegistry.note2,
                 ),
-                NotaContainer(
+                CashContainer(
                   label: 'Notas de 5R\$',
-                  onChanged: (value) {
-                    setState(
-                      () {
-                        widget.cashRegistry.note5 = int.tryParse(value) ?? 0;
-                        calculaTotal();
-                      },
-                    );
-                  },
-                  adicionaNotaFunc: () {
+                  initialValue: widget.cashRegistry.note5,
+                  onChanged: (int value) {
                     setState(() {
-                      widget.cashRegistry.note5++;
+                      widget.cashRegistry.note5 = value;
                       calculaTotal();
                     });
                   },
-                  removeNotaFunc: () {
-                    if (widget.cashRegistry.note5 > 0) {
-                      setState(() {
-                        widget.cashRegistry.note5--;
-                        calculaTotal();
-                      });
-                    }
-                  },
-                  clearQuantity: () {
-                    setState(() {
-                      widget.cashRegistry.note5 = 0;
-                      calculaTotal();
-                    });
-                  },
-                  quantidade: widget.cashRegistry.note5,
                 ),
               ],
             ),
             Row(
               children: [
-                NotaContainer(
+                CashContainer(
                   label: 'Notas de 10R\$',
-                  onChanged: (value) {
-                    setState(
-                      () {
-                        widget.cashRegistry.note10 = int.tryParse(value) ?? 0;
-                        calculaTotal();
-                      },
-                    );
-                  },
-                  adicionaNotaFunc: () {
+                  initialValue: widget.cashRegistry.note10,
+                  onChanged: (int value) {
                     setState(() {
-                      widget.cashRegistry.note10++;
+                      widget.cashRegistry.note10 = value;
                       calculaTotal();
                     });
                   },
-                  removeNotaFunc: () {
-                    if (widget.cashRegistry.note10 > 0) {
-                      setState(() {
-                        widget.cashRegistry.note10--;
-                        calculaTotal();
-                      });
-                    }
-                  },
-                  clearQuantity: () {
-                    setState(() {
-                      widget.cashRegistry.note10 = 0;
-                      calculaTotal();
-                    });
-                  },
-                  quantidade: widget.cashRegistry.note10,
                 ),
-                NotaContainer(
+                CashContainer(
                   label: 'Notas de 20R\$',
-                  onChanged: (value) {
-                    setState(
-                      () {
-                        widget.cashRegistry.note20 = int.tryParse(value) ?? 0;
-                        calculaTotal();
-                      },
-                    );
-                  },
-                  adicionaNotaFunc: () {
+                  initialValue: widget.cashRegistry.note20,
+                  onChanged: (int value) {
                     setState(() {
-                      widget.cashRegistry.note20++;
+                      widget.cashRegistry.note20 = value;
                       calculaTotal();
                     });
                   },
-                  removeNotaFunc: () {
-                    if (widget.cashRegistry.note20 > 0) {
-                      setState(() {
-                        widget.cashRegistry.note20--;
-                        calculaTotal();
-                      });
-                    }
-                  },
-                  clearQuantity: () {
-                    setState(() {
-                      widget.cashRegistry.note20 = 0;
-                      calculaTotal();
-                    });
-                  },
-                  quantidade: widget.cashRegistry.note20,
                 ),
               ],
             ),
             Row(
               children: [
-                NotaContainer(
+                CashContainer(
                   label: 'Notas de 50R\$',
-                  onChanged: (value) {
+                  initialValue: widget.cashRegistry.note50,
+                  onChanged: (int value) {
                     setState(() {
-                      widget.cashRegistry.note50 = int.tryParse(value) ?? 0;
+                      widget.cashRegistry.note50 = value;
                       calculaTotal();
                     });
                   },
-                  adicionaNotaFunc: () {
-                    setState(() {
-                      widget.cashRegistry.note50++;
-                      calculaTotal();
-                    });
-                  },
-                  removeNotaFunc: () {
-                    if (widget.cashRegistry.note50 > 0) {
-                      setState(() {
-                        widget.cashRegistry.note50--;
-                        calculaTotal();
-                      });
-                    }
-                  },
-                  clearQuantity: () {
-                    setState(() {
-                      widget.cashRegistry.note50 = 0;
-                      calculaTotal();
-                    });
-                  },
-                  quantidade: widget.cashRegistry.note50,
                 ),
-                NotaContainer(
+                CashContainer(
                   label: 'Notas de 100R\$',
-                  onChanged: (value) {
+                  initialValue: widget.cashRegistry.note100,
+                  onChanged: (int value) {
                     setState(() {
-                      widget.cashRegistry.note100 = int.tryParse(value) ?? 0;
+                      widget.cashRegistry.note100 = value;
                       calculaTotal();
                     });
                   },
-                  adicionaNotaFunc: () {
-                    setState(() {
-                      widget.cashRegistry.note100++;
-                      calculaTotal();
-                    });
-                  },
-                  removeNotaFunc: () {
-                    if (widget.cashRegistry.note100 > 0) {
-                      setState(() {
-                        widget.cashRegistry.note100--;
-                        calculaTotal();
-                      });
-                    }
-                  },
-                  clearQuantity: () {
-                    setState(() {
-                      widget.cashRegistry.note100 = 0;
-                      calculaTotal();
-                    });
-                  },
-                  quantidade: widget.cashRegistry.note100,
                 ),
               ],
             ),
+
+            ///
+            ///
+            /// TODO - Aqui ser o Stream Builder.
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
                 'Total: ${widget.cashRegistry.totalMoney.toStringAsFixed(2)} R\$',
-                style: kDefaultTotalTextStyle,
+                style: kDefaultTotalTextStyle, // TODO - Legibilidade.
               ),
             ),
+
+            ///
+            ///
+            /// TODO - Controller e callback??
+            ///
+            /// TODO - Talvez o valor da abertura do caixa não poderia ser no início
+            /// da rotina?
             DefaultTextField(
               hintText: 'Valor de abertura do caixa hoje',
               horizontalPadding: 5,
@@ -301,16 +186,14 @@ class _CashRegistryScreenState extends State<CashRegistryScreen> {
                 onPressed: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) =>
+                      builder: (BuildContext context) =>
                           DayResultScreen(cashRegistry: widget.cashRegistry),
                     ),
                   );
                 },
                 child: Text(
                   'Salvar Caixa',
-                  style: TextStyle(
-                    fontSize: 18,
-                  ),
+                  style: TextStyle(fontSize: 18),
                 ),
                 color: Colors.green,
                 shape: RoundedRectangleBorder(
@@ -347,10 +230,10 @@ class FloatActionButtonAddDespesas extends StatelessWidget {
     return FloatingActionButton(
       onPressed: () async {
         Expense expense = await showModalBottomSheet(
-          backgroundColor: Color(0x00FFFFFF),
+          backgroundColor: Colors.transparent,
           context: context,
           isScrollControlled: true,
-          builder: (context) => SingleChildScrollView(
+          builder: (BuildContext context) => SingleChildScrollView(
             padding: EdgeInsets.only(
               bottom: MediaQuery.of(context).viewInsets.bottom,
             ),

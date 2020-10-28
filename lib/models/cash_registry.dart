@@ -13,9 +13,6 @@ class CashRegistry {
   int note100 = 0;
   DateTime date = DateTime.now();
   double openValue = 0;
-  double totalCreditCardMachine = 0;
-  double totalExpenses = 0;
-  double totalMoney = 0;
   double total = 0;
   List<CreditCardMachine> creditCardMachineList;
   List<Expense> expenseList;
@@ -23,43 +20,32 @@ class CashRegistry {
   ///
   ///
   ///
-  void _calculateExpenses() {
-    totalExpenses = 0;
-    for (Expense expense in expenseList) {
-      totalExpenses += expense.value;
-    }
-  }
+  double get totalExpenses => expenseList.fold<double>(0.0,
+      (double previousValue, Expense expense) => previousValue + expense.value);
 
   ///
   ///
   ///
-  void _calculateCreditCardMachines() {
-    totalCreditCardMachine = 0;
-    for (CreditCardMachine machine in creditCardMachineList) {
-      totalCreditCardMachine += machine.controller.numberValue;
-    }
-  }
+  double get totalCreditCardMachine => creditCardMachineList.fold<double>(
+      0.0,
+      (double previousValue, CreditCardMachine machine) =>
+          previousValue + machine.controller.numberValue);
 
   ///
   ///
   ///
-  void calculateMoney() {
-    totalMoney = 0;
-    totalMoney += note2 * 2;
-    totalMoney += note5 * 5;
-    totalMoney += note10 * 10;
-    totalMoney += note20 * 20;
-    totalMoney += note50 * 50;
-    totalMoney += note100 * 100;
-  }
+  double get totalMoney =>
+      (note2 * 2.0) +
+      (note5 * 5.0) +
+      (note10 * 10.0) +
+      (note20 * 20.0) +
+      (note50 * 50.0) +
+      (note100 * 100.0);
 
   ///
   ///
   ///
   void calculate() {
-    _calculateExpenses();
-    _calculateCreditCardMachines();
-    calculateMoney();
     total = 0;
     total += totalMoney;
     total += totalCreditCardMachine;
