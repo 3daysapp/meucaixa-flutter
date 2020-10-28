@@ -7,10 +7,18 @@ import 'package:meu_caixa_flutter/components/normal_card.dart';
 import 'package:meu_caixa_flutter/models/provider.dart';
 import 'package:meu_caixa_flutter/utils/user_utils.dart';
 
-class ProviderScreen extends StatelessWidget {
+class ProviderScreen extends StatefulWidget {
   static String screenId = 'providerScreen';
-  final _firestore = FirebaseFirestore.instance;
+  const ProviderScreen({Key key}) : super(key: key);
+  @override
+  _ProviderScreenState createState() => _ProviderScreenState();
+}
+
+class _ProviderScreenState extends State<ProviderScreen> {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   final Provider provider = Provider();
 
   void addProvider(BuildContext context) async {

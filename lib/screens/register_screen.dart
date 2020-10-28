@@ -12,8 +12,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 ///
 class RegisterScreen extends StatefulWidget {
   static String screenId = 'register_screen';
-
-  /// TODO - Construtor
+  const RegisterScreen({Key key}) : super(key: key);
 
   ///
   ///
@@ -46,8 +45,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         await user.updateProfile(displayName: username);
         toggleSpinner();
 
-        /// TODO - Pode ter um problema aqui...
-        Navigator.pushNamed(context, MainScreen.screenId);
+        await Navigator.pushNamed(context, MainScreen.screenId);
       } on FirebaseAuthException catch (e) {
         toggleSpinner();
         if (e.code == 'weak-password') {
@@ -128,7 +126,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             icon: Icons.vpn_key,
 
                             /// TODO - Pode melhorar a legibilidade.
-                            validator: (value) {
+                            validator: (String value) {
                               if (value.isEmpty) {
                                 return 'Por favor, informe uma senha!';
                               } else {

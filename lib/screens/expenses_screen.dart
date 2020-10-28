@@ -12,6 +12,7 @@ import 'package:meu_caixa_flutter/screens/main_screen.dart';
 ///
 class ExpenseScreen extends StatefulWidget {
   static String screenId = 'ExpenseScreen';
+  const ExpenseScreen({Key key}) : super(key: key);
 
   ///
   ///
@@ -24,7 +25,7 @@ class ExpenseScreen extends StatefulWidget {
 ///
 ///
 class _ExpenseScreenState extends State<ExpenseScreen> {
-  List<Expense> expenseList = [];
+  List<Expense> expenseList = <Expense>[];
   CashRegistry cashRegistry = CashRegistry();
 
   ///
@@ -41,7 +42,7 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
         body: WillPopScope(
           onWillPop: () async => showDialog(
             context: context,
-            builder: (context) => AlertDialog(
+            builder: (BuildContext context) => AlertDialog(
               title: Text('Aviso'),
               content: Text(
                 'Tem certeza que deseja voltar?\n'
@@ -57,8 +58,8 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
                     child: Text('SIM'),
                     color: Colors.redAccent,
                     onPressed: () {
-                      Navigator.pushNamedAndRemoveUntil(
-                          context, MainScreen.screenId, (route) => true);
+                      Navigator.pushNamedAndRemoveUntil(context,
+                          MainScreen.screenId, (dynamic route) => true);
                     }),
               ],
             ),
@@ -94,7 +95,7 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
                       backgroundColor: Colors.transparent,
                       context: context,
                       isScrollControlled: true,
-                      builder: (context) => SingleChildScrollView(
+                      builder: (BuildContext context) => SingleChildScrollView(
                         padding: EdgeInsets.only(
                           bottom: MediaQuery.of(context).viewInsets.bottom,
                         ),
@@ -107,7 +108,7 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
+                    children: <Widget>[
                       Text('Adicionar despesa'),
                       Icon(Icons.add),
                     ],
@@ -118,8 +119,8 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
                   onPressed: () {
                     cashRegistry.expenseList = expenseList;
                     Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) =>
+                      MaterialPageRoute<Widget>(
+                        builder: (BuildContext context) =>
                             CreditCardScreen(cashRegistry: cashRegistry),
                       ),
                     );
@@ -127,7 +128,7 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
+                    children: <Widget>[
                       Text('Avançar'),
                       Icon(Icons.arrow_right_outlined),
                     ],

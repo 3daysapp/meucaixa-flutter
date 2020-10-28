@@ -11,10 +11,6 @@ const kDefaultQuantityLabelTextStyle = TextStyle(
   fontSize: 50,
 );
 
-const int majorVersion = 1;
-const int minorVersion = 0;
-const int patchVersion = 1;
-const int buildNumber = 2;
 const String releaseDate = '25/10/2020';
 
 const kDefaultTotalTextStyle = TextStyle(

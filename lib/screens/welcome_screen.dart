@@ -9,9 +9,14 @@ import 'package:meu_caixa_flutter/components/rounded_action_button.dart';
 ///
 ///
 ///
-class WelcomeScreen extends StatelessWidget {
+class WelcomeScreen extends StatefulWidget {
   static String screenId = 'welcome_screen';
+  const WelcomeScreen({Key key}) : super(key: key);
+  @override
+  _WelcomeScreenState createState() => _WelcomeScreenState();
+}
 
+class _WelcomeScreenState extends State<WelcomeScreen> {
   Widget _initialPage;
 
   /// TODO - Será que esta é uma boa implementação?

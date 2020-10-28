@@ -6,13 +6,39 @@ import 'package:meu_caixa_flutter/contantes.dart';
 import 'package:meu_caixa_flutter/screens/expenses_screen.dart';
 import 'package:meu_caixa_flutter/screens/login_screen.dart';
 import 'package:meu_caixa_flutter/screens/provider_screen.dart';
+import 'package:package_info/package_info.dart';
 
 ///
 ///
 ///
-class MainScreen extends StatelessWidget {
+class MainScreen extends StatefulWidget {
   static String screenId = 'mainScreen';
+  const MainScreen({Key key}) : super(key: key);
+  @override
+  _MainScreenState createState() => _MainScreenState();
+}
+
+class _MainScreenState extends State<MainScreen> {
   final User user = FirebaseAuth.instance.currentUser;
+
+  PackageInfo _packageInfo = PackageInfo(
+      appName: 'Unknown',
+      packageName: 'Unknown',
+      version: 'Unknown',
+      buildNumber: 'Unknown');
+
+  @override
+  void initState() {
+    super.initState();
+    _initPackageInfo();
+  }
+
+  Future<void> _initPackageInfo() async {
+    final PackageInfo info = await PackageInfo.fromPlatform();
+    setState(() {
+      _packageInfo = info;
+    });
+  }
 
   ///
   ///
@@ -110,12 +136,10 @@ class MainScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              /// TODO - Usar https://pub.dev/packages/package_info
               Container(
                 child: Column(
                   children: [
-                    Text(
-                        '$majorVersion.$minorVersion.$patchVersion.$buildNumber'),
+                    Text('${_packageInfo.version}.${_packageInfo.buildNumber}'),
                     Text(releaseDate)
                   ],
                 ),

@@ -12,6 +12,8 @@ import 'package:meu_caixa_flutter/utils/user_utils.dart';
 ///
 ///
 class AddExpenseScreen extends StatefulWidget {
+  const AddExpenseScreen({Key key}) : super(key: key);
+
   ///
   ///
   ///

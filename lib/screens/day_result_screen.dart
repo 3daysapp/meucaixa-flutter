@@ -21,7 +21,6 @@ class DayResultScreen extends StatefulWidget {
   ///
   ///
   ///
-  /// TODO - Colocar dentro do padrão
   const DayResultScreen({@required this.cashRegistry, Key key})
       : super(key: key);
 

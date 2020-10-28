@@ -13,6 +13,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 ///
 class LoginScreen extends StatefulWidget {
   static String screenId = 'login_screen';
+  const LoginScreen({Key key}) : super(key: key);
 
   ///
   ///
