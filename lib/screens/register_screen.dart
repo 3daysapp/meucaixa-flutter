@@ -26,8 +26,8 @@ class RegisterScreen extends StatefulWidget {
 ///
 ///
 class _RegisterScreenState extends State<RegisterScreen> {
-  final _formKey = GlobalKey<FormState>();
-  FirebaseAuth auth = FirebaseAuth.instance;
+  final GlobalKey<FormState> _formKey = GlobalKey();
+  final FirebaseAuth auth = FirebaseAuth.instance;
   String userEmail;
   String userPassword;
   String username;
@@ -84,7 +84,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
+                  children: <Widget>[
                     SizedBox(
                       height: 200,
                       width: 200,
@@ -108,26 +108,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
+                        children: <Widget>[
                           DefaultTextField(
-                            callback: (newValue) {
+                            callback: (String newValue) {
                               userEmail = newValue;
                             },
                             hintText: 'Seu e-mail',
                             icon: Icons.email,
                             inputType: TextInputType.emailAddress,
-                            validator: (value) {
-                              if (value.isEmpty) {
-                                return 'Por favor, informe seu email!';
-                              } else {
-                                return null;
-                              }
-                            },
+                            validator: (String value) => value.isEmpty
+                                ? 'Por favor, informe seu email!'
+                                : null,
                           ),
                           DefaultTextField(
-                            callback: (newValue) {
-                              userPassword = newValue;
-                            },
+                            callback: (String newValue) =>
+                                userPassword = newValue,
                             hintText: 'Sua senha',
                             obscureText: true,
                             icon: Icons.vpn_key,
@@ -142,13 +137,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             },
                           ),
                           DefaultTextField(
-                            callback: (newValue) {
-                              username = newValue;
-                            },
+                            callback: (String newValue) => username = newValue,
                             hintText: 'Seu nome',
                             inputAction: TextInputAction.done,
                             icon: Icons.person,
-                            validator: (value) => value.isEmpty
+                            validator: (String value) => value.isEmpty
                                 ? 'Por favor, informe seu nome!'
                                 : null,
                           ),
