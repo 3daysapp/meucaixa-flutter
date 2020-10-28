@@ -122,8 +122,7 @@ class _CreditCardScreenState extends State<CreditCardScreen> {
                       widget.cashRegistry.creditCardMachineList = [];
 
                       for (QueryDocumentSnapshot machine in machines.reversed) {
-                        Map<String, dynamic> machineData =
-                            machine.data(); // TODO - Qual é o tipo?
+                        Map<String, dynamic> machineData = machine.data();
 
                         final CreditCardMachine creditCardMachine =
                             CreditCardMachine();

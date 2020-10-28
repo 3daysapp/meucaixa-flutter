@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:meu_caixa_flutter/components/display_alert.dart';
@@ -10,9 +11,18 @@ import 'package:meu_caixa_flutter/utils/user_utils.dart';
 ///
 ///
 ///
-class AddCreditCardMachineScreen extends StatelessWidget {
-  final _firestore = FirebaseFirestore.instance;
+class AddCreditCardMachineScreen extends StatefulWidget {
+  @override
+  _AddCreditCardMachineScreenState createState() =>
+      _AddCreditCardMachineScreenState();
+}
+
+class _AddCreditCardMachineScreenState
+    extends State<AddCreditCardMachineScreen> {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   final CreditCardMachine creditCardMachine = CreditCardMachine();
 
   ///

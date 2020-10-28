@@ -14,20 +14,27 @@ import 'package:meu_caixa_flutter/utils/user_utils.dart';
 ///
 ///
 ///
-class DayResultScreen extends StatelessWidget {
+class DayResultScreen extends StatefulWidget {
   static String screenId = 'DayResultScreen';
   final CashRegistry cashRegistry;
-  final _firestore = FirebaseFirestore.instance;
 
   ///
   ///
   ///
   /// TODO - Colocar dentro do padrão
-  DayResultScreen({@required this.cashRegistry});
+  const DayResultScreen({@required this.cashRegistry, Key key})
+      : super(key: key);
+
+  @override
+  _DayResultScreenState createState() => _DayResultScreenState();
+}
+
+class _DayResultScreenState extends State<DayResultScreen> {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   List<Widget> getExpenseContainerList() {
     List<Widget> expList = [];
-    for (Expense exp in cashRegistry.expenseList) {
+    for (Expense exp in widget.cashRegistry.expenseList) {
       final mask = MoneyMaskedTextController(
         decimalSeparator: ',',
         thousandSeparator: '.',
@@ -51,12 +58,12 @@ class DayResultScreen extends StatelessWidget {
       DocumentReference reference =
           await _firestore.collection('cashRegistryHistory').add({
         'userId': UserUtils.getCurrentUser().uid,
-        'date': cashRegistry.date,
-        'openValue': cashRegistry.openValue,
-        'totalCreditCardMachine': cashRegistry.totalCreditCardMachine,
-        'totalExpenses': cashRegistry.totalExpenses,
-        'totalMoney': cashRegistry.totalMoney,
-        'total': cashRegistry.total,
+        'date': widget.cashRegistry.date,
+        'openValue': widget.cashRegistry.openValue,
+        'totalCreditCardMachine': widget.cashRegistry.totalCreditCardMachine,
+        'totalExpenses': widget.cashRegistry.totalExpenses,
+        'totalMoney': widget.cashRegistry.totalMoney,
+        'total': widget.cashRegistry.total,
       });
 
       await _saveExpenses(reference);
@@ -98,7 +105,7 @@ class DayResultScreen extends StatelessWidget {
   ///
   ///
   void _saveExpenses(DocumentReference reference) {
-    for (Expense expense in cashRegistry.expenseList) {
+    for (Expense expense in widget.cashRegistry.expenseList) {
       _firestore
           .collection('cashRegistryHistory')
           .doc(reference.id)
@@ -118,7 +125,7 @@ class DayResultScreen extends StatelessWidget {
   ///
   void _saveCreditCardMachines(DocumentReference reference) async {
     for (CreditCardMachine creditCardMachine
-        in cashRegistry.creditCardMachineList) {
+        in widget.cashRegistry.creditCardMachineList) {
       await _firestore
           .collection('cashRegistryHistory')
           .doc(reference.id)
@@ -136,7 +143,8 @@ class DayResultScreen extends StatelessWidget {
   ///
   List<Widget> getCreditCardMachineContainerList() {
     List<Widget> creditCardMachineContainerList = [];
-    for (CreditCardMachine cardMachine in cashRegistry.creditCardMachineList) {
+    for (CreditCardMachine cardMachine
+        in widget.cashRegistry.creditCardMachineList) {
       final expContainer = CreditCardMachineCard(cardMachine: cardMachine);
       creditCardMachineContainerList.add(expContainer);
     }
@@ -148,7 +156,7 @@ class DayResultScreen extends StatelessWidget {
   ///
   @override
   Widget build(BuildContext context) {
-    cashRegistry.calculate();
+    widget.cashRegistry.calculate();
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -179,18 +187,21 @@ class DayResultScreen extends StatelessWidget {
                 ),
                 NormalCard(
                   title: 'Total',
-                  trailing: 'R\$ ${cashRegistry.totalMoney.toStringAsFixed(2)}',
+                  trailing:
+                      'R\$ ${widget.cashRegistry.totalMoney.toStringAsFixed(2)}',
                   color: Colors.green,
                 ),
                 NormalCard(
                   title: 'Caixa aberto com',
-                  trailing: 'R\$ ${cashRegistry.openValue.toStringAsFixed(2)}',
+                  trailing:
+                      'R\$ ${widget.cashRegistry.openValue.toStringAsFixed(2)}',
                   color: Colors.green,
                 ),
                 CardTitle(
                   title: 'Resultado do dia',
-                  color:
-                      cashRegistry.total > 0 ? Colors.green : Colors.redAccent,
+                  color: widget.cashRegistry.total > 0
+                      ? Colors.green
+                      : Colors.redAccent,
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -199,22 +210,22 @@ class DayResultScreen extends StatelessWidget {
                     children: [
                       Text(
                         'Máquinas de cartão:  '
-                        'R\$ ${cashRegistry.totalCreditCardMachine.toStringAsFixed(2)}',
+                        'R\$ ${widget.cashRegistry.totalCreditCardMachine.toStringAsFixed(2)}',
                         style: kDefaultResultTextStyle,
                       ),
                       Text(
                         'Dinheiro:  '
-                        'R\$ ${cashRegistry.totalMoney.toStringAsFixed(2)}',
+                        'R\$ ${widget.cashRegistry.totalMoney.toStringAsFixed(2)}',
                         style: kDefaultResultTextStyle,
                       ),
                       Text(
                         'Abertura do caixa:  '
-                        'R\$ ${cashRegistry.openValue.toStringAsFixed(2)}',
+                        'R\$ ${widget.cashRegistry.openValue.toStringAsFixed(2)}',
                         style: kDefaultResultTextStyle,
                       ),
                       Text(
                         'Despesas:  '
-                        'R\$ ${cashRegistry.totalExpenses.toStringAsFixed(2)}',
+                        'R\$ ${widget.cashRegistry.totalExpenses.toStringAsFixed(2)}',
                         style: kDefaultResultTextStyle,
                       ),
                       SizedBox(
@@ -226,7 +237,7 @@ class DayResultScreen extends StatelessWidget {
                       ),
                       Text(
                         'Lucro:  '
-                        'R\$ ${cashRegistry.total.toStringAsFixed(2)}',
+                        'R\$ ${widget.cashRegistry.total.toStringAsFixed(2)}',
                         style: kDefaultResultTextStyle,
                       ),
                     ],
