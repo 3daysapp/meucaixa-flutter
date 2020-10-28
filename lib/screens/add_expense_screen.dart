@@ -8,18 +8,33 @@ import 'package:meu_caixa_flutter/models/expense.dart';
 import 'package:meu_caixa_flutter/models/provider.dart';
 import 'package:meu_caixa_flutter/utils/user_utils.dart';
 
+///
+///
+///
 class AddExpenseScreen extends StatefulWidget {
+  ///
+  ///
+  ///
   @override
   _AddExpenseScreenState createState() => _AddExpenseScreenState();
 }
 
+///
+///
+///
 class _AddExpenseScreenState extends State<AddExpenseScreen> {
   var descriptionController = TextEditingController();
   final _firestore = FirebaseFirestore.instance;
   Expense expense = Expense();
   String selectedProvider = '';
-  final valueController =
-      MoneyMaskedTextController(thousandSeparator: '.', decimalSeparator: ',');
+  final valueController = MoneyMaskedTextController(
+    thousandSeparator: '.',
+    decimalSeparator: ',',
+  );
+
+  ///
+  ///
+  ///
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -59,7 +74,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
           StreamBuilder(
             stream: _firestore
                 .collection('providers')
-                .where("userId", isEqualTo: UserUtils.getCurrentUser().uid)
+                .where('userId', isEqualTo: UserUtils.getCurrentUser().uid)
                 .snapshots(),
             builder: (context, snapshot) {
               if (!snapshot.hasData) {
@@ -69,8 +84,10 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                   ),
                 );
               }
+
               final providerSnapshot = snapshot.data.docs;
               List<DropdownMenuItem<String>> providerList = [];
+
               for (var provide in providerSnapshot.reversed) {
                 var p = provide.data();
                 print(p);
@@ -82,20 +99,22 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                   providerList.add(dropdown);
                 }
               }
+
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: DropdownButton(
-                    isExpanded: true,
-                    iconSize: 0,
-                    value:
-                        expense.provider != null ? expense.provider.name : null,
-                    items: providerList,
-                    onChanged: (value) {
-                      setState(() {
-                        expense.provider = Provider();
-                        expense.provider.name = value;
-                      });
-                    }),
+                  isExpanded: true,
+                  iconSize: 0,
+                  value:
+                      expense.provider != null ? expense.provider.name : null,
+                  items: providerList,
+                  onChanged: (value) {
+                    setState(() {
+                      expense.provider = Provider();
+                      expense.provider.name = value;
+                    });
+                  },
+                ),
               );
             },
           ),

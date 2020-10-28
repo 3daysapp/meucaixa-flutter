@@ -1,22 +1,29 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:meu_caixa_flutter/components/default_text_field.dart';
+import 'package:meu_caixa_flutter/components/display_alert.dart';
 import 'package:meu_caixa_flutter/components/rounded_action_button.dart';
-import 'package:meu_caixa_flutter/screens/cash_registry_screen.dart';
 import 'package:meu_caixa_flutter/screens/main_screen.dart';
 import 'package:meu_caixa_flutter/screens/register_screen.dart';
-import 'package:meu_caixa_flutter/utils/user_utils.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../components/display_alert.dart';
 
+///
+///
+///
 class LoginScreen extends StatefulWidget {
   static String screenId = 'login_screen';
 
+  ///
+  ///
+  ///
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
 
+///
+///
+///
 class _LoginScreenState extends State<LoginScreen> {
   FirebaseAuth _auth = FirebaseAuth.instance;
   Future<SharedPreferences> _prefs;
@@ -28,6 +35,18 @@ class _LoginScreenState extends State<LoginScreen> {
   final passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
+  ///
+  ///
+  ///
+  @override
+  void initState() {
+    super.initState();
+    loadSharedPreferences();
+  }
+
+  ///
+  ///
+  ///
   void signIn() async {
     final sharedPrefs = await _prefs;
     if (_formKey.currentState.validate()) {
@@ -39,17 +58,26 @@ class _LoginScreenState extends State<LoginScreen> {
             email: _userEmail, password: _userPassword);
         if (user != null) {
           if (saveUserEmail) {
+            /// TODO - Álvaro verificar se a linha abaixo está mostrando um alerta.
             sharedPrefs.setBool('shouldSaveUserEmail', saveUserEmail);
-            sharedPrefs.setString('userEmail', _userEmail);
+            await sharedPrefs.setString('userEmail', _userEmail);
           }
-          sharedPrefs.setBool("alreadyHasUser", true);
+
+          await sharedPrefs.setBool('alreadyHasUser', true);
+
           toggleSpinner();
-          _userEmail = "";
-          _userPassword = "";
-          Navigator.of(context)
-              .pushNamedAndRemoveUntil(MainScreen.screenId, (route) => false);
+
+          _userEmail = '';
+
+          _userPassword = '';
+
+          await Navigator.of(context).pushNamedAndRemoveUntil(
+            MainScreen.screenId,
+            (route) => false,
+          );
         } else {
           toggleSpinner();
+
           showAlertDialog(
               context: context,
               title: 'Erro',
@@ -63,19 +91,21 @@ class _LoginScreenState extends State<LoginScreen> {
                 )
               ]);
         }
-      } on FirebaseAuthException catch (e) {
+      } on FirebaseAuthException {
         showAlertDialog(
-            context: context,
-            title: 'Erro',
-            message: 'Usuário ou senha incorretos.',
-            actions: [
-              FlatButton(
-                child: Text('OK'),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              )
-            ]);
+          context: context,
+          title: 'Erro',
+          message: 'Usuário ou senha incorretos.',
+          actions: [
+            FlatButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            )
+          ],
+        );
+
         toggleSpinner();
       } catch (e) {
         toggleSpinner();
@@ -84,12 +114,9 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  @override
-  void initState() {
-    super.initState();
-    loadSharedPrefences();
-  }
-
+  ///
+  ///
+  ///
   @override
   void dispose() {
     super.dispose();
@@ -99,11 +126,17 @@ class _LoginScreenState extends State<LoginScreen> {
     _userPassword = null;
   }
 
-  void loadSharedPrefences() {
+  ///
+  ///
+  ///
+  void loadSharedPreferences() {
     _prefs = SharedPreferences.getInstance();
     loadUserEmail();
   }
 
+  ///
+  ///
+  ///
   void loadUserEmail() async {
     final sharedPrefs = await _prefs;
     setState(() {
@@ -116,12 +149,19 @@ class _LoginScreenState extends State<LoginScreen> {
     });
   }
 
+  ///
+  ///
+  ///
   void toggleSpinner() {
+    /// TODO - Caso clássico em que deve ser utilizado um stream.
     setState(() {
       _showSpinner = !_showSpinner;
     });
   }
 
+  ///
+  ///
+  ///
   @override
   Widget build(BuildContext context) {
     return SafeArea(

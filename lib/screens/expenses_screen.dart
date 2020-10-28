@@ -6,33 +6,47 @@ import 'package:meu_caixa_flutter/models/expense.dart';
 import 'package:meu_caixa_flutter/screens/add_expense_screen.dart';
 import 'package:meu_caixa_flutter/screens/credit_cards_screen.dart';
 import 'package:meu_caixa_flutter/screens/main_screen.dart';
-import 'package:meu_caixa_flutter/utils/user_utils.dart';
 
+///
+///
+///
 class ExpenseScreen extends StatefulWidget {
   static String screenId = 'ExpenseScreen';
 
+  ///
+  ///
+  ///
   @override
   _ExpenseScreenState createState() => _ExpenseScreenState();
 }
 
+///
+///
+///
 class _ExpenseScreenState extends State<ExpenseScreen> {
   List<Expense> expenseList = [];
   CashRegistry cashRegistry = CashRegistry();
+
+  ///
+  ///
+  ///
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: Text("Lançamento de despesas"),
+          title: Text('Lançamento de despesas'),
           centerTitle: true,
         ),
         body: WillPopScope(
           onWillPop: () async => showDialog(
             context: context,
             builder: (context) => AlertDialog(
-              title: Text("Aviso"),
+              title: Text('Aviso'),
               content: Text(
-                  "Tem certeza que deseja voltar? Ao voltar, o lançamento do caixa sera cancelado!"),
+                'Tem certeza que deseja voltar?\n'
+                'Ao voltar, o lançamento do caixa sera cancelado!',
+              ),
               actions: [
                 RaisedButton(
                   child: Text('NÃO'),
@@ -56,9 +70,9 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
               children: [
                 Expanded(
                   flex: 1,
+                  // TODO - Revisar montagem da lista.
                   child: ListView.builder(
-                    itemCount:
-                        expenseList.length == null ? 0 : expenseList.length,
+                    itemCount: expenseList == null ? 0 : expenseList.length,
                     itemBuilder: (BuildContext context, int index) {
                       if (expenseList[index] != null) {
                         return ExpenseCard(
@@ -77,7 +91,7 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
                 FlatButton(
                   onPressed: () async {
                     Expense expense = await showModalBottomSheet(
-                      backgroundColor: Color(0x00FFFFFF),
+                      backgroundColor: Colors.transparent,
                       context: context,
                       isScrollControlled: true,
                       builder: (context) => SingleChildScrollView(
@@ -114,7 +128,7 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Text("Avançar"),
+                      Text('Avançar'),
                       Icon(Icons.arrow_right_outlined),
                     ],
                   ),

@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+/// TODO - Uma classe mais estruturada seria uma opção?
+
 const kDefaultValorLabelTextStyle = TextStyle(
   fontSize: 20,
 );
@@ -15,12 +17,13 @@ const int patchVersion = 1;
 const int buildNumber = 2;
 const String releaseDate = '25/10/2020';
 
+/// TODO - As variáveis serão escritas em PT ou EN??
 const kDefaultTotaisTextStyle = TextStyle(
   fontSize: 20,
 );
 
 const kDefaultTextFieldStyle = InputDecoration(
-  labelText: "ZmaskField3",
+  labelText: 'ZmaskField3',
   contentPadding: EdgeInsets.all(10), // Espaçamento entre bordas e texto
   border: OutlineInputBorder(), // Essa borda é a que você procura
 );

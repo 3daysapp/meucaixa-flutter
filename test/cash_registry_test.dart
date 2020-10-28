@@ -29,16 +29,16 @@ void main() {
   cashRegistry.note50 = 1;
   cashRegistry.note100 = 2;
   cashRegistry.calculate();
-  test("Total de despesas", () {
+  test('Total de despesas', () {
     expect(cashRegistry.totalExpenses, 200);
   });
-  test("Total Cartão de credito", () {
+  test('Total Cartão de credito', () {
     expect(cashRegistry.totalCreditCardMachine, 179);
   });
-  test("Total Dinheiro", () {
+  test('Total Dinheiro', () {
     expect(cashRegistry.totalMoney, 400);
   });
-  test("Fechamento total do caixa", () {
+  test('Fechamento total do caixa', () {
     expect(cashRegistry.total, 643);
   });
 }

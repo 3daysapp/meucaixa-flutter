@@ -1,11 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:meu_caixa_flutter/components/default_text_field.dart';
 
+///
+///
+///
 class AddAnything extends StatelessWidget {
-  final List<Widget> childrens;
+  final List<Widget> children;
 
-  AddAnything({@required this.childrens});
+  ///
+  ///
+  ///
+  AddAnything({@required this.children});
 
+  ///
+  ///
+  ///
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -19,7 +27,7 @@ class AddAnything extends StatelessWidget {
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: childrens,
+        children: children,
       ),
     );
   }

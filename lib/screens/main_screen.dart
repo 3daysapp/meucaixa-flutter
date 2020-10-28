@@ -7,39 +7,48 @@ import 'package:meu_caixa_flutter/screens/expenses_screen.dart';
 import 'package:meu_caixa_flutter/screens/login_screen.dart';
 import 'package:meu_caixa_flutter/screens/provider_screen.dart';
 
+///
+///
+///
 class MainScreen extends StatelessWidget {
   static String screenId = 'mainScreen';
   final User user = FirebaseAuth.instance.currentUser;
 
+  ///
+  ///
+  ///
   void logout(BuildContext context) {
     showDialog(
       context: context,
-      builder: (context) => new AlertDialog(
-        title: new Text('Aviso'),
-        content: new Text('Deseja realmente sair do app?'),
+      builder: (context) => AlertDialog(
+        title: Text('Aviso'),
+        content: Text('Deseja realmente sair do app?'),
         actions: <Widget>[
           FlatButton(
             onPressed: () => Navigator.of(context).pop(false),
-            child: Text("Não"),
+            child: Text('Não'),
           ),
           SizedBox(height: 16),
           FlatButton(
             onPressed: () => Navigator.of(context).pushNamedAndRemoveUntil(
                 LoginScreen.screenId, (route) => false),
-            child: Text("Sim"),
+            child: Text('Sim'),
           ),
         ],
       ),
     );
   }
 
+  ///
+  ///
+  ///
   @override
   Widget build(BuildContext context) {
-    int numberOfTimesPressedBackButton = 0;
+    // int numberOfTimesPressedBackButton = 0;
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: Text("Meu caixa"),
+          title: Text('Meu caixa'),
         ),
         body: Container(
           child: Column(
@@ -101,6 +110,7 @@ class MainScreen extends StatelessWidget {
                   ],
                 ),
               ),
+              /// TODO - Usar https://pub.dev/packages/package_info
               Container(
                 child: Column(
                   children: [

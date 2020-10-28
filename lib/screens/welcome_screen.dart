@@ -1,18 +1,27 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:meu_caixa_flutter/contantes.dart';
+import 'package:meu_caixa_flutter/screens/login_screen.dart';
+import 'package:meu_caixa_flutter/screens/register_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../contantes.dart';
 import 'package:meu_caixa_flutter/components/rounded_action_button.dart';
-import 'login_screen.dart';
-import 'register_screen.dart';
 
+///
+///
+///
 class WelcomeScreen extends StatelessWidget {
   static String screenId = 'welcome_screen';
 
   Widget _initialPage;
+
+  /// TODO - Será que esta é uma boa implementação?
+
+  ///
+  ///
+  ///
   Future<FirebaseApp> _getFirebaseConnection(BuildContext context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (prefs.containsKey("alreadyHasUser")) {
+    if (prefs.containsKey('alreadyHasUser')) {
       _initialPage = LoginScreen();
     } else {
       _initialPage = WelcomeScreenActions();
@@ -20,6 +29,9 @@ class WelcomeScreen extends StatelessWidget {
     return Firebase.initializeApp();
   }
 
+  ///
+  ///
+  ///
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -45,7 +57,13 @@ class WelcomeScreen extends StatelessWidget {
   }
 }
 
+///
+///
+///
 class WelcomeScreenActions extends StatelessWidget {
+  ///
+  ///
+  ///
   @override
   Widget build(BuildContext context) {
     return Scaffold(

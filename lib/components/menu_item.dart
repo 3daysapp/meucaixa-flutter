@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_masked_text/flutter_masked_text.dart';
 
+///
+///
+///
 class MenuItem extends StatelessWidget {
   final Function action;
   final String label;
@@ -9,8 +11,21 @@ class MenuItem extends StatelessWidget {
   final Color color;
   final double height;
 
-  MenuItem({this.label, this.action, this.icon, this.color, this.height});
+  ///
+  ///
+  ///
+  const MenuItem({
+    Key key,
+    this.label,
+    this.action,
+    this.icon,
+    this.color,
+    this.height,
+  }) : super(key: key);
 
+  ///
+  ///
+  ///
   @override
   Widget build(BuildContext context) {
     return Container(

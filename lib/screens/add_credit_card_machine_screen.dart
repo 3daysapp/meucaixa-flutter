@@ -2,50 +2,58 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:meu_caixa_flutter/components/display_alert.dart';
-import 'package:meu_caixa_flutter/contantes.dart';
 import 'package:meu_caixa_flutter/components/default_text_field.dart';
 import 'package:meu_caixa_flutter/models/credit_card_machine.dart';
-import 'package:meu_caixa_flutter/models/expense.dart';
 import 'package:meu_caixa_flutter/utils/user_utils.dart';
 
+///
+///
+///
 class AddCreditCardMachineScreen extends StatelessWidget {
   final _firestore = FirebaseFirestore.instance;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final CreditCardMachine creditCardMachine = CreditCardMachine();
 
+  ///
+  ///
+  ///
   void addCreditCardMachine(BuildContext context) async {
     if (_formKey.currentState.validate()) {
       User user = UserUtils.getCurrentUser();
       try {
-        await _firestore
-            .collection("creditCardMachines")
-            .add({"userId": user.uid, "name": creditCardMachine.name});
+        await _firestore.collection('creditCardMachines').add({
+          'userId': user.uid,
+          'name': creditCardMachine.name,
+        });
+
         showAlertDialog(
           context: context,
-          title: "Sucesso",
-          message: "Máquina de cartão adicionada com sucesso",
+          title: 'Sucesso',
+          message: 'Máquina de cartão adicionada com sucesso',
           actions: [
             FlatButton(
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: Text("OK"),
+              child: Text('OK'),
             )
           ],
         );
       } catch (e) {
         Scaffold.of(context).showSnackBar(
           SnackBar(
-            content: Text(
-                "Falha ao adicionar máquina, por favor, tente novamente mais tarde!"),
+            content: Text('Falha ao adicionar máquina.\n'
+                'Por favor, tente novamente mais tarde!'),
           ),
         );
       }
     }
   }
 
+  ///
+  ///
+  ///
   @override
   Widget build(BuildContext context) {
     return Container(

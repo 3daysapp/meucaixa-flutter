@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:meu_caixa_flutter/components/default_text_field.dart';
@@ -9,49 +8,78 @@ import 'package:meu_caixa_flutter/screens/add_credit_card_machine_screen.dart';
 import 'package:meu_caixa_flutter/screens/cash_registry_screen.dart';
 import 'package:meu_caixa_flutter/utils/user_utils.dart';
 
+///
+///
+///
 class CreditCardScreen extends StatefulWidget {
-  static String screenId = "CreditCardScreen";
+  static String screenId = 'CreditCardScreen';
   final CashRegistry cashRegistry;
-  CreditCardScreen({@required this.cashRegistry});
+
+  ///
+  ///
+  ///
+  const CreditCardScreen({
+    Key key,
+    @required this.cashRegistry,
+  }) : super(key: key);
+
+  ///
+  ///
+  ///
   @override
   _CreditCardScreenState createState() => _CreditCardScreenState();
 }
 
+///
+///
+///
 class _CreditCardScreenState extends State<CreditCardScreen> {
   FirebaseFirestore _firestore;
   List<DefaultTextField> creditCardMachineList = [];
 
+  ///
+  ///
+  ///
   @override
   void initState() {
     super.initState();
     _firestore = FirebaseFirestore.instance;
   }
 
+  ///
+  ///
+  ///
   @override
   void dispose() {
     super.dispose();
   }
 
-  var scieloController =
-      MoneyMaskedTextController(decimalSeparator: ',', thousandSeparator: '.');
-  var steloController =
-      MoneyMaskedTextController(decimalSeparator: ',', thousandSeparator: '.');
+  MoneyMaskedTextController scieloController = MoneyMaskedTextController(
+    decimalSeparator: ',',
+    thousandSeparator: '.',
+  );
 
-  CashRegistry _cashRegistry = CashRegistry();
+  MoneyMaskedTextController steloController = MoneyMaskedTextController(
+    decimalSeparator: ',',
+    thousandSeparator: '.',
+  );
+
+  // CashRegistry _cashRegistry = CashRegistry();
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
-          title: Text("Cartões de crédito"),
+          title: Text('Cartões de crédito'),
           centerTitle: true,
           actions: [
             IconButton(
               icon: Icon(Icons.add),
               onPressed: () {
                 showModalBottomSheet(
-                  backgroundColor: Color(0x00FFFFFF),
+                  backgroundColor: Colors.transparent,
                   context: context,
                   isScrollControlled: true,
                   builder: (context) => SingleChildScrollView(
@@ -74,8 +102,10 @@ class _CreditCardScreenState extends State<CreditCardScreen> {
                   StreamBuilder(
                     stream: _firestore
                         .collection('creditCardMachines')
-                        .where("userId",
-                            isEqualTo: UserUtils.getCurrentUser().uid)
+                        .where(
+                          'userId',
+                          isEqualTo: UserUtils.getCurrentUser().uid,
+                        )
                         .snapshots(),
                     builder: (context, snapshot) {
                       if (!snapshot.hasData) {
@@ -85,29 +115,40 @@ class _CreditCardScreenState extends State<CreditCardScreen> {
                           ),
                         );
                       }
+
                       final machinesSnapshot = snapshot.data.docs;
                       creditCardMachineList = [];
                       widget.cashRegistry.creditCardMachineList = [];
+
                       for (var machine in machinesSnapshot.reversed) {
-                        var m = machine.data();
+                        var m = machine.data(); // TODO - Qual é o tipo?
+
                         final CreditCardMachine creditCardMachine =
                             CreditCardMachine();
+
                         if (m['name'] != null) {
                           creditCardMachine.name = m['name'];
+
                           creditCardMachine.controller =
                               MoneyMaskedTextController(
-                                  thousandSeparator: '.',
-                                  decimalSeparator: ',');
+                            thousandSeparator: '.',
+                            decimalSeparator: ',',
+                          );
+
                           print(m);
+
                           final defaultTextField = DefaultTextField(
                             hintText: creditCardMachine.name,
                             controller: creditCardMachine.controller,
                           );
+
                           creditCardMachineList.add(defaultTextField);
+
                           widget.cashRegistry.creditCardMachineList
                               .add(creditCardMachine);
                         }
                       }
+
                       return Column(
                         children: creditCardMachineList,
                       );
@@ -118,7 +159,8 @@ class _CreditCardScreenState extends State<CreditCardScreen> {
                       Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (context) => CashRegistryScreen(
-                              cashRegistry: widget.cashRegistry),
+                            cashRegistry: widget.cashRegistry,
+                          ),
                         ),
                       );
                     },
@@ -126,7 +168,7 @@ class _CreditCardScreenState extends State<CreditCardScreen> {
                       mainAxisSize: MainAxisSize.min,
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Text("Avançar"),
+                        Text('Avançar'),
                         Icon(Icons.arrow_right_outlined),
                       ],
                     ),

@@ -8,22 +8,22 @@ import 'package:meu_caixa_flutter/models/provider.dart';
 import 'package:meu_caixa_flutter/utils/user_utils.dart';
 
 class ProviderScreen extends StatelessWidget {
-  static String screenId = "providerScreen";
+  static String screenId = 'providerScreen';
   final _firestore = FirebaseFirestore.instance;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final Provider provider = Provider();
 
   void addProvider(BuildContext context) async {
     try {
-      await _firestore.collection("providers").add({
-        "userId": UserUtils.getCurrentUser().uid,
-        "name": provider.name,
-        "telephone": provider.telephone,
+      await _firestore.collection('providers').add({
+        'userId': UserUtils.getCurrentUser().uid,
+        'name': provider.name,
+        'telephone': provider.telephone,
       });
       showAlertDialog(
         context: context,
-        title: "Sucesso",
-        message: "Fornecedor cadastrado com sucesso",
+        title: 'Sucesso',
+        message: 'Fornecedor cadastrado com sucesso',
         actions: [
           FlatButton(
             onPressed: () {
@@ -36,9 +36,9 @@ class ProviderScreen extends StatelessWidget {
     } catch (e) {
       showAlertDialog(
         context: context,
-        title: "Erro",
+        title: 'Erro',
         message:
-            "Falha ao cadastrar o fornecedor, por favor, tente mais tarde.",
+            'Falha ao cadastrar o fornecedor, por favor, tente mais tarde.',
         actions: [
           FlatButton(
             onPressed: () {
@@ -56,7 +56,7 @@ class ProviderScreen extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: Text("Fornecedores"),
+          title: Text('Fornecedores'),
           centerTitle: true,
         ),
         floatingActionButton: FloatingActionButton(
@@ -65,9 +65,9 @@ class ProviderScreen extends StatelessWidget {
             color: Colors.white,
           ),
           backgroundColor: Colors.teal,
-          onPressed: () async {
+          onPressed: () {
             showModalBottomSheet(
-              backgroundColor: Color(0x00FFFFFF),
+              backgroundColor: Colors.transparent,
               context: context,
               isScrollControlled: true,
               builder: (context) => SingleChildScrollView(
@@ -75,7 +75,7 @@ class ProviderScreen extends StatelessWidget {
                   bottom: MediaQuery.of(context).viewInsets.bottom,
                 ),
                 child: AddAnything(
-                  childrens: [
+                  children: [
                     Form(
                       key: _formKey,
                       child: Padding(
@@ -133,7 +133,7 @@ class ProviderScreen extends StatelessWidget {
               StreamBuilder(
                 stream: _firestore
                     .collection('providers')
-                    .where("userId", isEqualTo: UserUtils.getCurrentUser().uid)
+                    .where('userId', isEqualTo: UserUtils.getCurrentUser().uid)
                     .snapshots(),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) {
@@ -153,9 +153,7 @@ class ProviderScreen extends StatelessWidget {
                       provider.telephone = p['telephone'];
                       final providerListTile = NormalCard(
                         title: provider.name,
-                        trailing: provider.telephone != null
-                            ? provider.telephone
-                            : '',
+                        trailing: provider.telephone ?? '',
                         color: Colors.teal,
                       );
                       providersList.add(providerListTile);

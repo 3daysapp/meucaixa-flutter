@@ -1,17 +1,32 @@
 import 'package:flutter/material.dart';
 
+///
+///
+///
 class NormalCard extends StatelessWidget {
   final String title;
   final String trailing;
   final Color color;
-  NormalCard({@required this.title, @required this.trailing, this.color});
 
+  ///
+  ///
+  ///
+  const NormalCard({
+    Key key,
+    @required this.title,
+    @required this.trailing,
+    @required this.color,
+  }) : super(key: key);
+
+  ///
+  ///
+  ///
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 5),
       child: Card(
-        color: this.color,
+        color: color,
         child: Padding(
           padding: const EdgeInsets.all(10.0),
           child: Row(

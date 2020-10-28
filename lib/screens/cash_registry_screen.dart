@@ -8,39 +8,68 @@ import 'package:meu_caixa_flutter/models/expense.dart';
 import 'package:meu_caixa_flutter/screens/add_expense_screen.dart';
 import 'package:meu_caixa_flutter/screens/day_result_screen.dart';
 
+///
+///
+///
 class CashRegistryScreen extends StatefulWidget {
   static String screenId = 'caixa_screen';
   final CashRegistry cashRegistry;
 
-  CashRegistryScreen({@required this.cashRegistry});
+  ///
+  ///
+  ///
+  const CashRegistryScreen({
+    Key key,
+    @required this.cashRegistry,
+  }) : super(key: key);
 
+  ///
+  ///
+  ///
   @override
   _CashRegistryScreenState createState() => _CashRegistryScreenState();
 }
 
+///
+///
+///
 class _CashRegistryScreenState extends State<CashRegistryScreen> {
+  MoneyMaskedTextController cashRegistryOpenValueController;
+
+  ///
+  ///
+  ///
   void calculaTotal() {
     widget.cashRegistry.calculateMoney();
   }
 
-  MoneyMaskedTextController cashRegistryOpenValueController;
-
+  ///
+  ///
+  ///
   @override
   void initState() {
     super.initState();
     cashRegistryOpenValueController = MoneyMaskedTextController(
-        decimalSeparator: ',', thousandSeparator: '.');
+      decimalSeparator: ',',
+      thousandSeparator: '.',
+    );
     setState(() {
       calculaTotal();
     });
   }
 
+  ///
+  ///
+  ///
   @override
   void dispose() {
     super.dispose();
     cashRegistryOpenValueController.dispose();
   }
 
+  ///
+  ///
+  ///
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -258,7 +287,7 @@ class _CashRegistryScreenState extends State<CashRegistryScreen> {
               ),
             ),
             DefaultTextField(
-              hintText: "Valor de abertura do caixa hoje",
+              hintText: 'Valor de abertura do caixa hoje',
               horizontalPadding: 5,
               controller: cashRegistryOpenValueController,
               callback: (_) {
@@ -285,7 +314,8 @@ class _CashRegistryScreenState extends State<CashRegistryScreen> {
                 ),
                 color: Colors.green,
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5)),
+                  borderRadius: BorderRadius.circular(5),
+                ),
               ),
             )
           ],
@@ -295,10 +325,23 @@ class _CashRegistryScreenState extends State<CashRegistryScreen> {
   }
 }
 
+///
+///
+///
 class FloatActionButtonAddDespesas extends StatelessWidget {
   final Function callback;
-  FloatActionButtonAddDespesas({@required this.callback});
 
+  ///
+  ///
+  ///
+  const FloatActionButtonAddDespesas({
+    Key key,
+    @required this.callback,
+  }) : super(key: key);
+
+  ///
+  ///
+  ///
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(

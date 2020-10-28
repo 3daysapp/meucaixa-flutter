@@ -1,6 +1,9 @@
 import 'package:meu_caixa_flutter/models/credit_card_machine.dart';
 import 'package:meu_caixa_flutter/models/expense.dart';
 
+///
+///
+///
 class CashRegistry {
   int note2 = 0;
   int note5 = 0;
@@ -17,6 +20,9 @@ class CashRegistry {
   List<CreditCardMachine> creditCardMachineList;
   List<Expense> expenseList;
 
+  ///
+  ///
+  ///
   void _calculateExpenses() {
     totalExpenses = 0;
     for (Expense expense in expenseList) {
@@ -24,6 +30,9 @@ class CashRegistry {
     }
   }
 
+  ///
+  ///
+  ///
   void _calculateCreditCardMachines() {
     totalCreditCardMachine = 0;
     for (CreditCardMachine machine in creditCardMachineList) {
@@ -31,6 +40,9 @@ class CashRegistry {
     }
   }
 
+  ///
+  ///
+  ///
   void calculateMoney() {
     totalMoney = 0;
     totalMoney += note2 * 2;
@@ -41,6 +53,9 @@ class CashRegistry {
     totalMoney += note100 * 100;
   }
 
+  ///
+  ///
+  ///
   void calculate() {
     _calculateExpenses();
     _calculateCreditCardMachines();

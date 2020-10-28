@@ -1,11 +1,26 @@
 import 'package:flutter/material.dart';
 
+///
+///
+///
 class MaisMenosBotao extends StatelessWidget {
   final Function onPressed;
   final Function onLongPress;
   final IconData icon;
-  MaisMenosBotao(
-      {@required this.onPressed, @required this.icon, this.onLongPress});
+
+  ///
+  ///
+  ///
+  const MaisMenosBotao({
+    Key key,
+    @required this.onPressed,
+    @required this.icon,
+    this.onLongPress,
+  }) : super(key: key);
+
+  ///
+  ///
+  ///
   @override
   Widget build(BuildContext context) {
     return RawMaterialButton(

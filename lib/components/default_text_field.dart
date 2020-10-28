@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+///
+///
+///
 class DefaultTextField extends StatelessWidget {
   final Function callback;
   final String hintText;
@@ -12,22 +15,33 @@ class DefaultTextField extends StatelessWidget {
   final double horizontalPadding;
   final String initialValue;
   final controller;
-  DefaultTextField(
-      {this.callback,
-      this.obscureText = false,
-      this.icon,
-      this.horizontalPadding = 20,
-      this.inputAction = TextInputAction.next,
-      this.inputType = TextInputType.text,
-      this.initialValue,
-      this.validator,
-      this.controller,
-      @required this.hintText});
 
+  ///
+  ///
+  ///
+  DefaultTextField({
+    this.callback,
+    this.obscureText = false,
+    this.icon,
+    this.horizontalPadding = 20,
+    this.inputAction = TextInputAction.next,
+    this.inputType = TextInputType.text,
+    this.initialValue,
+    this.validator,
+    this.controller,
+    @required this.hintText,
+  });
+
+  ///
+  ///
+  ///
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 5, horizontal: horizontalPadding),
+      padding: EdgeInsets.symmetric(
+        vertical: 5,
+        horizontal: horizontalPadding,
+      ),
       child: TextFormField(
         initialValue: initialValue,
         onChanged: callback,
