@@ -39,104 +39,78 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
           title: Text('Lançamento de despesas'),
           centerTitle: true,
         ),
-        body: WillPopScope(
-          onWillPop: () async => showDialog(
-            context: context,
-            builder: (BuildContext context) => AlertDialog(
-              title: Text('Aviso'),
-              content: Text(
-                'Tem certeza que deseja voltar?\n'
-                'Ao voltar, o lançamento do caixa sera cancelado!',
-              ),
-              actions: [
-                RaisedButton(
-                  child: Text('NÃO'),
-                  color: Colors.green,
-                  onPressed: () => Navigator.of(context).pop(false),
-                ),
-                RaisedButton(
-                    child: Text('SIM'),
-                    color: Colors.redAccent,
-                    onPressed: () {
-                      Navigator.pushNamedAndRemoveUntil(context,
-                          MainScreen.screenId, (dynamic route) => true);
-                    }),
-              ],
-            ),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Expanded(
-                  flex: 1,
-                  // TODO - Revisar montagem da lista.
-                  child: ListView.builder(
-                    itemCount: expenseList == null ? 0 : expenseList.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      if (expenseList[index] != null) {
-                        return ExpenseCard(
-                            expense: expenseList[index],
-                            callback: () {
-                              setState(() {
-                                expenseList.removeAt(index);
-                              });
+        body: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Expanded(
+                flex: 1,
+                // TODO - Revisar montagem da lista.
+                child: ListView.builder(
+                  itemCount: expenseList == null ? 0 : expenseList.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    if (expenseList[index] != null) {
+                      return ExpenseCard(
+                          expense: expenseList[index],
+                          callback: () {
+                            setState(() {
+                              expenseList.removeAt(index);
                             });
-                      } else {
-                        return Container();
-                      }
-                    },
-                  ),
-                ),
-                FlatButton(
-                  onPressed: () async {
-                    Expense expense = await showModalBottomSheet(
-                      backgroundColor: Colors.transparent,
-                      context: context,
-                      isScrollControlled: true,
-                      builder: (BuildContext context) => SingleChildScrollView(
-                        padding: EdgeInsets.only(
-                          bottom: MediaQuery.of(context).viewInsets.bottom,
-                        ),
-                        child: AddExpenseScreen(),
-                      ),
-                    );
-                    setState(() {
-                      expenseList.add(expense);
-                    });
+                          });
+                    } else {
+                      return Container();
+                    }
                   },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text('Adicionar despesa'),
-                      Icon(Icons.add),
-                    ],
-                  ),
-                  color: Colors.redAccent,
                 ),
-                FlatButton(
-                  onPressed: () {
-                    cashRegistry.expenseList = expenseList;
-                    Navigator.of(context).push(
-                      MaterialPageRoute<Widget>(
-                        builder: (BuildContext context) =>
-                            CreditCardScreen(cashRegistry: cashRegistry),
+              ),
+              FlatButton(
+                onPressed: () async {
+                  Expense expense = await showModalBottomSheet(
+                    backgroundColor: Colors.transparent,
+                    context: context,
+                    isScrollControlled: true,
+                    builder: (BuildContext context) => SingleChildScrollView(
+                      padding: EdgeInsets.only(
+                        bottom: MediaQuery.of(context).viewInsets.bottom,
                       ),
-                    );
-                  },
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      Text('Avançar'),
-                      Icon(Icons.arrow_right_outlined),
-                    ],
-                  ),
-                  color: Colors.blueAccent,
-                )
-              ],
-            ),
+                      child: AddExpenseScreen(),
+                    ),
+                  );
+                  setState(() {
+                    expenseList.add(expense);
+                  });
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text('Adicionar despesa'),
+                    Icon(Icons.add),
+                  ],
+                ),
+                color: Colors.redAccent,
+              ),
+              FlatButton(
+                onPressed: () {
+                  cashRegistry.expenseList = expenseList;
+                  Navigator.of(context).push(
+                    MaterialPageRoute<Widget>(
+                      builder: (BuildContext context) =>
+                          CreditCardScreen(cashRegistry: cashRegistry),
+                    ),
+                  );
+                },
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[
+                    Text('Avançar'),
+                    Icon(Icons.arrow_right_outlined),
+                  ],
+                ),
+                color: Colors.blueAccent,
+              )
+            ],
           ),
         ),
       ),
