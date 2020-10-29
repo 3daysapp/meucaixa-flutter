@@ -50,7 +50,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
+        children: <Widget>[
           Padding(
             padding: const EdgeInsets.only(bottom: 15),
             child: Text(

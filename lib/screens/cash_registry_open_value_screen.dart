@@ -15,6 +15,7 @@ class CashRegistryOpenScreen extends StatefulWidget {
 class _CashRegistryOpenScreenState extends State<CashRegistryOpenScreen> {
   final MoneyMaskedTextController _controller =
       MoneyMaskedTextController(decimalSeparator: ',', thousandSeparator: '.');
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -25,13 +26,14 @@ class _CashRegistryOpenScreenState extends State<CashRegistryOpenScreen> {
         body: WillPopScope(
           onWillPop: () async => showDialog(
             context: context,
+            // TODO - Usar DisplayAlert.yesNo
             builder: (BuildContext context) => AlertDialog(
               title: Text('Aviso'),
               content: Text(
                 'Tem certeza que deseja voltar?\n'
                 'Ao voltar, o lançamento do caixa sera cancelado!',
               ),
-              actions: [
+              actions: <Widget>[
                 RaisedButton(
                   child: Text('NÃO'),
                   color: Colors.green,
@@ -52,16 +54,18 @@ class _CashRegistryOpenScreenState extends State<CashRegistryOpenScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
+              children: <Widget>[
                 DefaultTextField(
-                  hintText: "Com quantos reais você abriu o caixa hoje?",
+                  hintText: 'Com quantos reais você abriu o caixa hoje?',
                   controller: _controller,
                 ),
                 SizedBox(
                   height: 75,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 15, vertical: 10),
+                      horizontal: 15,
+                      vertical: 10,
+                    ),
                     child: RaisedButton(
                       onPressed: () {
                         Navigator.of(context).pushNamed(ExpenseScreen.screenId);

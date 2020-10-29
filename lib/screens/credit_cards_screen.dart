@@ -34,46 +34,19 @@ class CreditCardScreen extends StatefulWidget {
 ///
 ///
 class _CreditCardScreenState extends State<CreditCardScreen> {
-  FirebaseFirestore _firestore;
-  List<DefaultTextField> creditCardMachineList = [];
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   ///
   ///
   ///
-  @override
-  void initState() {
-    super.initState();
-    _firestore = FirebaseFirestore.instance;
-  }
-
-  ///
-  ///
-  ///
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-  MoneyMaskedTextController scieloController = MoneyMaskedTextController(
-    decimalSeparator: ',',
-    thousandSeparator: '.',
-  );
-
-  MoneyMaskedTextController steloController = MoneyMaskedTextController(
-    decimalSeparator: ',',
-    thousandSeparator: '.',
-  );
-
-  // CashRegistry _cashRegistry = CashRegistry();
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Cartões de crédito'),
+          title: Text('Cartões de Crédito'),
           centerTitle: true,
-          actions: [
+          actions: <Widget>[
             IconButton(
               icon: Icon(Icons.add),
               onPressed: () {
@@ -97,16 +70,17 @@ class _CreditCardScreenState extends State<CreditCardScreen> {
             padding: const EdgeInsets.all(8.0),
             child: Container(
               child: Column(
-                children: [
+                children: <Widget>[
                   StreamBuilder<QuerySnapshot>(
                     stream: _firestore
                         .collection('creditCardMachines')
-                        .where(
-                          'userId',
-                          isEqualTo: UserUtils.getCurrentUser().uid,
-                        )
+                        .where('userId',
+                            isEqualTo: UserUtils.getCurrentUser().uid)
                         .snapshots(),
-                    builder: (context, snapshot) {
+                    builder: (
+                      BuildContext context,
+                      AsyncSnapshot<QuerySnapshot> snapshot,
+                    ) {
                       if (!snapshot.hasData) {
                         return Center(
                           child: CircularProgressIndicator(
@@ -117,8 +91,12 @@ class _CreditCardScreenState extends State<CreditCardScreen> {
 
                       final List<QueryDocumentSnapshot> machines =
                           snapshot.data.docs;
-                      creditCardMachineList = [];
-                      widget.cashRegistry.creditCardMachineList = [];
+
+                      List<DefaultTextField> creditCardMachineList =
+                          <DefaultTextField>[];
+
+                      widget.cashRegistry.creditCardMachineList =
+                          <CreditCardMachine>[];
 
                       for (QueryDocumentSnapshot machine in machines.reversed) {
                         Map<String, dynamic> machineData = machine.data();
@@ -137,7 +115,8 @@ class _CreditCardScreenState extends State<CreditCardScreen> {
 
                           print(machineData);
 
-                          final defaultTextField = DefaultTextField(
+                          final DefaultTextField defaultTextField =
+                              DefaultTextField(
                             hintText: creditCardMachine.name,
                             controller: creditCardMachine.controller,
                           );
@@ -154,11 +133,12 @@ class _CreditCardScreenState extends State<CreditCardScreen> {
                       );
                     },
                   ),
+                  /// TODO - O que acha de jogar no actions do AppBar?
                   FlatButton(
                     onPressed: () {
                       Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => CashRegistryScreen(
+                        MaterialPageRoute<CashRegistryScreen>(
+                          builder: (BuildContext context) => CashRegistryScreen(
                             cashRegistry: widget.cashRegistry,
                           ),
                         ),
@@ -167,7 +147,7 @@ class _CreditCardScreenState extends State<CreditCardScreen> {
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
+                      children: <Widget>[
                         Text('Avançar'),
                         Icon(Icons.arrow_right_outlined),
                       ],

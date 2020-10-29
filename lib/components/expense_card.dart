@@ -9,7 +9,7 @@ class ExpenseCard extends StatelessWidget {
   final Expense expense;
   final Function callback;
   final bool finalResult;
-  final controller = MoneyMaskedTextController(
+  final MoneyMaskedTextController controller = MoneyMaskedTextController(
     decimalSeparator: ',',
     thousandSeparator: '.',
   );
@@ -36,12 +36,12 @@ class ExpenseCard extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
+          children: <Widget>[
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+                children: <Widget>[
                   Text(
                     '${expense.description.toUpperCase()} '
                     '${expense.provider != null ? '- ${expense.provider.name}' : ''}',

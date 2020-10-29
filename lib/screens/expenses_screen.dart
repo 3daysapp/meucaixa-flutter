@@ -5,7 +5,6 @@ import 'package:meu_caixa_flutter/models/cash_registry.dart';
 import 'package:meu_caixa_flutter/models/expense.dart';
 import 'package:meu_caixa_flutter/screens/add_expense_screen.dart';
 import 'package:meu_caixa_flutter/screens/credit_cards_screen.dart';
-import 'package:meu_caixa_flutter/screens/main_screen.dart';
 
 ///
 ///
@@ -43,7 +42,7 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
           padding: const EdgeInsets.all(8.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
+            children: <Widget>[
               Expanded(
                 flex: 1,
                 // TODO - Revisar montagem da lista.

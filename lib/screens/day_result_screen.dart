@@ -24,24 +24,37 @@ class DayResultScreen extends StatefulWidget {
   const DayResultScreen({@required this.cashRegistry, Key key})
       : super(key: key);
 
+  ///
+  ///
+  ///
   @override
   _DayResultScreenState createState() => _DayResultScreenState();
 }
 
+///
+///
+///
 class _DayResultScreenState extends State<DayResultScreen> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
+  ///
+  ///
+  ///
   List<Widget> getExpenseContainerList() {
-    List<Widget> expList = [];
+    List<Widget> expList = <Widget>[];
+
     for (Expense exp in widget.cashRegistry.expenseList) {
-      final mask = MoneyMaskedTextController(
+      final MoneyMaskedTextController mask = MoneyMaskedTextController(
         decimalSeparator: ',',
         thousandSeparator: '.',
       );
 
       mask.text = exp.value.toString();
 
-      final expContainer = ExpenseResultCard(exp: exp, mask: mask);
+      final ExpenseResultCard expContainer = ExpenseResultCard(
+        exp: exp,
+        mask: mask,
+      );
 
       expList.add(expContainer);
     }
@@ -54,9 +67,11 @@ class _DayResultScreenState extends State<DayResultScreen> {
   ///
   Future<void> saveCashRegistry(BuildContext context) async {
     try {
-      DocumentReference reference =
-          await _firestore.collection('cashRegistryHistory').add({
-        'userId': UserUtils.getCurrentUser().uid,
+      DocumentReference reference = await _firestore
+          .collection('cashRegistryHistory')
+          .add(<String, dynamic>{
+        'userId': UserUtils.getCurrentUser()
+            .uid, // FIXME - Estrutura do firestore :-(
         'date': widget.cashRegistry.date,
         'openValue': widget.cashRegistry.openValue,
         'totalCreditCardMachine': widget.cashRegistry.totalCreditCardMachine,
@@ -98,7 +113,7 @@ class _DayResultScreenState extends State<DayResultScreen> {
           .collection('cashRegistryHistory')
           .doc(reference.id)
           .collection('expenses')
-          .add({
+          .add(<String, dynamic>{
         'description': expense.description,
         'value': expense.value,
         'cashRegistryId': reference.id,
@@ -118,7 +133,7 @@ class _DayResultScreenState extends State<DayResultScreen> {
           .collection('cashRegistryHistory')
           .doc(reference.id)
           .collection('creditCardMachine')
-          .add({
+          .add(<String, dynamic>{
         'name': creditCardMachine.name,
         'value': creditCardMachine.controller.text,
         'cashRegistryId': reference.id,
@@ -128,16 +143,25 @@ class _DayResultScreenState extends State<DayResultScreen> {
 
   ///
   ///
-  ///
-  List<Widget> getCreditCardMachineContainerList() {
-    List<Widget> creditCardMachineContainerList = [];
-    for (CreditCardMachine cardMachine
-        in widget.cashRegistry.creditCardMachineList) {
-      final expContainer = CreditCardMachineCard(cardMachine: cardMachine);
-      creditCardMachineContainerList.add(expContainer);
-    }
-    return creditCardMachineContainerList;
-  }
+  /// TODO - Dart style
+  List<Widget> getCreditCardMachineContainerList() =>
+      widget.cashRegistry.creditCardMachineList
+          .map((CreditCardMachine cardMachine) =>
+              CreditCardMachineCard(cardMachine: cardMachine))
+          .toList();
+
+  // List<Widget> getCreditCardMachineContainerList() {
+  //   List<Widget> creditCardMachineContainerList = <Widget>[];
+  //
+  //   for (CreditCardMachine cardMachine
+  //       in widget.cashRegistry.creditCardMachineList) {
+  //     final CreditCardMachineCard expContainer =
+  //         CreditCardMachineCard(cardMachine: cardMachine);
+  //     creditCardMachineContainerList.add(expContainer);
+  //   }
+  //
+  //   return creditCardMachineContainerList;
+  // }
 
   ///
   ///
@@ -154,7 +178,7 @@ class _DayResultScreenState extends State<DayResultScreen> {
           child: Container(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
+              children: <Widget>[
                 CardTitle(
                   title: 'Despesas',
                   color: Colors.redAccent,
@@ -195,7 +219,7 @@ class _DayResultScreenState extends State<DayResultScreen> {
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
+                    children: <Widget>[
                       Text(
                         'Máquinas de cartão:  '
                         'R\$ ${widget.cashRegistry.totalCreditCardMachine.toStringAsFixed(2)}',
@@ -306,22 +330,23 @@ class CreditCardMachineCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        child: Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 5),
-      child: Card(
-        color: Colors.blue,
-        child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(cardMachine.name.toUpperCase()),
-              Text('R\$ ${cardMachine.controller.value.text}')
-            ],
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 5),
+        child: Card(
+          color: Colors.blue,
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text(cardMachine.name.toUpperCase()),
+                Text('R\$ ${cardMachine.controller.value.text}'),
+              ],
+            ),
           ),
         ),
       ),
-    ));
+    );
   }
 }
 
@@ -355,7 +380,7 @@ class ExpenseResultCard extends StatelessWidget {
             padding: const EdgeInsets.all(10.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
+              children: <Widget>[
                 Text(exp.description.toUpperCase()),
                 exp.provider != null ? Text(exp.provider.name) : Text(''),
                 Text('R\$ ${mask.value.text}')

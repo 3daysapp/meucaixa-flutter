@@ -8,7 +8,7 @@ import 'screens/register_screen.dart';
 import 'screens/login_screen.dart';
 
 Map<String, WidgetBuilder> getRoutes(BuildContext context) {
-  Map<String, WidgetBuilder> routes = {
+  Map<String, WidgetBuilder> routes = <String, WidgetBuilder>{
     WelcomeScreen.screenId: (BuildContext context) => WelcomeScreen(),
     LoginScreen.screenId: (BuildContext context) => LoginScreen(),
     RegisterScreen.screenId: (BuildContext context) => RegisterScreen(),

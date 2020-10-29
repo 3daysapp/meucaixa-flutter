@@ -9,7 +9,6 @@ class MenuItem extends StatelessWidget {
   final String label;
   final IconData icon;
   final Color color;
-  final double height;
 
   ///
   ///
@@ -20,7 +19,6 @@ class MenuItem extends StatelessWidget {
     this.action,
     this.icon,
     this.color,
-    this.height,
   }) : super(key: key);
 
   ///
@@ -28,28 +26,22 @@ class MenuItem extends StatelessWidget {
   ///
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: height,
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: RaisedButton(
         onPressed: action,
         color: color,
+        padding: const EdgeInsets.all(8.0),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(5),
         ),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              icon,
-              size: 40,
-            ),
-            SizedBox(
-              height: 5,
-            ),
-            Text(
-              label,
-              style: TextStyle(fontSize: 18),
-            ),
+          children: <Widget>[
+            Icon(icon, size: 40),
+            Container(height: 5),
+            Text(label, style: TextStyle(fontSize: 18)),
           ],
         ),
       ),

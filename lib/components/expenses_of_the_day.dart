@@ -28,43 +28,18 @@ class _ExpensesOfTheDayState extends State<ExpensesOfTheDay> {
   ///
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(itemBuilder: (context, index) {
-      final expense = widget.expenseList[index];
-      return ExpenseItemState(expense: expense);
-    });
-  }
-}
-
-///
-///
-///
-class ExpenseItemState extends StatelessWidget {
-  final Expense expense;
-
-  ///
-  ///
-  ///
-  const ExpenseItemState({
-    Key key,
-    this.expense,
-  }) : super(key: key);
-
-  ///
-  ///
-  ///
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      title: Text(expense.description),
-      trailing: Row(
-        children: [
-          Text(expense.value.toString()),
-          RaisedButton(
+    return ListView.builder(
+      itemBuilder: (BuildContext context, int index) {
+        final Expense expense = widget.expenseList[index];
+        return ListTile(
+          title: Text(expense.value.toString()),
+          subtitle: Text(expense.description),
+          trailing: IconButton(
+            icon: Icon(Icons.delete),
             onPressed: () {},
-            child: Icon(Icons.delete),
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }

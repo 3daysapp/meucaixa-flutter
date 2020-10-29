@@ -11,7 +11,9 @@ import 'package:meu_caixa_flutter/components/rounded_action_button.dart';
 ///
 class WelcomeScreen extends StatefulWidget {
   static String screenId = 'welcome_screen';
+
   const WelcomeScreen({Key key}) : super(key: key);
+
   @override
   _WelcomeScreenState createState() => _WelcomeScreenState();
 }
@@ -39,9 +41,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   ///
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
+    return FutureBuilder<FirebaseApp>(
       future: _getFirebaseConnection(context),
-      builder: (context, snapshot) {
+      builder: (BuildContext context, AsyncSnapshot<FirebaseApp> snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           return _initialPage;
         } else {
@@ -75,7 +77,7 @@ class WelcomeScreenActions extends StatelessWidget {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
+        children: <Widget>[
           SizedBox(
             height: 250,
             width: 250,

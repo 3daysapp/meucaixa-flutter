@@ -31,7 +31,7 @@ class NormalCard extends StatelessWidget {
           padding: const EdgeInsets.all(10.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
+            children: <Widget>[
               Text(title),
               Text(trailing),
             ],

@@ -3,21 +3,21 @@ import 'package:flutter/material.dart';
 
 /// TODO - Uma classe mais estruturada seria uma opção?
 
-const kDefaultValorLabelTextStyle = TextStyle(
+const TextStyle kDefaultValorLabelTextStyle = TextStyle(
   fontSize: 20,
 );
 
-const kDefaultQuantityLabelTextStyle = TextStyle(
+const TextStyle kDefaultQuantityLabelTextStyle = TextStyle(
   fontSize: 50,
 );
 
 const String releaseDate = '25/10/2020';
 
-const kDefaultTotalTextStyle = TextStyle(
+const TextStyle kDefaultTotalTextStyle = TextStyle(
   fontSize: 20,
 );
 
-const kDefaultResultTextStyle = TextStyle(fontSize: 18);
+const TextStyle kDefaultResultTextStyle = TextStyle(fontSize: 18);
 
 const Color kRichBlackColor = Color(0xFF011627);
 const Color kRadicalRedColor = Color(0xFFFF3366);

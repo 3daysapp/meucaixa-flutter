@@ -27,15 +27,15 @@ class LoginScreen extends StatefulWidget {
 ///
 ///
 class _LoginScreenState extends State<LoginScreen> {
-  FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   Future<SharedPreferences> _prefs;
   String _userEmail;
   String _userPassword;
   bool _showSpinner = false;
   bool saveUserEmail = false;
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
-  final _formKey = GlobalKey<FormState>();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   ///
   ///
@@ -50,7 +50,7 @@ class _LoginScreenState extends State<LoginScreen> {
   ///
   ///
   void signIn() async {
-    final sharedPrefs = await _prefs;
+    final SharedPreferences sharedPrefs = await _prefs;
     if (_formKey.currentState.validate()) {
       _userEmail = emailController.text;
       _userPassword = passwordController.text;
@@ -60,8 +60,7 @@ class _LoginScreenState extends State<LoginScreen> {
             email: _userEmail, password: _userPassword);
         if (user != null) {
           if (saveUserEmail) {
-            /// TODO - Álvaro verificar se a linha abaixo está mostrando um alerta.
-            sharedPrefs.setBool('shouldSaveUserEmail', saveUserEmail);
+            await sharedPrefs.setBool('shouldSaveUserEmail', saveUserEmail);
             await sharedPrefs.setString('userEmail', _userEmail);
           }
 
@@ -75,7 +74,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
           await Navigator.of(context).pushNamedAndRemoveUntil(
             MainScreen.screenId,
-            (route) => false,
+            (Route<dynamic> route) => false,
           );
         } else {
           toggleSpinner();
@@ -125,7 +124,7 @@ class _LoginScreenState extends State<LoginScreen> {
   ///
   ///
   void loadUserEmail() async {
-    final sharedPrefs = await _prefs;
+    final SharedPreferences sharedPrefs = await _prefs;
     setState(() {
       if (sharedPrefs.containsKey('shouldSaveUserEmail')) {
         saveUserEmail = sharedPrefs.getBool('shouldSaveUserEmail');
@@ -159,7 +158,7 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
+              children: <Widget>[
                 Flexible(
                   child: SizedBox(
                     height: 200,
@@ -177,13 +176,14 @@ class _LoginScreenState extends State<LoginScreen> {
                 Form(
                   key: _formKey,
                   child: Column(
-                    children: [
+                    children: <Widget>[
                       DefaultTextField(
                         hintText: 'Seu email',
                         inputType: TextInputType.emailAddress,
                         icon: Icons.email,
                         controller: emailController,
-                        validator: (value) {
+                        // TODO - Operador ternário.
+                        validator: (String value) {
                           if (value.isEmpty) {
                             return 'Por favor, informe seu email';
                           }
@@ -196,7 +196,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         obscureText: true,
                         inputAction: TextInputAction.done,
                         controller: passwordController,
-                        validator: (value) {
+                        // TODO - Operador ternário.
+                        validator: (String value) {
                           if (value.isEmpty) {
                             return 'Por favor, informe sua senha';
                           }
@@ -207,12 +208,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 Row(
-                  children: [
+                  children: <Widget>[
                     Padding(
                       padding: const EdgeInsets.only(left: 8),
                       child: Checkbox(
                         value: saveUserEmail,
-                        onChanged: (newValue) async {
+                        onChanged: (bool newValue) async {
                           setState(() {
                             saveUserEmail = newValue;
                           });

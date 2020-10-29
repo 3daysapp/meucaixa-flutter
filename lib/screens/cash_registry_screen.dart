@@ -106,7 +106,7 @@ class _CashRegistryScreenState extends State<CashRegistryScreen> {
               ],
             ),
             Row(
-              children: [
+              children: <Widget>[
                 CashContainer(
                   label: 'Notas de 10R\$',
                   initialValue: widget.cashRegistry.note10,
@@ -130,7 +130,7 @@ class _CashRegistryScreenState extends State<CashRegistryScreen> {
               ],
             ),
             Row(
-              children: [
+              children: <Widget>[
                 CashContainer(
                   label: 'Notas de 50R\$',
                   initialValue: widget.cashRegistry.note50,
@@ -185,7 +185,7 @@ class _CashRegistryScreenState extends State<CashRegistryScreen> {
               child: RaisedButton(
                 onPressed: () {
                   Navigator.of(context).push(
-                    MaterialPageRoute(
+                    MaterialPageRoute<DayResultScreen>(
                       builder: (BuildContext context) =>
                           DayResultScreen(cashRegistry: widget.cashRegistry),
                     ),
