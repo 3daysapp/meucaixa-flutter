@@ -25,11 +25,11 @@ class AddExpenseScreen extends StatefulWidget {
 ///
 ///
 class _AddExpenseScreenState extends State<AddExpenseScreen> {
-  var descriptionController = TextEditingController();
-  final _firestore = FirebaseFirestore.instance;
+  final TextEditingController descriptionController = TextEditingController();
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   Expense expense = Expense();
   String selectedProvider = '';
-  final valueController = MoneyMaskedTextController(
+  final MoneyMaskedTextController valueController = MoneyMaskedTextController(
     thousandSeparator: '.',
     decimalSeparator: ',',
   );
@@ -73,12 +73,13 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
             padding: const EdgeInsets.only(left: 20, right: 20, top: 10),
             child: Text('Escolha o fornecedor'),
           ),
-          StreamBuilder(
+          StreamBuilder<QuerySnapshot>(
             stream: _firestore
                 .collection('providers')
                 .where('userId', isEqualTo: UserUtils.getCurrentUser().uid)
                 .snapshots(),
-            builder: (context, snapshot) {
+            builder:
+                (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
               if (!snapshot.hasData) {
                 return Center(
                   child: CircularProgressIndicator(
@@ -87,30 +88,33 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                 );
               }
 
-              final providerSnapshot = snapshot.data.docs;
-              List<DropdownMenuItem<String>> providerList = [];
+              final List<QueryDocumentSnapshot> providerSnapshot =
+                  snapshot.data.docs;
+              List<DropdownMenuItem<String>> supplierList =
+                  <DropdownMenuItem<String>>[];
 
-              for (var provide in providerSnapshot.reversed) {
-                var p = provide.data();
-                print(p);
-                if (p['name'] != null) {
-                  final dropdown = DropdownMenuItem<String>(
-                    child: Text(p['name']),
-                    value: p['name'],
-                  );
-                  providerList.add(dropdown);
-                }
+              for (QueryDocumentSnapshot supplierSnapshot
+                  in providerSnapshot.reversed) {
+                Map<String, dynamic> supplierData = supplierSnapshot.data();
+                Supplier supplier =
+                    Supplier.fromMap(supplierSnapshot.id, supplierData);
+                final DropdownMenuItem<String> dropdown =
+                    DropdownMenuItem<String>(
+                  child: Text(supplier.name),
+                  value: supplier.name,
+                );
+                supplierList.add(dropdown);
               }
 
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: DropdownButton(
+                child: DropdownButton<String>(
                   isExpanded: true,
                   iconSize: 0,
                   value:
                       expense.provider != null ? expense.provider.name : null,
-                  items: providerList,
-                  onChanged: (value) {
+                  items: supplierList,
+                  onChanged: (String value) {
                     setState(() {
                       expense.provider = Supplier();
                       expense.provider.name = value;

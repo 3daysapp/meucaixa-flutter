@@ -71,7 +71,6 @@ class _CreditCardScreenState extends State<CreditCardScreen> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          automaticallyImplyLeading: false,
           title: Text('Cartões de crédito'),
           centerTitle: true,
           actions: [
@@ -82,7 +81,7 @@ class _CreditCardScreenState extends State<CreditCardScreen> {
                   backgroundColor: Colors.transparent,
                   context: context,
                   isScrollControlled: true,
-                  builder: (context) => SingleChildScrollView(
+                  builder: (BuildContext context) => SingleChildScrollView(
                     padding: EdgeInsets.only(
                       bottom: MediaQuery.of(context).viewInsets.bottom,
                     ),
