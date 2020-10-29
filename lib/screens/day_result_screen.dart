@@ -69,33 +69,22 @@ class _DayResultScreenState extends State<DayResultScreen> {
 
       await _saveCreditCardMachines(reference);
 
-      showAlertDialog(
+      await DisplayAlert.show(
         context: context,
-        message: 'Caixa salvo com sucesso.',
         title: 'Sucesso',
-        actions: [
-          FlatButton(
-              onPressed: () {
-                Navigator.of(context).pushNamedAndRemoveUntil(
-                    MainScreen.screenId, (route) => false);
-              },
-              child: Text('OK')),
-        ],
+        message: 'Caixa salvo com sucesso.',
+      );
+
+      await Navigator.of(context).pushNamedAndRemoveUntil(
+        MainScreen.screenId,
+        (Route<dynamic> route) => false,
       );
     } catch (e) {
-      showAlertDialog(
+      await DisplayAlert.show(
         context: context,
-        message:
-            'Falha ao salvar o caixa, por favor, tente novamente mais tarde',
         title: 'Erro',
-        actions: [
-          FlatButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: Text('OK'),
-          ),
-        ],
+        message: 'Falha ao salvar o caixa.\n'
+            'Por favor, tente novamente mais tarde',
       );
     }
   }

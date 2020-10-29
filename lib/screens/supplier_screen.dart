@@ -1,9 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-// import 'package:meu_caixa_flutter/components/add_anything.dart';
-// import 'package:meu_caixa_flutter/components/default_text_field.dart';
-// import 'package:meu_caixa_flutter/components/display_alert.dart';
+import 'package:meu_caixa_flutter/components/display_alert.dart';
 import 'package:meu_caixa_flutter/models/supplier.dart';
+import 'package:meu_caixa_flutter/screens/supplier_edit_screen.dart';
 import 'package:meu_caixa_flutter/utils/user_utils.dart';
 
 ///
@@ -30,50 +29,6 @@ class ProviderScreen extends StatefulWidget {
 class _ProviderScreenState extends State<ProviderScreen> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  // final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  // final Supplier provider = Supplier();
-
-  ///
-  ///
-  ///
-  // void addProvider(BuildContext context) async {
-  //   try {
-  //     await _firestore.collection('providers').add({
-  //       'userId': UserUtils.getCurrentUser().uid,
-  //       'name': provider.name,
-  //       'telephone': provider.telephone,
-  //     });
-  //     showAlertDialog(
-  //       context: context,
-  //       title: 'Sucesso',
-  //       message: 'Fornecedor cadastrado com sucesso',
-  //       actions: [
-  //         FlatButton(
-  //           onPressed: () {
-  //             Navigator.of(context).pop();
-  //           },
-  //           child: Text('OK'),
-  //         )
-  //       ],
-  //     );
-  //   } catch (e) {
-  //     showAlertDialog(
-  //       context: context,
-  //       title: 'Erro',
-  //       message:
-  //           'Falha ao cadastrar o fornecedor, por favor, tente mais tarde.',
-  //       actions: [
-  //         FlatButton(
-  //           onPressed: () {
-  //             Navigator.of(context).pop();
-  //           },
-  //           child: Text('OK'),
-  //         )
-  //       ],
-  //     );
-  //   }
-  // }
-
   ///
   ///
   ///
@@ -91,68 +46,11 @@ class _ProviderScreenState extends State<ProviderScreen> {
             color: Colors.white,
           ),
           backgroundColor: Colors.teal,
-          onPressed: () {},
-          // onPressed: () {
-          //   showModalBottomSheet(
-          //     backgroundColor: Colors.transparent,
-          //     context: context,
-          //     isScrollControlled: true,
-          //     builder: (context) => SingleChildScrollView(
-          //       padding: EdgeInsets.only(
-          //         bottom: MediaQuery.of(context).viewInsets.bottom,
-          //       ),
-          //       child: AddAnything(
-          //         children: [
-          //           Form(
-          //             key: _formKey,
-          //             child: Padding(
-          //               padding: const EdgeInsets.only(bottom: 15),
-          //               child: Text(
-          //                 'Cadastrar fornecedor',
-          //                 textAlign: TextAlign.center,
-          //                 style: TextStyle(
-          //                   fontSize: 20,
-          //                 ),
-          //               ),
-          //             ),
-          //           ),
-          //           DefaultTextField(
-          //             hintText: 'Nome',
-          //             callback: (value) => provider.name = value,
-          //             validator: (value) {
-          //               if (value.isEmpty) {
-          //                 return 'Por favor, informe o nome do fornecedor';
-          //               }
-          //               return null;
-          //             },
-          //           ),
-          //           DefaultTextField(
-          //             hintText: 'Telefone',
-          //             callback: (value) => provider.telephone = value,
-          //           ),
-          //           Padding(
-          //             padding:
-          //                 const EdgeInsets.only(left: 20, right: 20, top: 10),
-          //             child: SizedBox(
-          //               height: 45,
-          //               child: RaisedButton(
-          //                 onPressed: () {
-          //                   addProvider(context);
-          //                 },
-          //                 color: Colors.teal,
-          //                 elevation: 5,
-          //                 shape: RoundedRectangleBorder(
-          //                   borderRadius: BorderRadius.circular(5),
-          //                 ),
-          //                 child: Text('Cadastrar fornecedor'),
-          //               ),
-          //             ),
-          //           ),
-          //         ],
-          //       ),
-          //     ),
-          //   );
-          // },
+          onPressed: () => Navigator.of(context).push(
+            MaterialPageRoute<Widget>(
+              builder: (BuildContext context) => SupplierEditScreen(),
+            ),
+          ),
         ),
         body: Padding(
           padding: EdgeInsets.all(16.0),
@@ -173,11 +71,26 @@ class _ProviderScreenState extends State<ProviderScreen> {
                     QueryDocumentSnapshot doc = docs[index];
                     Supplier supplier = Supplier.fromMap(doc.id, doc.data());
                     return ListTile(
-                      leading: Icon(Icons.circle),
+                      leading: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Icon(Icons.circle),
+                        ],
+                      ),
                       title: Text(supplier.name),
                       subtitle: Text(supplier.telephone),
                       tileColor: Colors.teal,
-                      onTap: () {},
+                      onTap: () => Navigator.of(context).push(
+                        MaterialPageRoute<Widget>(
+                          builder: (BuildContext context) => SupplierEditScreen(
+                            supplier: supplier,
+                          ),
+                        ),
+                      ),
+                      trailing: IconButton(
+                        icon: Icon(Icons.delete),
+                        onPressed: () => _delete(supplier),
+                      ),
                     );
                   },
                   separatorBuilder: (BuildContext context, int index) =>
@@ -194,5 +107,34 @@ class _ProviderScreenState extends State<ProviderScreen> {
         ),
       ),
     );
+  }
+
+  ///
+  ///
+  ///
+  void _delete(Supplier supplier) async {
+    bool delete = await DisplayAlert.yesNo(
+      context: context,
+      message: 'Deseja excluir o fornecedor ${supplier.name}?',
+    );
+
+    if (delete) {
+      try {
+        await _firestore.collection('providers').doc(supplier.id).delete();
+
+        await DisplayAlert.show(
+          context: context,
+          title: 'Sucesso',
+          message: 'Fornecedor excluído com sucesso.',
+        );
+      } catch (e) {
+        await DisplayAlert.show(
+          context: context,
+          title: 'Erro',
+          message: 'Falha ao excluir o fornecedor.\n'
+              'Por favor, tente mais tarde.',
+        );
+      }
+    }
   }
 }
