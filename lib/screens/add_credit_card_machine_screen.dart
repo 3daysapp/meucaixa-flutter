@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:meu_caixa_flutter/components/display_alert.dart';
@@ -12,7 +11,14 @@ import 'package:meu_caixa_flutter/utils/user_utils.dart';
 ///
 ///
 class AddCreditCardMachineScreen extends StatefulWidget {
+  ///
+  ///
+  ///
   const AddCreditCardMachineScreen({Key key}) : super(key: key);
+
+  ///
+  ///
+  ///
   @override
   _AddCreditCardMachineScreenState createState() =>
       _AddCreditCardMachineScreenState();
@@ -33,23 +39,15 @@ class _AddCreditCardMachineScreenState
     if (_formKey.currentState.validate()) {
       User user = UserUtils.getCurrentUser();
       try {
-        await _firestore.collection('creditCardMachines').add({
+        await _firestore.collection('creditCardMachines').add(<String, dynamic>{
           'userId': user.uid,
           'name': creditCardMachine.name,
         });
 
-        showAlertDialog(
+        await DisplayAlert.show(
           context: context,
           title: 'Sucesso',
-          message: 'Máquina de cartão adicionada com sucesso',
-          actions: [
-            FlatButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: Text('OK'),
-            )
-          ],
+          message: 'Máquina de cartão adicionada com sucesso.',
         );
       } catch (e) {
         Scaffold.of(context).showSnackBar(
@@ -78,7 +76,7 @@ class _AddCreditCardMachineScreenState
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
+        children: <Widget>[
           Form(
             key: _formKey,
             child: Padding(
@@ -94,8 +92,8 @@ class _AddCreditCardMachineScreenState
           ),
           DefaultTextField(
             hintText: 'Nome da Maquina',
-            callback: (value) => creditCardMachine.name = value,
-            validator: (value) {
+            callback: (String value) => creditCardMachine.name = value,
+            validator: (String value) {
               if (value.isEmpty) {
                 return 'Por favor, informe o nome da máquina';
               }

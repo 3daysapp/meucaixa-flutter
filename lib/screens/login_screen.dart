@@ -13,6 +13,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 ///
 class LoginScreen extends StatefulWidget {
   static String screenId = 'login_screen';
+
   const LoginScreen({Key key}) : super(key: key);
 
   ///
@@ -79,32 +80,17 @@ class _LoginScreenState extends State<LoginScreen> {
         } else {
           toggleSpinner();
 
-          showAlertDialog(
-              context: context,
-              title: 'Erro',
-              message: 'Usuário ou senha incorretos',
-              actions: [
-                FlatButton(
-                  child: Text('OK'),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                )
-              ]);
+          await DisplayAlert.show(
+            context: context,
+            title: 'Erro',
+            message: 'Usuário ou senha incorretos.',
+          );
         }
       } on FirebaseAuthException {
-        showAlertDialog(
+        await DisplayAlert.show(
           context: context,
           title: 'Erro',
           message: 'Usuário ou senha incorretos.',
-          actions: [
-            FlatButton(
-              child: Text('OK'),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            )
-          ],
         );
 
         toggleSpinner();
