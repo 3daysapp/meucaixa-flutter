@@ -5,7 +5,7 @@ import 'package:meu_caixa_flutter/components/menu_item.dart';
 import 'package:meu_caixa_flutter/contantes.dart';
 import 'package:meu_caixa_flutter/screens/expenses_screen.dart';
 import 'package:meu_caixa_flutter/screens/login_screen.dart';
-import 'package:meu_caixa_flutter/screens/provider_screen.dart';
+import 'package:meu_caixa_flutter/screens/supplier_screen.dart';
 import 'package:package_info/package_info.dart';
 
 ///

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:meu_caixa_flutter/screens/expenses_screen.dart';
 import 'package:meu_caixa_flutter/screens/main_screen.dart';
-import 'package:meu_caixa_flutter/screens/provider_screen.dart';
+import 'package:meu_caixa_flutter/screens/supplier_screen.dart';
 import 'package:meu_caixa_flutter/screens/welcome_screen.dart';
 import 'screens/register_screen.dart';
 import 'screens/login_screen.dart';

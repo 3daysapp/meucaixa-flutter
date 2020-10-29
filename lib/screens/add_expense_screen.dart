@@ -5,7 +5,7 @@ import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:meu_caixa_flutter/contantes.dart';
 import 'package:meu_caixa_flutter/components/default_text_field.dart';
 import 'package:meu_caixa_flutter/models/expense.dart';
-import 'package:meu_caixa_flutter/models/provider.dart';
+import 'package:meu_caixa_flutter/models/supplier.dart';
 import 'package:meu_caixa_flutter/utils/user_utils.dart';
 
 ///
@@ -112,7 +112,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                   items: providerList,
                   onChanged: (value) {
                     setState(() {
-                      expense.provider = Provider();
+                      expense.provider = Supplier();
                       expense.provider.name = value;
                     });
                   },
