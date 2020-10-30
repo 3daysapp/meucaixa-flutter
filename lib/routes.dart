@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:meu_caixa_flutter/screens/cash_registry_open_value_screen.dart';
+import 'package:meu_caixa_flutter/screens/cash_registry_open_screen.dart';
 import 'package:meu_caixa_flutter/screens/expenses_screen.dart';
 import 'package:meu_caixa_flutter/screens/main_screen.dart';
 import 'package:meu_caixa_flutter/screens/supplier_screen.dart';

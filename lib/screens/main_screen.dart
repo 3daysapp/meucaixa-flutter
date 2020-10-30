@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:meu_caixa_flutter/components/menu_item.dart';
 import 'package:meu_caixa_flutter/contantes.dart';
-import 'package:meu_caixa_flutter/screens/cash_registry_open_value_screen.dart';
+import 'package:meu_caixa_flutter/screens/cash_registry_open_screen.dart';
 import 'package:meu_caixa_flutter/screens/login_screen.dart';
 import 'package:meu_caixa_flutter/screens/supplier_screen.dart';
 import 'package:package_info/package_info.dart';
