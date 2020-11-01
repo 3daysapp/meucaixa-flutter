@@ -6,7 +6,6 @@ import 'package:meu_caixa_flutter/models/cash_registry.dart';
 import 'package:meu_caixa_flutter/models/credit_card_machine.dart';
 import 'package:meu_caixa_flutter/screens/add_credit_card_machine_screen.dart';
 import 'package:meu_caixa_flutter/screens/cash_registry_screen.dart';
-import 'package:meu_caixa_flutter/utils/user_utils.dart';
 
 ///
 ///
@@ -74,8 +73,8 @@ class _CreditCardScreenState extends State<CreditCardScreen> {
                   StreamBuilder<QuerySnapshot>(
                     stream: _firestore
                         .collection('creditCardMachines')
-                        .where('userId',
-                            isEqualTo: UserUtils.getCurrentUser().uid)
+                        // .where('userId',
+                        //     isEqualTo: UserUtils.getCurrentUser().uid)
                         .snapshots(),
                     builder: (
                       BuildContext context,

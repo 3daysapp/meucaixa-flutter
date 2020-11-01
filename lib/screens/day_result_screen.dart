@@ -9,7 +9,6 @@ import 'package:meu_caixa_flutter/models/cash_registry.dart';
 import 'package:meu_caixa_flutter/models/credit_card_machine.dart';
 import 'package:meu_caixa_flutter/models/expense.dart';
 import 'package:meu_caixa_flutter/screens/main_screen.dart';
-import 'package:meu_caixa_flutter/utils/user_utils.dart';
 
 ///
 ///
@@ -70,8 +69,8 @@ class _DayResultScreenState extends State<DayResultScreen> {
       DocumentReference reference = await _firestore
           .collection('cashRegistryHistory')
           .add(<String, dynamic>{
-        'userId': UserUtils.getCurrentUser()
-            .uid, // FIXME - Estrutura do firestore :-(
+        // 'userId': UserUtils.getCurrentUser()
+        //     .uid, // FIXME - Estrutura do firestore :-(
         'date': widget.cashRegistry.date,
         'openValue': widget.cashRegistry.openValue,
         'totalCreditCardMachine': widget.cashRegistry.totalCreditCardMachine,

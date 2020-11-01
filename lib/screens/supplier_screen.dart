@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:meu_caixa_flutter/components/display_alert.dart';
 import 'package:meu_caixa_flutter/models/supplier.dart';
 import 'package:meu_caixa_flutter/screens/supplier_edit_screen.dart';
-import 'package:meu_caixa_flutter/utils/user_utils.dart';
 
 ///
 ///
@@ -57,7 +56,7 @@ class _ProviderScreenState extends State<ProviderScreen> {
           child: StreamBuilder<QuerySnapshot>(
             stream: _firestore
                 .collection('providers')
-                .where('userId', isEqualTo: UserUtils.getCurrentUser().uid)
+                // .where('userId', isEqualTo: UserUtils.getCurrentUser().uid)
                 .snapshots(),
             builder: (
               BuildContext context,

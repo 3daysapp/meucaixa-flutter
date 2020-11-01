@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:meu_caixa_flutter/components/display_alert.dart';
 import 'package:meu_caixa_flutter/components/default_text_field.dart';
 import 'package:meu_caixa_flutter/models/credit_card_machine.dart';
-import 'package:meu_caixa_flutter/utils/user_utils.dart';
+// import 'package:meu_caixa_flutter/utils/user_utils.dart';
 
 ///
 ///
@@ -37,10 +37,10 @@ class _AddCreditCardMachineScreenState
   ///
   void addCreditCardMachine(BuildContext context) async {
     if (_formKey.currentState.validate()) {
-      User user = UserUtils.getCurrentUser();
+      // User user = UserUtils.getCurrentUser();
       try {
         await _firestore.collection('creditCardMachines').add(<String, dynamic>{
-          'userId': user.uid,
+          // 'userId': user.uid,
           'name': creditCardMachine.name,
         });
 

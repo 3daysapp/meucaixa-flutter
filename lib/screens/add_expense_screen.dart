@@ -6,7 +6,6 @@ import 'package:meu_caixa_flutter/contantes.dart';
 import 'package:meu_caixa_flutter/components/default_text_field.dart';
 import 'package:meu_caixa_flutter/models/expense.dart';
 import 'package:meu_caixa_flutter/models/supplier.dart';
-import 'package:meu_caixa_flutter/utils/user_utils.dart';
 
 ///
 ///
@@ -76,7 +75,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
           StreamBuilder<QuerySnapshot>(
             stream: _firestore
                 .collection('providers')
-                .where('userId', isEqualTo: UserUtils.getCurrentUser().uid)
+                // .where('userId', isEqualTo: UserUtils.getCurrentUser().uid)
                 .snapshots(),
             builder:
                 (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
