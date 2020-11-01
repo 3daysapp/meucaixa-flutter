@@ -4,7 +4,9 @@ import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:meu_caixa_flutter/components/display_alert.dart';
+import 'package:meu_caixa_flutter/components/new_default_textfield.dart';
 import 'package:meu_caixa_flutter/screens/main_screen.dart';
+import 'package:meu_caixa_flutter/screens/register_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 ///
@@ -61,7 +63,7 @@ class _LoginState extends State<Login> {
     // TODO - Shared Preferences.
     bool automaticLogin = await _shouldAutomaticalyLogin();
     if (automaticLogin &&
-        (_auth.currentUser != null || widget.logoff == false)) {
+        (_auth.currentUser != null && widget.logoff == false)) {
       _controller.add(LoginStatus.go);
     } else {
       _controller.add(LoginStatus.form);
@@ -85,10 +87,6 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Meu Caixa'),
-        centerTitle: true,
-      ),
       body: StreamBuilder<LoginStatus>(
         stream: _controller.stream,
         initialData: LoginStatus.init,
@@ -115,27 +113,22 @@ class _LoginState extends State<Login> {
               case LoginStatus.form:
                 return Form(
                   key: _formKey,
-                  child: SingleChildScrollView(
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: <Widget>[
-                          /// Logo
-                          Image.asset(
-                            'images/meucaixa-logo.png',
-                            height: 250,
-                          ),
+                  child: Center(
+                    child: SingleChildScrollView(
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: <Widget>[
+                            /// Logo
+                            Image.asset(
+                              'images/meucaixa-logo.png',
+                              height: 250,
+                            ),
 
-                          /// E-mail
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 8.0),
-                            child: TextFormField(
-                              decoration: InputDecoration(
-                                labelText: 'E-mail',
-                                border: OutlineInputBorder(),
-                                counterText: '',
-                              ),
+                            /// E-mail
+                            NewDefaultTextField(
+                              labelText: 'E-mail',
                               controller: _emailController,
                               keyboardType: TextInputType.emailAddress,
                               validator: (String value) =>
@@ -143,29 +136,48 @@ class _LoginState extends State<Login> {
                                       ? null
                                       : 'Informe o e-mail.',
                             ),
-                          ),
 
-                          /// Password
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 8.0),
-                            child: TextFormField(
-                              decoration: InputDecoration(
-                                labelText: 'Senha',
-                                border: OutlineInputBorder(),
-                                counterText: '',
-                              ),
+                            /// Password
+                            NewDefaultTextField(
+                              labelText: 'Senha',
                               controller: _passwordController,
-                              obscureText: true,
+                              isPassword: true,
                               validator: (String value) =>
                                   value.isEmpty ? 'Informe a senha.' : null,
                             ),
-                          ),
 
-                          RaisedButton(
-                            child: Text('ENTRAR'),
-                            onPressed: _login,
-                          ),
-                        ],
+                            /// Botao Entrar
+                            RaisedButton(
+                              child: Text('ENTRAR'),
+                              onPressed: _login,
+                            ),
+                            SizedBox(
+                              height: 15,
+                            ),
+
+                            Text(
+                              'Ainda não possui uma conta?',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(color: Colors.white),
+                            ),
+
+                            /// Botão abrir tela de cadastro
+                            FlatButton(
+                              child: Text(
+                                'clique aqui para se cadastrar!',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              onPressed: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute<RegisterScreen>(
+                                      builder: (BuildContext context) =>
+                                          RegisterScreen()),
+                                );
+                              },
+                            )
+                          ],
+                        ),
                       ),
                     ),
                   ),

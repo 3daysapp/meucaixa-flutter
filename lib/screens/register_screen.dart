@@ -1,6 +1,8 @@
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:meu_caixa_flutter/components/default_text_field.dart';
+import 'package:meu_caixa_flutter/components/new_default_textfield.dart';
 import 'package:meu_caixa_flutter/components/rounded_action_button.dart';
 import 'package:meu_caixa_flutter/contantes.dart';
 import 'package:meu_caixa_flutter/screens/main_screen.dart';
@@ -27,9 +29,9 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey();
   final FirebaseAuth auth = FirebaseAuth.instance;
-  String userEmail;
-  String userPassword;
-  String username;
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
   // bool showSpinner = false;
 
   ///
@@ -40,9 +42,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
       // toggleSpinner();
       try {
         await auth.createUserWithEmailAndPassword(
-            email: userEmail, password: userPassword);
+            email: _emailController.text, password: _passwordController.text);
         User user = auth.currentUser;
-        await user.updateProfile(displayName: username);
+        await user.updateProfile(displayName: _nameController.text);
         // toggleSpinner();
 
         await Navigator.pushNamed(context, MainScreen.screenId);
@@ -77,6 +79,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         body: Center(
           child: SingleChildScrollView(
             child: Container(
+              padding: EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -105,62 +108,51 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: <Widget>[
-                        DefaultTextField(
-                          callback: (String newValue) {
-                            userEmail = newValue;
-                          },
-                          hintText: 'Seu e-mail',
-                          icon: Icons.email,
-                          inputType: TextInputType.emailAddress,
-                          validator: (String value) => value.isEmpty
-                              ? 'Por favor, informe seu email!'
-                              : null,
+                        NewDefaultTextField(
+                          labelText: 'E-mail',
+                          controller: _emailController,
+                          keyboardType: TextInputType.emailAddress,
+                          validator: (String value) =>
+                              EmailValidator.validate(value)
+                                  ? null
+                                  : 'Informe um email válido.',
                         ),
-                        DefaultTextField(
-                          callback: (String newValue) =>
-                              userPassword = newValue,
-                          hintText: 'Sua senha',
-                          obscureText: true,
-                          icon: Icons.vpn_key,
-
-                          /// TODO - Pode melhorar a legibilidade usando operador ternário.
-                          validator: (String value) {
-                            if (value.isEmpty) {
-                              return 'Por favor, informe uma senha!';
-                            } else {
-                              return null;
-                            }
-                          },
+                        NewDefaultTextField(
+                          labelText: 'Senha',
+                          controller: _passwordController,
+                          isPassword: true,
+                          validator: (String value) =>
+                              value.isEmpty ? 'Informe sua senha' : null,
                         ),
-                        DefaultTextField(
-                          callback: (String newValue) => username = newValue,
-                          hintText: 'Seu nome',
-                          inputAction: TextInputAction.done,
-                          icon: Icons.person,
-                          validator: (String value) => value.isEmpty
-                              ? 'Por favor, informe seu nome!'
-                              : null,
-                        ),
+                        NewDefaultTextField(
+                          labelText: 'Nome',
+                          controller: _nameController,
+                          validator: (String value) =>
+                              value.isEmpty ? 'Informe seu nome' : null,
+                        )
                       ],
                     ),
                   ),
-                  RoundedActionButton(
-                    color: Colors.green,
-                    label: 'Cadastrar',
-                    callback: () {
-                      print('Clicou no botão');
-                      setState(() {
+                  FlatButton(
+                      child: Text(
+                        'Cadastrar',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      color: Colors.green,
+                      onPressed: () {
                         registerUser();
-                      });
-                    },
-                  ),
-                  RoundedActionButton(
-                    color: kRadicalRedColor,
-                    label: 'Cancelar',
-                    callback: () {
-                      Navigator.pop(context);
-                    },
-                  ),
+                      }),
+                  FlatButton(
+                      child: Text(
+                        'Cancelar',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      color: Colors.redAccent,
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      }),
                 ],
               ),
             ),
