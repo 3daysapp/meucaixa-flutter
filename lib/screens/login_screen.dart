@@ -5,7 +5,6 @@ import 'package:meu_caixa_flutter/components/display_alert.dart';
 import 'package:meu_caixa_flutter/components/rounded_action_button.dart';
 import 'package:meu_caixa_flutter/screens/main_screen.dart';
 import 'package:meu_caixa_flutter/screens/register_screen.dart';
-import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 ///
@@ -152,100 +151,97 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: ModalProgressHUD(
-          inAsyncCall: _showSpinner,
-          child: Container(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                Flexible(
-                  child: SizedBox(
-                    height: 200,
-                    child: Hero(
-                      tag: 'logo',
-                      child: Image(
-                        image: AssetImage('images/meucaixa-logo.png'),
-                      ),
+        body: Container(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              Flexible(
+                child: SizedBox(
+                  height: 200,
+                  child: Hero(
+                    tag: 'logo',
+                    child: Image(
+                      image: AssetImage('images/meucaixa-logo.png'),
                     ),
                   ),
                 ),
-                SizedBox(
-                  height: 10,
-                ),
-                Form(
-                  key: _formKey,
-                  child: Column(
-                    children: <Widget>[
-                      DefaultTextField(
-                        hintText: 'Seu email',
-                        inputType: TextInputType.emailAddress,
-                        icon: Icons.email,
-                        controller: emailController,
-                        // TODO - Operador ternário.
-                        validator: (String value) {
-                          if (value.isEmpty) {
-                            return 'Por favor, informe seu email';
-                          }
-                          return null;
-                        },
-                      ),
-                      DefaultTextField(
-                        hintText: 'Sua senha',
-                        icon: Icons.vpn_key,
-                        obscureText: true,
-                        inputAction: TextInputAction.done,
-                        controller: passwordController,
-                        // TODO - Operador ternário.
-                        validator: (String value) {
-                          if (value.isEmpty) {
-                            return 'Por favor, informe sua senha';
-                          }
-                          return null;
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-                Row(
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Form(
+                key: _formKey,
+                child: Column(
                   children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8),
-                      child: Checkbox(
-                        value: saveUserEmail,
-                        onChanged: (bool newValue) async {
-                          setState(() {
-                            saveUserEmail = newValue;
-                          });
-                        },
-                      ),
+                    DefaultTextField(
+                      hintText: 'Seu email',
+                      inputType: TextInputType.emailAddress,
+                      icon: Icons.email,
+                      controller: emailController,
+                      // TODO - Operador ternário.
+                      validator: (String value) {
+                        if (value.isEmpty) {
+                          return 'Por favor, informe seu email';
+                        }
+                        return null;
+                      },
                     ),
-                    Text('Lembrar email'),
+                    DefaultTextField(
+                      hintText: 'Sua senha',
+                      icon: Icons.vpn_key,
+                      obscureText: true,
+                      inputAction: TextInputAction.done,
+                      controller: passwordController,
+                      // TODO - Operador ternário.
+                      validator: (String value) {
+                        if (value.isEmpty) {
+                          return 'Por favor, informe sua senha';
+                        }
+                        return null;
+                      },
+                    ),
                   ],
                 ),
-                RoundedActionButton(
-                  callback: () {
-                    signIn();
-                  },
-                  label: 'Entrar',
-                ),
-                Text(
-                  'Ainda não possui uma conta?',
+              ),
+              Row(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8),
+                    child: Checkbox(
+                      value: saveUserEmail,
+                      onChanged: (bool newValue) async {
+                        setState(() {
+                          saveUserEmail = newValue;
+                        });
+                      },
+                    ),
+                  ),
+                  Text('Lembrar email'),
+                ],
+              ),
+              RoundedActionButton(
+                callback: () {
+                  signIn();
+                },
+                label: 'Entrar',
+              ),
+              Text(
+                'Ainda não possui uma conta?',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.white),
+              ),
+              FlatButton(
+                child: Text(
+                  'clique aqui para se cadastrar!',
                   textAlign: TextAlign.center,
                   style: TextStyle(color: Colors.white),
                 ),
-                FlatButton(
-                  child: Text(
-                    'clique aqui para se cadastrar!',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  onPressed: () {
-                    Navigator.pushNamed(context, RegisterScreen.screenId);
-                  },
-                )
-              ],
-            ),
+                onPressed: () {
+                  Navigator.pushNamed(context, RegisterScreen.screenId);
+                },
+              )
+            ],
           ),
         ),
       ),
