@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:meu_caixa_flutter/components/display_alert.dart';
 import 'package:meu_caixa_flutter/models/supplier.dart';
@@ -25,6 +26,7 @@ class SupplierEditScreen extends StatefulWidget {
 ///
 ///
 class _SupplierEditScreenState extends State<SupplierEditScreen> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   Supplier _supplier;
@@ -112,10 +114,16 @@ class _SupplierEditScreenState extends State<SupplierEditScreen> {
 
       try {
         if (_supplier.id == null) {
-          await _firestore.collection('providers').add(_supplier.toMap());
+          await _firestore
+              .collection('users')
+              .doc(_auth.currentUser.uid)
+              .collection('suppliers')
+              .add(_supplier.toMap());
         } else {
           await _firestore
-              .collection('providers')
+              .collection('users')
+              .doc(_auth.currentUser.uid)
+              .collection('suppliers')
               .doc(_supplier.id)
               .update(_supplier.toMap());
         }

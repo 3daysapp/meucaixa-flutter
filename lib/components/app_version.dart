@@ -5,20 +5,7 @@ import 'package:package_info/package_info.dart';
 ///
 ///
 ///
-class AppVersion extends StatefulWidget {
-  ///
-  ///
-  ///
-  @override
-  _AppVersionState createState() => _AppVersionState();
-}
-
-///
-///
-///
-class _AppVersionState extends State<AppVersion> {
-
-
+class AppVersion extends StatelessWidget {
   ///
   ///
   ///
@@ -27,8 +14,7 @@ class _AppVersionState extends State<AppVersion> {
     return FutureBuilder<PackageInfo>(
       future: PackageInfo.fromPlatform(),
       builder: (BuildContext context, AsyncSnapshot<PackageInfo> snapshot) {
-
-        if(snapshot.hasData) {
+        if (snapshot.hasData) {
           PackageInfo _packageInfo = snapshot.data;
 
           return Container(
@@ -42,7 +28,7 @@ class _AppVersionState extends State<AppVersion> {
         }
 
         return CircularProgressIndicator();
-      }
+      },
     );
   }
 }

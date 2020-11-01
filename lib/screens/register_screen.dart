@@ -30,28 +30,28 @@ class _RegisterScreenState extends State<RegisterScreen> {
   String userEmail;
   String userPassword;
   String username;
-  bool showSpinner = false;
+  // bool showSpinner = false;
 
   ///
   ///
   ///
   void registerUser() async {
     if (_formKey.currentState.validate()) {
-      toggleSpinner();
+      // toggleSpinner();
       try {
         await auth.createUserWithEmailAndPassword(
             email: userEmail, password: userPassword);
         User user = auth.currentUser;
         await user.updateProfile(displayName: username);
-        toggleSpinner();
+        // toggleSpinner();
 
         await Navigator.pushNamed(context, MainScreen.screenId);
       } on FirebaseAuthException catch (e) {
-        toggleSpinner();
+        // toggleSpinner();
         if (e.code == 'weak-password') {
         } else if (e.code == 'email-already-in-use') {}
       } catch (e) {
-        toggleSpinner();
+        // toggleSpinner();
         print(e);
       }
     }
@@ -60,12 +60,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
   ///
   ///
   ///
-  void toggleSpinner() {
-    /// Caso clássico de utilização de stream.
-    setState(() {
-      showSpinner = !showSpinner;
-    });
-  }
+  // void toggleSpinner() {
+  //   /// Caso clássico de utilização de stream.
+  //   setState(() {
+  //     showSpinner = !showSpinner;
+  //   });
+  // }
 
   ///
   ///
@@ -123,7 +123,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           obscureText: true,
                           icon: Icons.vpn_key,
 
-                          /// TODO - Pode melhorar a legibilidade.
+                          /// TODO - Pode melhorar a legibilidade usando operador ternário.
                           validator: (String value) {
                             if (value.isEmpty) {
                               return 'Por favor, informe uma senha!';

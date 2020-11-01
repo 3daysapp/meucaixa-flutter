@@ -6,6 +6,7 @@ import 'package:meu_caixa_flutter/components/display_alert.dart';
 import 'package:meu_caixa_flutter/components/drawer_menu.dart';
 import 'package:meu_caixa_flutter/components/menu_item.dart';
 import 'package:meu_caixa_flutter/screens/login.dart';
+import 'package:meu_caixa_flutter/screens/supplier_screen.dart';
 
 ///
 ///
@@ -65,7 +66,11 @@ class _MainScreenState extends State<MainScreen> {
                         icon: Icons.add_business_outlined,
                         label: 'Fornecedores',
                         color: Colors.teal,
-                        action: () {},
+                        action: () => Navigator.of(context).push(
+                          MaterialPageRoute<SupplierScreen>(
+                            builder: (_) => SupplierScreen(),
+                          ),
+                        ),
                       ),
                       MenuItem(
                         icon: Icons.exit_to_app_outlined,
