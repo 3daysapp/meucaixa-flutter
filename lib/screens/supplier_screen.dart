@@ -58,6 +58,7 @@ class _SupplierScreenState extends State<SupplierScreen> {
                 .collection('users')
                 .doc(_auth.currentUser.uid)
                 .collection('suppliers')
+                .where('isActive', isEqualTo: true)
                 .snapshots(),
             builder: (
               BuildContext context,
@@ -121,6 +122,7 @@ class _SupplierScreenState extends State<SupplierScreen> {
   ///
   ///
   void _delete(Supplier supplier) async {
+    print(supplier.id);
     bool delete = await DisplayAlert.yesNo(
       context: context,
       message: 'Deseja excluir o fornecedor ${supplier.name}?',
@@ -128,7 +130,16 @@ class _SupplierScreenState extends State<SupplierScreen> {
 
     if (delete) {
       try {
-        await _firestore.collection('providers').doc(supplier.id).delete();
+        // await _firestore.collection('providers').doc(supplier.id).delete();
+
+        supplier.isActive = false;
+
+        await _firestore
+            .collection('users')
+            .doc(_auth.currentUser.uid)
+            .collection('suppliers')
+            .doc(supplier.id)
+            .update(supplier.toMap());
 
         await DisplayAlert.show(
           context: context,

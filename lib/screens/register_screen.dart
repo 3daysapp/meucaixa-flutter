@@ -1,10 +1,12 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:meu_caixa_flutter/components/display_alert.dart';
 import 'package:meu_caixa_flutter/components/new_default_textfield.dart';
+import 'package:meu_caixa_flutter/models/app_user.dart';
 import 'package:meu_caixa_flutter/screens/main_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -38,6 +40,7 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey();
   final FirebaseAuth auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
@@ -208,7 +211,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
         await auth.createUserWithEmailAndPassword(
             email: _emailController.text, password: _passwordController.text);
         User user = auth.currentUser;
+
         await user.updateProfile(displayName: _nameController.text);
+
+        AppUser appUser =
+            AppUser(email: user.email, name: _nameController.text);
+
+        await _firestore.collection('users').doc(user.uid).set(appUser.toMap());
+
         _controller.add(RegisterStatus.go);
       } on FirebaseAuthException catch (e) {
         if (e.code == 'weak-password') {

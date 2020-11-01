@@ -91,9 +91,6 @@ class _SupplierEditScreenState extends State<SupplierEditScreen> {
                       counterText: '',
                     ),
                     initialValue: _supplier.telephone,
-                    validator: (String value) => value.isEmpty
-                        ? 'Informe o telefone do fornecedor.'
-                        : null,
                     onSaved: (String value) => _supplier.telephone = value,
                   ),
                 ),
