@@ -59,8 +59,13 @@ class _MainScreenState extends State<MainScreen> {
                       MenuItem(
                         icon: Icons.analytics_outlined,
                         label: 'Histórico',
-                        color: Colors.blueAccent,
-                        action: () {},
+                        color: Colors.redAccent,
+                        action: () {
+                          DisplayAlert.show(
+                              context: context,
+                              message:
+                                  'Módulo em desenvolvimento, por favor, aguarde!');
+                        },
                       ),
                       MenuItem(
                         icon: Icons.add_business_outlined,
@@ -73,10 +78,15 @@ class _MainScreenState extends State<MainScreen> {
                         ),
                       ),
                       MenuItem(
-                        icon: Icons.exit_to_app_outlined,
-                        label: 'Sair',
-                        color: Colors.red,
-                        action: _logout,
+                        icon: Icons.attach_money_sharp,
+                        label: 'Maquinas de cartão de crédito',
+                        color: Colors.blueAccent,
+                        action: () {
+                          DisplayAlert.show(
+                              context: context,
+                              message:
+                                  'Módulo em desenvolvimento, por favor, aguarde!');
+                        },
                       ),
                     ],
                   ),

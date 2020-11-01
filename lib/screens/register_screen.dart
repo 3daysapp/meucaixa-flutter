@@ -1,12 +1,21 @@
+import 'dart:async';
+
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:meu_caixa_flutter/components/default_text_field.dart';
+import 'package:meu_caixa_flutter/components/display_alert.dart';
 import 'package:meu_caixa_flutter/components/new_default_textfield.dart';
-import 'package:meu_caixa_flutter/components/rounded_action_button.dart';
-import 'package:meu_caixa_flutter/contantes.dart';
 import 'package:meu_caixa_flutter/screens/main_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+
+///
+///
+///
+enum RegisterStatus {
+  form,
+  register,
+  go,
+}
 
 ///
 ///
@@ -32,42 +41,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
-  // bool showSpinner = false;
+  final StreamController<RegisterStatus> _controller =
+      StreamController<RegisterStatus>();
 
-  ///
-  ///
-  ///
-  void registerUser() async {
-    if (_formKey.currentState.validate()) {
-      // toggleSpinner();
-      try {
-        await auth.createUserWithEmailAndPassword(
-            email: _emailController.text, password: _passwordController.text);
-        User user = auth.currentUser;
-        await user.updateProfile(displayName: _nameController.text);
-        // toggleSpinner();
-
-        await Navigator.pushNamed(context, MainScreen.screenId);
-      } on FirebaseAuthException catch (e) {
-        // toggleSpinner();
-        if (e.code == 'weak-password') {
-        } else if (e.code == 'email-already-in-use') {}
-      } catch (e) {
-        // toggleSpinner();
-        print(e);
-      }
-    }
+  @override
+  void initState() {
+    super.initState();
+    _controller.add(RegisterStatus.form);
   }
-
-  ///
-  ///
-  ///
-  // void toggleSpinner() {
-  //   /// Caso clássico de utilização de stream.
-  //   setState(() {
-  //     showSpinner = !showSpinner;
-  //   });
-  // }
 
   ///
   ///
@@ -76,89 +57,191 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: Center(
-          child: SingleChildScrollView(
-            child: Container(
-              padding: EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  SizedBox(
-                    height: 200,
-                    width: 200,
-                    child: Hero(
-                      tag: 'logo',
-                      child: Image(
-                        image: AssetImage('images/meucaixa-logo.png'),
+        body: StreamBuilder<RegisterStatus>(
+          stream: _controller.stream,
+          builder:
+              (BuildContext context, AsyncSnapshot<RegisterStatus> snapshot) {
+            if (snapshot.hasData) {
+              switch (snapshot.data) {
+                case RegisterStatus.form:
+                  return Center(
+                    child: SingleChildScrollView(
+                      child: Container(
+                        padding: EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            SizedBox(
+                              height: 200,
+                              width: 200,
+                              child: Hero(
+                                tag: 'logo',
+                                child: Image(
+                                  image: AssetImage('images/meucaixa-logo.png'),
+                                ),
+                              ),
+                            ),
+                            Text(
+                              'Meu Caixa - Cadastro',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 25,
+                              ),
+                            ),
+                            Form(
+                              key: _formKey,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: <Widget>[
+                                  NewDefaultTextField(
+                                    labelText: 'E-mail',
+                                    controller: _emailController,
+                                    keyboardType: TextInputType.emailAddress,
+                                    validator: (String value) =>
+                                        EmailValidator.validate(value)
+                                            ? null
+                                            : 'Informe um email válido.',
+                                  ),
+                                  NewDefaultTextField(
+                                    labelText: 'Senha',
+                                    controller: _passwordController,
+                                    isPassword: true,
+                                    validator: (String value) => value.isEmpty
+                                        ? 'Informe sua senha.'
+                                        : null,
+                                  ),
+                                  NewDefaultTextField(
+                                    labelText: 'Nome',
+                                    controller: _nameController,
+                                    validator: (String value) => value.isEmpty
+                                        ? 'Informe seu nome.'
+                                        : null,
+                                  )
+                                ],
+                              ),
+                            ),
+                            FlatButton(
+                                child: Text(
+                                  'Cadastrar',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                color: Colors.green,
+                                onPressed: () {
+                                  _registerUser(context);
+                                }),
+                            FlatButton(
+                                child: Text(
+                                  'Cancelar',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                color: Colors.redAccent,
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                }),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  Text(
-                    'Meu Caixa - Cadastro',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 25,
-                    ),
-                  ),
-                  Form(
-                    key: _formKey,
+                  );
+                case RegisterStatus.register:
+                  return Center(
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
-                        NewDefaultTextField(
-                          labelText: 'E-mail',
-                          controller: _emailController,
-                          keyboardType: TextInputType.emailAddress,
-                          validator: (String value) =>
-                              EmailValidator.validate(value)
-                                  ? null
-                                  : 'Informe um email válido.',
+                        CircularProgressIndicator(),
+                        Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Text('Criando usuário...'),
                         ),
-                        NewDefaultTextField(
-                          labelText: 'Senha',
-                          controller: _passwordController,
-                          isPassword: true,
-                          validator: (String value) =>
-                              value.isEmpty ? 'Informe sua senha' : null,
-                        ),
-                        NewDefaultTextField(
-                          labelText: 'Nome',
-                          controller: _nameController,
-                          validator: (String value) =>
-                              value.isEmpty ? 'Informe seu nome' : null,
-                        )
                       ],
                     ),
-                  ),
-                  FlatButton(
-                      child: Text(
-                        'Cadastrar',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      color: Colors.green,
-                      onPressed: () {
-                        registerUser();
-                      }),
-                  FlatButton(
-                      child: Text(
-                        'Cancelar',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      color: Colors.redAccent,
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      }),
-                ],
-              ),
-            ),
-          ),
+                  );
+                  break;
+                case RegisterStatus.go:
+                  _goAhead(context);
+                  return Center(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        CircularProgressIndicator(),
+                        Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Text('Iniciando...'),
+                        ),
+                      ],
+                    ),
+                  );
+              }
+            }
+            return Center(
+              child: Text('Erro'),
+            );
+          },
         ),
       ),
     );
+  }
+
+  ///
+  ///
+  ///
+  void _goAhead(BuildContext context) async {
+    await Future<dynamic>.delayed(const Duration(milliseconds: 1000));
+    await Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute<MainScreen>(
+            builder: (BuildContext context) => MainScreen()),
+        (dynamic route) => false);
+  }
+
+  ///
+  ///
+  ///
+  void _registerUser(BuildContext context) async {
+    if (_formKey.currentState.validate()) {
+      _controller.add(RegisterStatus.register);
+      try {
+        await auth.createUserWithEmailAndPassword(
+            email: _emailController.text, password: _passwordController.text);
+        User user = auth.currentUser;
+        await user.updateProfile(displayName: _nameController.text);
+        _controller.add(RegisterStatus.go);
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'weak-password') {
+          await DisplayAlert.show(
+              context: context,
+              message:
+                  'Sua senha deve possuir pelo menos 6 caracteres, por favor, tente novamente.');
+        } else if (e.code == 'email-already-in-use') {
+          await DisplayAlert.show(
+              context: context,
+              message:
+                  'O e-mail informado já esta em uso, por favor utilize outro');
+        }
+        _controller.add(RegisterStatus.form);
+      } catch (e) {
+        await DisplayAlert.show(
+            context: context,
+            message:
+                'Erro ao realizar cadastro, por favor, tente novamente mais tarde');
+        _controller.add(RegisterStatus.form);
+      }
+    }
+  }
+
+  ///
+  ///
+  ///
+  @override
+  void dispose() {
+    _controller.close();
+    _emailController.dispose();
+    _passwordController.dispose();
+    _nameController.dispose();
+    super.dispose();
   }
 }
