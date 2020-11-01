@@ -1,12 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
+import 'package:meu_caixa_flutter/components/app_version.dart';
 import 'package:meu_caixa_flutter/components/display_alert.dart';
 import 'package:meu_caixa_flutter/components/menu_item.dart';
-import 'package:meu_caixa_flutter/contantes.dart';
 import 'package:meu_caixa_flutter/screens/login.dart';
-import 'package:meu_caixa_flutter/screens/supplier_screen.dart';
-import 'package:package_info/package_info.dart';
 
 ///
 ///
@@ -26,31 +24,6 @@ class MainScreen extends StatefulWidget {
 ///
 class _MainScreenState extends State<MainScreen> {
   final User user = FirebaseAuth.instance.currentUser;
-
-  PackageInfo _packageInfo = PackageInfo(
-      appName: 'Unknown',
-      packageName: 'Unknown',
-      version: 'Unknown',
-      buildNumber: 'Unknown');
-
-  ///
-  ///
-  ///
-  @override
-  void initState() {
-    super.initState();
-    _initPackageInfo();
-  }
-
-  ///
-  ///
-  ///
-  Future<void> _initPackageInfo() async {
-    final PackageInfo info = await PackageInfo.fromPlatform();
-    setState(() {
-      _packageInfo = info;
-    });
-  }
 
   ///
   ///
@@ -104,16 +77,7 @@ class _MainScreenState extends State<MainScreen> {
               ),
 
               /// Version
-              /// TODO - Este container poderia ser um Widget separado?
-              /// Desacoplamento?? Responsabilidade. StatefulWidget...
-              Container(
-                child: Column(
-                  children: <Widget>[
-                    Text('${_packageInfo.version}.${_packageInfo.buildNumber}'),
-                    Text(releaseDate)
-                  ],
-                ),
-              )
+              AppVersion(),
             ],
           ),
         ),

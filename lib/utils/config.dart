@@ -4,6 +4,8 @@
 class Config {
   static final Config _singleton = Config._internal();
 
+  static const String releaseDate = '25/10/2020';
+
   ///
   ///
   ///
