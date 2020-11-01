@@ -14,7 +14,6 @@ Map<String, WidgetBuilder> getRoutes(BuildContext context) {
     RegisterScreen.screenId: (BuildContext context) => RegisterScreen(),
     ExpenseScreen.screenId: (BuildContext context) => ExpenseScreen(),
     MainScreen.screenId: (BuildContext context) => MainScreen(),
-    ProviderScreen.screenId: (BuildContext context) => ProviderScreen(),
     CashRegistryOpenScreen.screenId: (BuildContext context) =>
         CashRegistryOpenScreen()
   };

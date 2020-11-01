@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:meu_caixa_flutter/components/display_alert.dart';
 import 'package:meu_caixa_flutter/models/supplier.dart';
@@ -7,25 +8,24 @@ import 'package:meu_caixa_flutter/screens/supplier_edit_screen.dart';
 ///
 ///
 ///
-class ProviderScreen extends StatefulWidget {
-  static String screenId = 'providerScreen';
-
+class SupplierScreen extends StatefulWidget {
   ///
   ///
   ///
-  const ProviderScreen({Key key}) : super(key: key);
+  const SupplierScreen({Key key}) : super(key: key);
 
   ///
   ///
   ///
   @override
-  _ProviderScreenState createState() => _ProviderScreenState();
+  _SupplierScreenState createState() => _SupplierScreenState();
 }
 
 ///
 ///
 ///
-class _ProviderScreenState extends State<ProviderScreen> {
+class _SupplierScreenState extends State<SupplierScreen> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   ///
@@ -55,8 +55,9 @@ class _ProviderScreenState extends State<ProviderScreen> {
           padding: EdgeInsets.all(16.0),
           child: StreamBuilder<QuerySnapshot>(
             stream: _firestore
-                .collection('providers')
-                // .where('userId', isEqualTo: UserUtils.getCurrentUser().uid)
+                .collection('users')
+                .doc(_auth.currentUser.uid)
+                .collection('suppliers')
                 .snapshots(),
             builder: (
               BuildContext context,
@@ -64,6 +65,14 @@ class _ProviderScreenState extends State<ProviderScreen> {
             ) {
               if (snapshot.hasData) {
                 List<QueryDocumentSnapshot> docs = snapshot.data.docs;
+
+                if (docs.isEmpty) {
+                  return Center(
+                    child: Text('Nenhum fornecedor cadastrado '
+                        'até o momento.'),
+                  );
+                }
+
                 return ListView.separated(
                   itemCount: docs.length,
                   itemBuilder: (BuildContext context, int index) {
