@@ -5,44 +5,29 @@ import 'package:package_info/package_info.dart';
 ///
 ///
 ///
-class AppVersion extends StatefulWidget {
-  ///
-  ///
-  ///
-  @override
-  _AppVersionState createState() => _AppVersionState();
-}
-
-///
-///
-///
-class _AppVersionState extends State<AppVersion> {
-
-
+class AppVersion extends StatelessWidget {
   ///
   ///
   ///
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<PackageInfo>(
-      future: PackageInfo.fromPlatform(),
-      builder: (BuildContext context, AsyncSnapshot<PackageInfo> snapshot) {
+        future: PackageInfo.fromPlatform(),
+        builder: (BuildContext context, AsyncSnapshot<PackageInfo> snapshot) {
+          if (snapshot.hasData) {
+            PackageInfo _packageInfo = snapshot.data;
 
-        if(snapshot.hasData) {
-          PackageInfo _packageInfo = snapshot.data;
+            return Container(
+              child: Column(
+                children: <Widget>[
+                  Text('${_packageInfo.version}.${_packageInfo.buildNumber}'),
+                  Text(Config.releaseDate),
+                ],
+              ),
+            );
+          }
 
-          return Container(
-            child: Column(
-              children: <Widget>[
-                Text('${_packageInfo.version}.${_packageInfo.buildNumber}'),
-                Text(Config.releaseDate),
-              ],
-            ),
-          );
-        }
-
-        return CircularProgressIndicator();
-      }
-    );
+          return CircularProgressIndicator();
+        });
   }
 }
