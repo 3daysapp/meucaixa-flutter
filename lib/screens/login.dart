@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:meu_caixa_flutter/components/display_alert.dart';
 import 'package:meu_caixa_flutter/screens/main_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 ///
 ///
@@ -23,7 +24,8 @@ class Login extends StatefulWidget {
   ///
   ///
   ///
-  const Login({Key key}) : super(key: key);
+  final bool logoff;
+  const Login({Key key, this.logoff = false}) : super(key: key);
 
   ///
   ///
@@ -57,12 +59,24 @@ class _LoginState extends State<Login> {
   ///
   void _loadData() async {
     // TODO - Shared Preferences.
-
-    if (_auth.currentUser == null) {
-      _controller.add(LoginStatus.form);
-    } else {
+    bool automaticLogin = await _shouldAutomaticalyLogin();
+    if (automaticLogin &&
+        (_auth.currentUser != null || widget.logoff == false)) {
       _controller.add(LoginStatus.go);
+    } else {
+      _controller.add(LoginStatus.form);
     }
+  }
+
+  ///
+  ///
+  ///
+  Future<bool> _shouldAutomaticalyLogin() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (prefs.containsKey('automaticLogin')) {
+      return await prefs.getBool('automaticLogin');
+    }
+    return false;
   }
 
   ///
