@@ -175,32 +175,22 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Column(
                   children: <Widget>[
                     DefaultTextField(
-                      hintText: 'Seu email',
-                      inputType: TextInputType.emailAddress,
-                      icon: Icons.email,
-                      controller: emailController,
-                      // TODO - Operador ternário.
-                      validator: (String value) {
-                        if (value.isEmpty) {
-                          return 'Por favor, informe seu email';
-                        }
-                        return null;
-                      },
-                    ),
+                        hintText: 'Seu email',
+                        inputType: TextInputType.emailAddress,
+                        icon: Icons.email,
+                        controller: emailController,
+                        validator: (String value) => value.isEmpty
+                            ? 'Por favor, informe seu email'
+                            : null),
                     DefaultTextField(
-                      hintText: 'Sua senha',
-                      icon: Icons.vpn_key,
-                      obscureText: true,
-                      inputAction: TextInputAction.done,
-                      controller: passwordController,
-                      // TODO - Operador ternário.
-                      validator: (String value) {
-                        if (value.isEmpty) {
-                          return 'Por favor, informe sua senha';
-                        }
-                        return null;
-                      },
-                    ),
+                        hintText: 'Sua senha',
+                        icon: Icons.vpn_key,
+                        obscureText: true,
+                        inputAction: TextInputAction.done,
+                        controller: passwordController,
+                        validator: (String value) => value.isEmpty
+                            ? 'Por favor, informe sua senha'
+                            : null),
                   ],
                 ),
               ),

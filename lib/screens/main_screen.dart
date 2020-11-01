@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:meu_caixa_flutter/components/app_version.dart';
 import 'package:meu_caixa_flutter/components/display_alert.dart';
+import 'package:meu_caixa_flutter/components/drawer_menu.dart';
 import 'package:meu_caixa_flutter/components/menu_item.dart';
 import 'package:meu_caixa_flutter/screens/login.dart';
 
@@ -32,6 +33,7 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        drawer: DrawerMenu(),
         appBar: AppBar(
           title: Text('Meu Caixa'),
           centerTitle: true,
