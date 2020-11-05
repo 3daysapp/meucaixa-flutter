@@ -14,9 +14,7 @@ void main() {
 
   for (int i = 0; i < 2; i++) {
     CreditCardMachine creditCardMachine = CreditCardMachine();
-    creditCardMachine.controller = MoneyMaskedTextController(
-        thousandSeparator: '.', decimalSeparator: ',');
-    creditCardMachine.controller.text = '89,50';
+    creditCardMachine.value = 89.50;
     creditCardMachineList.add(creditCardMachine);
   }
 
@@ -37,15 +35,15 @@ void main() {
   cashRegistry.calculate();
 
   test('Total de despesas', () {
-    expect(cashRegistry.totalExpenses, 200);
+    expect(cashRegistry.getTotalExpenses, 200);
   });
 
   test('Total Cartão de credito', () {
-    expect(cashRegistry.totalCreditCardMachine, 179);
+    expect(cashRegistry.getTotalCreditCardMachine, 179);
   });
 
   test('Total Dinheiro', () {
-    expect(cashRegistry.totalMoney, 400);
+    expect(cashRegistry.getTotalMoney, 400);
   });
 
   test('Fechamento total do caixa', () {

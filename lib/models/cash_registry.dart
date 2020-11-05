@@ -5,6 +5,7 @@ import 'package:meu_caixa_flutter/models/expense.dart';
 ///
 ///
 class CashRegistry {
+  String id;
   int note2 = 0;
   int note5 = 0;
   int note10 = 0;
@@ -12,6 +13,9 @@ class CashRegistry {
   int note50 = 0;
   int note100 = 0;
   DateTime date = DateTime.now();
+  double totalCreditCardMachine;
+  double totalExpenses;
+  double totalMoney;
   double openValue = 0;
   double total = 0;
   List<CreditCardMachine> creditCardMachineList;
@@ -20,21 +24,52 @@ class CashRegistry {
   ///
   ///
   ///
-  double get totalExpenses => expenseList.fold<double>(0.0,
+  CashRegistry();
+
+  ///
+  ///
+  ///
+  CashRegistry.fromMap(String id, Map<String, dynamic> map)
+      : id = id,
+        date = map['date'],
+        openValue = map['openValue'],
+        totalCreditCardMachine = map['totalCreditCardMachine'],
+        totalExpenses = map['totalExpenses'],
+        totalMoney = map['totalMoney'],
+        total = map['total'];
+
+  ///
+  ///
+  ///
+  Map<String, dynamic> toMap() {
+    Map<String, dynamic> map = <String, dynamic>{};
+    map['date'] = date;
+    map['openValue'] = openValue;
+    map['totalCreditCardMachine'] = getTotalCreditCardMachine;
+    map['totalExpenses'] = getTotalExpenses;
+    map['totalMoney'] = getTotalMoney;
+    map['total'] = total;
+    return map;
+  }
+
+  ///
+  ///
+  ///
+  double get getTotalExpenses => expenseList.fold<double>(0.0,
       (double previousValue, Expense expense) => previousValue + expense.value);
 
   ///
   ///
   ///
-  double get totalCreditCardMachine => creditCardMachineList.fold<double>(
+  double get getTotalCreditCardMachine => creditCardMachineList.fold<double>(
       0.0,
       (double previousValue, CreditCardMachine machine) =>
-          previousValue + machine.controller.numberValue);
+          previousValue + machine.value);
 
   ///
   ///
   ///
-  double get totalMoney =>
+  double get getTotalMoney =>
       (note2 * 2.0) +
       (note5 * 5.0) +
       (note10 * 10.0) +
@@ -47,9 +82,9 @@ class CashRegistry {
   ///
   void calculate() {
     total = 0;
-    total += totalMoney;
-    total += totalCreditCardMachine;
+    total += getTotalMoney;
+    total += getTotalCreditCardMachine;
     total += openValue;
-    total -= totalExpenses;
+    total -= getTotalExpenses;
   }
 }

@@ -17,13 +17,6 @@ class Config {
 
   bool debug = false;
 
-  /// TODO Esse é o estilo padrão do NewDefaultTextField, não sei se esse é o
-  /// jeito correto de colocar dentro do Config. Verificar
-  InputDecoration textFieldDecoration = InputDecoration(
-    border: OutlineInputBorder(),
-    counterText: '',
-  );
-
   ///
   ///
   ///

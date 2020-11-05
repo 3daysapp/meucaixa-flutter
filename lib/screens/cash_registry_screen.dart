@@ -40,7 +40,7 @@ class _CashRegistryScreenState extends State<CashRegistryScreen> {
   ///
   ///
   void calculaTotal() {
-    widget.cashRegistry.totalMoney;
+    widget.cashRegistry.getTotalMoney;
   }
 
   ///
@@ -54,7 +54,7 @@ class _CashRegistryScreenState extends State<CashRegistryScreen> {
       thousandSeparator: '.',
     );
     setState(() {
-      widget.cashRegistry.totalMoney;
+      widget.cashRegistry.getTotalMoney;
     });
   }
 
@@ -160,25 +160,9 @@ class _CashRegistryScreenState extends State<CashRegistryScreen> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
-                'Total: ${widget.cashRegistry.totalMoney.toStringAsFixed(2)} R\$',
+                'Total: ${widget.cashRegistry.getTotalMoney.toStringAsFixed(2)} R\$',
                 style: kDefaultTotalTextStyle, // TODO - Legibilidade.
               ),
-            ),
-
-            ///
-            ///
-            /// TODO - Controller e callback??
-            ///
-            /// TODO - Talvez o valor da abertura do caixa não poderia ser no início
-            /// da rotina?
-            DefaultTextField(
-              hintText: 'Valor de abertura do caixa hoje',
-              horizontalPadding: 5,
-              controller: cashRegistryOpenValueController,
-              callback: (_) {
-                widget.cashRegistry.openValue =
-                    cashRegistryOpenValueController.numberValue;
-              },
             ),
             Padding(
               padding: const EdgeInsets.all(5.0),

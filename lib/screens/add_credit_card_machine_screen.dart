@@ -26,6 +26,7 @@ class AddCreditCardMachineScreen extends StatefulWidget {
 
 class _AddCreditCardMachineScreenState
     extends State<AddCreditCardMachineScreen> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -39,7 +40,11 @@ class _AddCreditCardMachineScreenState
     if (_formKey.currentState.validate()) {
       // User user = UserUtils.getCurrentUser();
       try {
-        await _firestore.collection('creditCardMachines').add(<String, dynamic>{
+        await _firestore
+            .collection('users')
+            .doc(_auth.currentUser.uid)
+            .collection('creditCardMachines')
+            .add(<String, dynamic>{
           // 'userId': user.uid,
           'name': creditCardMachine.name,
         });
@@ -82,7 +87,7 @@ class _AddCreditCardMachineScreenState
             child: Padding(
               padding: const EdgeInsets.only(bottom: 15),
               child: Text(
-                'Adicionar nova maquina de cartão',
+                'Adicionar nova máquina de cartão',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 20,
@@ -91,7 +96,7 @@ class _AddCreditCardMachineScreenState
             ),
           ),
           DefaultTextField(
-            hintText: 'Nome da Maquina',
+            hintText: 'Nome da Máquina',
             callback: (String value) => creditCardMachine.name = value,
             validator: (String value) {
               if (value.isEmpty) {

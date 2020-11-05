@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:meu_caixa_flutter/components/display_alert.dart';
 import 'package:meu_caixa_flutter/models/supplier.dart';
 
@@ -108,7 +109,7 @@ class _SupplierEditScreenState extends State<SupplierEditScreen> {
   void _save() async {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
-
+      _supplier.name = toBeginningOfSentenceCase(_supplier.name);
       try {
         if (_supplier.id == null) {
           await _firestore

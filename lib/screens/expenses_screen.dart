@@ -5,13 +5,16 @@ import 'package:meu_caixa_flutter/models/cash_registry.dart';
 import 'package:meu_caixa_flutter/models/expense.dart';
 import 'package:meu_caixa_flutter/screens/add_expense_screen.dart';
 import 'package:meu_caixa_flutter/screens/credit_cards_screen.dart';
+import 'package:meu_caixa_flutter/screens/supplier_edit_screen.dart';
+import 'package:meu_caixa_flutter/screens/supplier_screen.dart';
 
 ///
 ///
 ///
 class ExpenseScreen extends StatefulWidget {
   static String screenId = 'ExpenseScreen';
-  const ExpenseScreen({Key key}) : super(key: key);
+  final CashRegistry cashRegistry;
+  const ExpenseScreen({Key key, @required this.cashRegistry}) : super(key: key);
 
   ///
   ///
@@ -25,7 +28,6 @@ class ExpenseScreen extends StatefulWidget {
 ///
 class _ExpenseScreenState extends State<ExpenseScreen> {
   List<Expense> expenseList = <Expense>[];
-  CashRegistry cashRegistry = CashRegistry();
 
   ///
   ///
@@ -35,8 +37,19 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Lançamento de despesas'),
+          title: Text('Despesas do dia'),
           centerTitle: true,
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.add),
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute<SupplierEditScreen>(
+                      builder: (BuildContext context) => SupplierEditScreen()),
+                );
+              },
+            )
+          ],
         ),
         body: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -91,11 +104,11 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
               ),
               FlatButton(
                 onPressed: () {
-                  cashRegistry.expenseList = expenseList;
+                  widget.cashRegistry.expenseList = expenseList;
                   Navigator.of(context).push(
                     MaterialPageRoute<Widget>(
                       builder: (BuildContext context) =>
-                          CreditCardScreen(cashRegistry: cashRegistry),
+                          CreditCardScreen(cashRegistry: widget.cashRegistry),
                     ),
                   );
                 },

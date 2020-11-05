@@ -9,7 +9,6 @@ class NewDefaultTextField extends StatelessWidget {
   final TextInputType keyboardType;
   final Function validator;
   final bool isPassword;
-  final Config _config = Config();
   NewDefaultTextField(
       {this.controller,
       this.validator,
@@ -22,7 +21,11 @@ class NewDefaultTextField extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: TextFormField(
-        decoration: _config.textFieldDecoration.copyWith(labelText: labelText),
+        decoration: InputDecoration(
+          border: OutlineInputBorder(),
+          counterText: '',
+          labelText: labelText,
+        ),
         obscureText: isPassword,
         controller: controller,
         keyboardType: keyboardType,

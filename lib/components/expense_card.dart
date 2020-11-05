@@ -44,7 +44,7 @@ class ExpenseCard extends StatelessWidget {
                 children: <Widget>[
                   Text(
                     '${expense.description.toUpperCase()} '
-                    '${expense.provider != null ? '- ${expense.provider.name}' : ''}',
+                    '${expense.supplier != null ? '- ${expense.supplier.name}' : ''}',
                   ),
                   // TODO - User money format
                   Text('R\$ ${controller.value.text}'),

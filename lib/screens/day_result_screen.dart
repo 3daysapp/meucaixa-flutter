@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
@@ -35,6 +36,7 @@ class DayResultScreen extends StatefulWidget {
 ///
 class _DayResultScreenState extends State<DayResultScreen> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   ///
   ///
@@ -66,34 +68,31 @@ class _DayResultScreenState extends State<DayResultScreen> {
   ///
   Future<void> saveCashRegistry(BuildContext context) async {
     try {
+      print('Iniciando o lançamento');
+      print(widget.cashRegistry.toMap());
       DocumentReference reference = await _firestore
+          .collection('users')
+          .doc(_auth.currentUser.uid)
           .collection('cashRegistryHistory')
-          .add(<String, dynamic>{
-        // 'userId': UserUtils.getCurrentUser()
-        //     .uid, // FIXME - Estrutura do firestore :-(
-        'date': widget.cashRegistry.date,
-        'openValue': widget.cashRegistry.openValue,
-        'totalCreditCardMachine': widget.cashRegistry.totalCreditCardMachine,
-        'totalExpenses': widget.cashRegistry.totalExpenses,
-        'totalMoney': widget.cashRegistry.totalMoney,
-        'total': widget.cashRegistry.total,
-      });
+          .add(widget.cashRegistry.toMap());
 
+      print('Lançou o caixa');
       await _saveExpenses(reference);
-
+      print('Lançou as despesas');
       await _saveCreditCardMachines(reference);
-
+      print('Lançou as maquinas');
       await DisplayAlert.show(
         context: context,
         title: 'Sucesso',
         message: 'Caixa salvo com sucesso.',
       );
 
-      await Navigator.of(context).pushNamedAndRemoveUntil(
-        MainScreen.screenId,
-        (Route<dynamic> route) => false,
-      );
+      await Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute<MainScreen>(
+              builder: (BuildContext context) => MainScreen()),
+          (dynamic route) => false);
     } catch (e) {
+      print(e);
       await DisplayAlert.show(
         context: context,
         title: 'Erro',
@@ -106,19 +105,15 @@ class _DayResultScreenState extends State<DayResultScreen> {
   ///
   ///
   ///
-  void _saveExpenses(DocumentReference reference) {
+  void _saveExpenses(DocumentReference reference) async {
     for (Expense expense in widget.cashRegistry.expenseList) {
-      _firestore
+      await _firestore
+          .collection('users')
+          .doc(_auth.currentUser.uid)
           .collection('cashRegistryHistory')
           .doc(reference.id)
           .collection('expenses')
-          .add(<String, dynamic>{
-        'description': expense.description,
-        'value': expense.value,
-        'cashRegistryId': reference.id,
-        'providerName': expense.provider.name,
-        'providerId': expense.provider.id,
-      });
+          .add(expense.toMap());
     }
   }
 
@@ -129,14 +124,12 @@ class _DayResultScreenState extends State<DayResultScreen> {
     for (CreditCardMachine creditCardMachine
         in widget.cashRegistry.creditCardMachineList) {
       await _firestore
+          .collection('users')
+          .doc(_auth.currentUser.uid)
           .collection('cashRegistryHistory')
           .doc(reference.id)
           .collection('creditCardMachine')
-          .add(<String, dynamic>{
-        'name': creditCardMachine.name,
-        'value': creditCardMachine.controller.text,
-        'cashRegistryId': reference.id,
-      });
+          .add(creditCardMachine.toMap());
     }
   }
 
@@ -148,19 +141,6 @@ class _DayResultScreenState extends State<DayResultScreen> {
           .map((CreditCardMachine cardMachine) =>
               CreditCardMachineCard(cardMachine: cardMachine))
           .toList();
-
-  // List<Widget> getCreditCardMachineContainerList() {
-  //   List<Widget> creditCardMachineContainerList = <Widget>[];
-  //
-  //   for (CreditCardMachine cardMachine
-  //       in widget.cashRegistry.creditCardMachineList) {
-  //     final CreditCardMachineCard expContainer =
-  //         CreditCardMachineCard(cardMachine: cardMachine);
-  //     creditCardMachineContainerList.add(expContainer);
-  //   }
-  //
-  //   return creditCardMachineContainerList;
-  // }
 
   ///
   ///
@@ -199,7 +179,7 @@ class _DayResultScreenState extends State<DayResultScreen> {
                 NormalCard(
                   title: 'Total',
                   trailing:
-                      'R\$ ${widget.cashRegistry.totalMoney.toStringAsFixed(2)}',
+                      'R\$ ${widget.cashRegistry.getTotalMoney.toStringAsFixed(2)}',
                   color: Colors.green,
                 ),
                 NormalCard(
@@ -221,12 +201,12 @@ class _DayResultScreenState extends State<DayResultScreen> {
                     children: <Widget>[
                       Text(
                         'Máquinas de cartão:  '
-                        'R\$ ${widget.cashRegistry.totalCreditCardMachine.toStringAsFixed(2)}',
+                        'R\$ ${widget.cashRegistry.getTotalCreditCardMachine.toStringAsFixed(2)}',
                         style: kDefaultResultTextStyle,
                       ),
                       Text(
                         'Dinheiro:  '
-                        'R\$ ${widget.cashRegistry.totalMoney.toStringAsFixed(2)}',
+                        'R\$ ${widget.cashRegistry.getTotalMoney.toStringAsFixed(2)}',
                         style: kDefaultResultTextStyle,
                       ),
                       Text(
@@ -236,7 +216,7 @@ class _DayResultScreenState extends State<DayResultScreen> {
                       ),
                       Text(
                         'Despesas:  '
-                        'R\$ ${widget.cashRegistry.totalExpenses.toStringAsFixed(2)}',
+                        'R\$ ${widget.cashRegistry.getTotalExpenses.toStringAsFixed(2)}',
                         style: kDefaultResultTextStyle,
                       ),
                       SizedBox(
@@ -339,7 +319,7 @@ class CreditCardMachineCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Text(cardMachine.name.toUpperCase()),
-                Text('R\$ ${cardMachine.controller.value.text}'),
+                Text('R\$ ${cardMachine.value}'),
               ],
             ),
           ),
@@ -381,7 +361,7 @@ class ExpenseResultCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Text(exp.description.toUpperCase()),
-                exp.provider != null ? Text(exp.provider.name) : Text(''),
+                exp.supplier != null ? Text(exp.supplier.name) : Text(''),
                 Text('R\$ ${mask.value.text}')
               ],
             ),

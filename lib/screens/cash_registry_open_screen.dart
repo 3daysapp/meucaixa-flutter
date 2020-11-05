@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:meu_caixa_flutter/components/default_text_field.dart';
+import 'package:meu_caixa_flutter/components/display_alert.dart';
+import 'package:meu_caixa_flutter/models/cash_registry.dart';
 import 'package:meu_caixa_flutter/screens/expenses_screen.dart';
-import 'package:meu_caixa_flutter/screens/main_screen.dart';
 
 class CashRegistryOpenScreen extends StatefulWidget {
   const CashRegistryOpenScreen({Key key}) : super(key: key);
@@ -15,7 +16,7 @@ class CashRegistryOpenScreen extends StatefulWidget {
 class _CashRegistryOpenScreenState extends State<CashRegistryOpenScreen> {
   final MoneyMaskedTextController _controller =
       MoneyMaskedTextController(decimalSeparator: ',', thousandSeparator: '.');
-
+  final CashRegistry cashRegistry = CashRegistry();
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -24,31 +25,11 @@ class _CashRegistryOpenScreenState extends State<CashRegistryOpenScreen> {
           title: Text('Abertura do caixa'),
         ),
         body: WillPopScope(
-          onWillPop: () async => showDialog(
-            context: context,
-            // TODO - Usar DisplayAlert.yesNo
-            builder: (BuildContext context) => AlertDialog(
-              title: Text('Aviso'),
-              content: Text(
-                'Tem certeza que deseja voltar?\n'
-                'Ao voltar, o lançamento do caixa sera cancelado!',
-              ),
-              actions: <Widget>[
-                RaisedButton(
-                  child: Text('NÃO'),
-                  color: Colors.green,
-                  onPressed: () => Navigator.of(context).pop(false),
-                ),
-                RaisedButton(
-                    child: Text('SIM'),
-                    color: Colors.redAccent,
-                    onPressed: () {
-                      Navigator.pushNamedAndRemoveUntil(context,
-                          MainScreen.screenId, (dynamic route) => true);
-                    }),
-              ],
-            ),
-          ),
+          onWillPop: () async {
+            return await DisplayAlert.yesNo(
+                context: context,
+                message: 'Deseja mesmo cancelar o lançamento do caixa?');
+          },
           child: Container(
             padding: EdgeInsets.only(top: 10),
             child: Column(
@@ -56,7 +37,7 @@ class _CashRegistryOpenScreenState extends State<CashRegistryOpenScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 DefaultTextField(
-                  hintText: 'Com quantos reais você abriu o caixa hoje?',
+                  hintText: 'Valor de abertura do caixa',
                   controller: _controller,
                 ),
                 SizedBox(
@@ -68,7 +49,13 @@ class _CashRegistryOpenScreenState extends State<CashRegistryOpenScreen> {
                     ),
                     child: RaisedButton(
                       onPressed: () {
-                        Navigator.of(context).pushNamed(ExpenseScreen.screenId);
+                        cashRegistry.openValue = _controller.numberValue;
+                        Navigator.of(context).push(
+                          MaterialPageRoute<ExpenseScreen>(
+                              builder: (BuildContext context) => ExpenseScreen(
+                                    cashRegistry: cashRegistry,
+                                  )),
+                        );
                       },
                       child: Text(
                         'Avançar',

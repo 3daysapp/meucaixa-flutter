@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:meu_caixa_flutter/components/default_text_field.dart';
@@ -34,6 +35,7 @@ class CreditCardScreen extends StatefulWidget {
 ///
 class _CreditCardScreenState extends State<CreditCardScreen> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   ///
   ///
@@ -72,9 +74,9 @@ class _CreditCardScreenState extends State<CreditCardScreen> {
                 children: <Widget>[
                   StreamBuilder<QuerySnapshot>(
                     stream: _firestore
+                        .collection('users')
+                        .doc(_auth.currentUser.uid)
                         .collection('creditCardMachines')
-                        // .where('userId',
-                        //     isEqualTo: UserUtils.getCurrentUser().uid)
                         .snapshots(),
                     builder: (
                       BuildContext context,
@@ -106,18 +108,15 @@ class _CreditCardScreenState extends State<CreditCardScreen> {
                         if (machineData['name'] != null) {
                           creditCardMachine.name = machineData['name'];
 
-                          creditCardMachine.controller =
-                              MoneyMaskedTextController(
-                            thousandSeparator: '.',
-                            decimalSeparator: ',',
-                          );
-
                           print(machineData);
 
+                          /// TODO Tirei o controller de dentro do model
+                          /// Agora, é preciso achar uma maneira de recuperar
+                          /// o valor digitado pelo usuário
                           final DefaultTextField defaultTextField =
                               DefaultTextField(
                             hintText: creditCardMachine.name,
-                            controller: creditCardMachine.controller,
+                            controller: TextEditingController(),
                           );
 
                           creditCardMachineList.add(defaultTextField);
@@ -132,6 +131,7 @@ class _CreditCardScreenState extends State<CreditCardScreen> {
                       );
                     },
                   ),
+
                   /// TODO - O que acha de jogar no actions do AppBar?
                   FlatButton(
                     onPressed: () {
