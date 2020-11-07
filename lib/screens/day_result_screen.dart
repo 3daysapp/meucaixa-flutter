@@ -1,11 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:meu_caixa_flutter/components/display_alert.dart';
 import 'package:meu_caixa_flutter/components/normal_card.dart';
-import 'package:meu_caixa_flutter/contantes.dart';
 import 'package:meu_caixa_flutter/models/cash_registry.dart';
 import 'package:meu_caixa_flutter/models/credit_card_machine.dart';
 import 'package:meu_caixa_flutter/models/expense.dart';
@@ -202,22 +200,22 @@ class _DayResultScreenState extends State<DayResultScreen> {
                       Text(
                         'Máquinas de cartão:  '
                         'R\$ ${widget.cashRegistry.getTotalCreditCardMachine.toStringAsFixed(2)}',
-                        style: kDefaultResultTextStyle,
+                        style: TextStyle(fontSize: 18),
                       ),
                       Text(
                         'Dinheiro:  '
                         'R\$ ${widget.cashRegistry.getTotalMoney.toStringAsFixed(2)}',
-                        style: kDefaultResultTextStyle,
+                        style: TextStyle(fontSize: 18),
                       ),
                       Text(
                         'Abertura do caixa:  '
                         'R\$ ${widget.cashRegistry.openValue.toStringAsFixed(2)}',
-                        style: kDefaultResultTextStyle,
+                        style: TextStyle(fontSize: 18),
                       ),
                       Text(
                         'Despesas:  '
                         'R\$ ${widget.cashRegistry.getTotalExpenses.toStringAsFixed(2)}',
-                        style: kDefaultResultTextStyle,
+                        style: TextStyle(fontSize: 18),
                       ),
                       SizedBox(
                         height: 1,
@@ -229,7 +227,7 @@ class _DayResultScreenState extends State<DayResultScreen> {
                       Text(
                         'Lucro:  '
                         'R\$ ${widget.cashRegistry.total.toStringAsFixed(2)}',
-                        style: kDefaultResultTextStyle,
+                        style: TextStyle(fontSize: 18),
                       ),
                     ],
                   ),

@@ -1,7 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:meu_caixa_flutter/components/plus_sub_button.dart';
-import 'package:meu_caixa_flutter/contantes.dart';
 
 ///
 ///
@@ -73,7 +71,7 @@ class _CashContainerState extends State<CashContainer> {
           children: <Widget>[
             Text(
               widget.label,
-              style: kDefaultValorLabelTextStyle, // TODO - Legibilidade.
+              style: TextStyle(fontSize: 20),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -89,7 +87,7 @@ class _CashContainerState extends State<CashContainer> {
                     keyboardType: TextInputType.number,
                     controller: _controller,
                     textAlign: TextAlign.center,
-                    style: kDefaultQuantityLabelTextStyle,
+                    style: TextStyle(fontSize: 50),
                   ),
                 ),
                 PlusSubButton(

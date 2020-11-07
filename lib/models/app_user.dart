@@ -9,7 +9,10 @@ class AppUser {
   ///
   ///
   ///
-  AppUser({this.email, this.name});
+  AppUser({
+    this.email,
+    this.name,
+  });
 
   ///
   ///

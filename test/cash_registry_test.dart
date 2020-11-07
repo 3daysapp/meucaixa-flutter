@@ -1,4 +1,3 @@
-import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:meu_caixa_flutter/models/cash_registry.dart';
 import 'package:meu_caixa_flutter/models/credit_card_machine.dart';

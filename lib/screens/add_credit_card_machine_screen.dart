@@ -1,20 +1,24 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:meu_caixa_flutter/components/display_alert.dart';
-import 'package:meu_caixa_flutter/components/default_text_field.dart';
+import 'package:meu_caixa_flutter/components/new_default_textfield.dart';
 import 'package:meu_caixa_flutter/models/credit_card_machine.dart';
-// import 'package:meu_caixa_flutter/utils/user_utils.dart';
 
 ///
-///
+/// TODO - Essa classe pode ser refatorada para ser inclusão e alteração.
 ///
 class AddCreditCardMachineScreen extends StatefulWidget {
+  final CreditCardMachine creditCardMachine;
+
   ///
   ///
   ///
-  const AddCreditCardMachineScreen({Key key}) : super(key: key);
+  const AddCreditCardMachineScreen({
+    Key key,
+    this.creditCardMachine,
+  }) : super(key: key);
 
   ///
   ///
@@ -24,49 +28,27 @@ class AddCreditCardMachineScreen extends StatefulWidget {
       _AddCreditCardMachineScreenState();
 }
 
+///
+///
+///
 class _AddCreditCardMachineScreenState
     extends State<AddCreditCardMachineScreen> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
-  final CreditCardMachine creditCardMachine = CreditCardMachine();
+  CreditCardMachine _creditCardMachine = CreditCardMachine();
 
   ///
   ///
   ///
-  void addCreditCardMachine(BuildContext context) async {
-    if (_formKey.currentState.validate()) {
-      // User user = UserUtils.getCurrentUser();
-      try {
-        await _firestore
-            .collection('users')
-            .doc(_auth.currentUser.uid)
-            .collection('creditCardMachines')
-            .add(<String, dynamic>{
-          // 'userId': user.uid,
-          'name': creditCardMachine.name,
-        });
-
-        await DisplayAlert.show(
-          context: context,
-          title: 'Sucesso',
-          message: 'Máquina de cartão adicionada com sucesso.',
-        );
-      } catch (e) {
-        Scaffold.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Falha ao adicionar máquina.\n'
-                'Por favor, tente novamente mais tarde!'),
-          ),
-        );
-      }
-    }
+  @override
+  void initState() {
+    super.initState();
+    _creditCardMachine = widget.creditCardMachine ?? CreditCardMachine();
   }
 
   ///
-  ///
+  ///  TODO - Padronizar a interface.
   ///
   @override
   Widget build(BuildContext context) {
@@ -95,24 +77,19 @@ class _AddCreditCardMachineScreenState
               ),
             ),
           ),
-          DefaultTextField(
-            hintText: 'Nome da Máquina',
-            callback: (String value) => creditCardMachine.name = value,
-            validator: (String value) {
-              if (value.isEmpty) {
-                return 'Por favor, informe o nome da máquina';
-              }
-              return null;
-            },
+          NewDefaultTextField(
+            labelText: 'Nome da Máquina',
+            initialValue: _creditCardMachine.name,
+            validator: (String value) =>
+                value.isEmpty ? 'Por favor, informe o nome da máquina' : null,
+            onSaved: (String value) => _creditCardMachine.name = value,
           ),
           Padding(
             padding: const EdgeInsets.only(left: 20, right: 20, top: 10),
             child: SizedBox(
               height: 45,
               child: RaisedButton(
-                onPressed: () {
-                  addCreditCardMachine(context);
-                },
+                onPressed: _addCreditCardMachine,
                 color: Colors.blueAccent,
                 elevation: 5,
                 shape: RoundedRectangleBorder(
@@ -125,5 +102,47 @@ class _AddCreditCardMachineScreenState
         ],
       ),
     );
+  }
+
+  ///
+  ///
+  ///
+  void _addCreditCardMachine() async {
+    if (_formKey.currentState.validate()) {
+      _formKey.currentState.save();
+      _creditCardMachine.name =
+          toBeginningOfSentenceCase(_creditCardMachine.name);
+      try {
+        if (_creditCardMachine.id == null) {
+          await _firestore
+              .collection('users')
+              .doc(_auth.currentUser.uid)
+              .collection('creditCardMachines')
+              .add(_creditCardMachine.toMap());
+        } else {
+          await _firestore
+              .collection('users')
+              .doc(_auth.currentUser.uid)
+              .collection('creditCardMachines')
+              .doc(_creditCardMachine.id)
+              .update(_creditCardMachine.toMap());
+        }
+
+        await DisplayAlert.show(
+          context: context,
+          title: 'Sucesso',
+          message: 'Máquina de cartão adicionada com sucesso.',
+        );
+      } catch (e) {
+        await DisplayAlert.show(
+          context: context,
+          title: 'Erro',
+          message: 'Falha ao cadastrar a máquina.\n'
+              'Por favor, tente mais tarde.',
+        );
+      }
+
+      Navigator.of(context).pop();
+    }
   }
 }

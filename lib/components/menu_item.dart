@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 ///
@@ -41,7 +40,10 @@ class MenuItem extends StatelessWidget {
           children: <Widget>[
             Icon(icon, size: 40),
             Container(height: 5),
-            Text(label, style: TextStyle(fontSize: 18)),
+            Text(
+              label,
+              style: TextStyle(fontSize: 18),
+            ),
           ],
         ),
       ),

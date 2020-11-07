@@ -5,18 +5,31 @@ import 'package:meu_caixa_flutter/components/display_alert.dart';
 import 'package:meu_caixa_flutter/models/cash_registry.dart';
 import 'package:meu_caixa_flutter/screens/expenses_screen.dart';
 
+///
+///
+///
 class CashRegistryOpenScreen extends StatefulWidget {
   const CashRegistryOpenScreen({Key key}) : super(key: key);
   static String screenId = 'cashRegistryOpenScreen';
 
+  ///
+  ///
+  ///
   @override
   _CashRegistryOpenScreenState createState() => _CashRegistryOpenScreenState();
 }
 
+///
+///
+///
 class _CashRegistryOpenScreenState extends State<CashRegistryOpenScreen> {
   final MoneyMaskedTextController _controller =
       MoneyMaskedTextController(decimalSeparator: ',', thousandSeparator: '.');
   final CashRegistry cashRegistry = CashRegistry();
+
+  ///
+  ///
+  ///
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -27,8 +40,9 @@ class _CashRegistryOpenScreenState extends State<CashRegistryOpenScreen> {
         body: WillPopScope(
           onWillPop: () async {
             return await DisplayAlert.yesNo(
-                context: context,
-                message: 'Deseja mesmo cancelar o lançamento do caixa?');
+              context: context,
+              message: 'Deseja mesmo cancelar o lançamento do caixa?',
+            );
           },
           child: Container(
             padding: EdgeInsets.only(top: 10),
@@ -52,9 +66,10 @@ class _CashRegistryOpenScreenState extends State<CashRegistryOpenScreen> {
                         cashRegistry.openValue = _controller.numberValue;
                         Navigator.of(context).push(
                           MaterialPageRoute<ExpenseScreen>(
-                              builder: (BuildContext context) => ExpenseScreen(
-                                    cashRegistry: cashRegistry,
-                                  )),
+                            builder: (BuildContext context) => ExpenseScreen(
+                              cashRegistry: cashRegistry,
+                            ),
+                          ),
                         );
                       },
                       child: Text(

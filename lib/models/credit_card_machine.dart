@@ -1,11 +1,9 @@
-import 'package:flutter_masked_text/flutter_masked_text.dart';
-
 ///
 ///
 ///
 class CreditCardMachine {
-  String name;
   String id;
+  String name;
   double value;
 
   ///
@@ -21,10 +19,13 @@ class CreditCardMachine {
         name = map['name'],
         value = map['value'];
 
+  ///
+  ///
+  ///
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = <String, dynamic>{};
-    map['name'] = name;
-    map['value'] = value;
+    if (name != null) map['name'] = name;
+    if (value != null) map['value'] = value;
     return map;
   }
 }

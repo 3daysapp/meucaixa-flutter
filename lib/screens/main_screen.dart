@@ -6,7 +6,6 @@ import 'package:meu_caixa_flutter/components/display_alert.dart';
 import 'package:meu_caixa_flutter/components/drawer_menu.dart';
 import 'package:meu_caixa_flutter/components/menu_item.dart';
 import 'package:meu_caixa_flutter/screens/cash_registry_open_screen.dart';
-import 'package:meu_caixa_flutter/screens/login.dart';
 import 'package:meu_caixa_flutter/screens/supplier_screen.dart';
 
 ///
@@ -58,8 +57,9 @@ class _MainScreenState extends State<MainScreen> {
                         action: () {
                           Navigator.of(context).push(
                             MaterialPageRoute<CashRegistryOpenScreen>(
-                                builder: (BuildContext context) =>
-                                    CashRegistryOpenScreen()),
+                              builder: (BuildContext context) =>
+                                  CashRegistryOpenScreen(),
+                            ),
                           );
                         },
                       ),
@@ -69,9 +69,10 @@ class _MainScreenState extends State<MainScreen> {
                         color: Colors.redAccent,
                         action: () {
                           DisplayAlert.show(
-                              context: context,
-                              message:
-                                  'Módulo em desenvolvimento, por favor, aguarde!');
+                            context: context,
+                            message: 'Módulo em desenvolvimento, '
+                                'por favor, aguarde!',
+                          );
                         },
                       ),
                       MenuItem(
@@ -90,9 +91,10 @@ class _MainScreenState extends State<MainScreen> {
                         color: Colors.blueAccent,
                         action: () {
                           DisplayAlert.show(
-                              context: context,
-                              message:
-                                  'Módulo em desenvolvimento, por favor, aguarde!');
+                            context: context,
+                            message: 'Módulo em desenvolvimento, '
+                                'por favor, aguarde!',
+                          );
                         },
                       ),
                     ],
@@ -107,24 +109,5 @@ class _MainScreenState extends State<MainScreen> {
         ),
       ),
     );
-  }
-
-  ///
-  ///
-  ///
-  void _logout() async {
-    bool exit = await DisplayAlert.yesNo(
-      context: context,
-      message: 'Deseja realmente sair do app?',
-    );
-
-    if (exit) {
-      await Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute<Login>(
-          builder: (BuildContext context) => Login(),
-        ),
-        (Route<dynamic> route) => false,
-      );
-    }
   }
 }

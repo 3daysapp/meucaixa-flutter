@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:meu_caixa_flutter/components/display_alert.dart';
+import 'package:meu_caixa_flutter/components/new_default_textfield.dart';
 import 'package:meu_caixa_flutter/models/supplier.dart';
 
 ///
@@ -14,7 +15,10 @@ class SupplierEditScreen extends StatefulWidget {
   ///
   ///
   ///
-  const SupplierEditScreen({Key key, this.supplier}) : super(key: key);
+  const SupplierEditScreen({
+    Key key,
+    this.supplier,
+  }) : super(key: key);
 
   ///
   ///
@@ -65,35 +69,19 @@ class _SupplierEditScreenState extends State<SupplierEditScreen> {
             child: Column(
               children: <Widget>[
                 /// Name
-                /// TODO - Pode usar a implementação do DefaultTextField
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: TextFormField(
-                    decoration: InputDecoration(
-                      labelText: 'Nome',
-                      border: OutlineInputBorder(),
-                      counterText: '',
-                    ),
-                    initialValue: _supplier.name,
-                    validator: (String value) =>
-                        value.isEmpty ? 'Informe o nome do fornecedor.' : null,
-                    onSaved: (String value) => _supplier.name = value,
-                  ),
+                NewDefaultTextField(
+                  labelText: 'Nome',
+                  initialValue: _supplier.name,
+                  validator: (String value) =>
+                      value.isEmpty ? 'Informe o nome do fornecedor.' : null,
+                  onSaved: (String value) => _supplier.name = value,
                 ),
 
                 /// Telephone
-                /// TODO - Pode usar a implementação do DefaultTextField
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: TextFormField(
-                    decoration: InputDecoration(
-                      labelText: 'Telefone',
-                      border: OutlineInputBorder(),
-                      counterText: '',
-                    ),
-                    initialValue: _supplier.telephone,
-                    onSaved: (String value) => _supplier.telephone = value,
-                  ),
+                NewDefaultTextField(
+                  labelText: 'Telefone',
+                  initialValue: _supplier.telephone,
+                  onSaved: (String value) => _supplier.telephone = value,
                 ),
               ],
             ),

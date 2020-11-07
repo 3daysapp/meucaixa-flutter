@@ -12,6 +12,7 @@ class CashRegistry {
   int note20 = 0;
   int note50 = 0;
   int note100 = 0;
+  /// TODO - E a nota de R$ 200
   DateTime date = DateTime.now();
   double totalCreditCardMachine;
   double totalExpenses;

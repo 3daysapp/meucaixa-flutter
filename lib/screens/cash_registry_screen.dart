@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
-import 'package:meu_caixa_flutter/components/default_text_field.dart';
 import 'package:meu_caixa_flutter/components/cash_container.dart';
-import 'package:meu_caixa_flutter/contantes.dart';
 import 'package:meu_caixa_flutter/models/cash_registry.dart';
 import 'package:meu_caixa_flutter/models/expense.dart';
 import 'package:meu_caixa_flutter/screens/add_expense_screen.dart';
 import 'package:meu_caixa_flutter/screens/day_result_screen.dart';
+import 'package:meu_caixa_flutter/utils/config.dart';
 
 ///
 ///
@@ -39,7 +38,7 @@ class _CashRegistryScreenState extends State<CashRegistryScreen> {
   ///
   ///
   ///
-  void calculaTotal() {
+  void calculateTotal() {
     widget.cashRegistry.getTotalMoney;
   }
 
@@ -53,18 +52,7 @@ class _CashRegistryScreenState extends State<CashRegistryScreen> {
       decimalSeparator: ',',
       thousandSeparator: '.',
     );
-    setState(() {
-      widget.cashRegistry.getTotalMoney;
-    });
-  }
-
-  ///
-  ///
-  ///
-  @override
-  void dispose() {
-    super.dispose();
-    cashRegistryOpenValueController.dispose();
+    setState(() => widget.cashRegistry.getTotalMoney);
   }
 
   ///
@@ -89,7 +77,7 @@ class _CashRegistryScreenState extends State<CashRegistryScreen> {
                   onChanged: (int value) {
                     setState(() {
                       widget.cashRegistry.note2 = value;
-                      calculaTotal();
+                      calculateTotal();
                     });
                   },
                 ),
@@ -99,7 +87,7 @@ class _CashRegistryScreenState extends State<CashRegistryScreen> {
                   onChanged: (int value) {
                     setState(() {
                       widget.cashRegistry.note5 = value;
-                      calculaTotal();
+                      calculateTotal();
                     });
                   },
                 ),
@@ -113,7 +101,7 @@ class _CashRegistryScreenState extends State<CashRegistryScreen> {
                   onChanged: (int value) {
                     setState(() {
                       widget.cashRegistry.note10 = value;
-                      calculaTotal();
+                      calculateTotal();
                     });
                   },
                 ),
@@ -123,7 +111,7 @@ class _CashRegistryScreenState extends State<CashRegistryScreen> {
                   onChanged: (int value) {
                     setState(() {
                       widget.cashRegistry.note20 = value;
-                      calculaTotal();
+                      calculateTotal();
                     });
                   },
                 ),
@@ -135,10 +123,11 @@ class _CashRegistryScreenState extends State<CashRegistryScreen> {
                   label: 'Notas de 50R\$',
                   initialValue: widget.cashRegistry.note50,
                   onChanged: (int value) {
-                    setState(() {
-                      widget.cashRegistry.note50 = value;
-                      calculaTotal();
-                    });
+                    setState(
+                      () {
+                        widget.cashRegistry.note50 = value;
+                        calculateTotal();
+                      });
                   },
                 ),
                 CashContainer(
@@ -147,7 +136,7 @@ class _CashRegistryScreenState extends State<CashRegistryScreen> {
                   onChanged: (int value) {
                     setState(() {
                       widget.cashRegistry.note100 = value;
-                      calculaTotal();
+                      calculateTotal();
                     });
                   },
                 ),
@@ -160,8 +149,9 @@ class _CashRegistryScreenState extends State<CashRegistryScreen> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
-                'Total: ${widget.cashRegistry.getTotalMoney.toStringAsFixed(2)} R\$',
-                style: kDefaultTotalTextStyle, // TODO - Legibilidade.
+                'Total: '
+                '${widget.cashRegistry.getTotalMoney.toStringAsFixed(2)} R\$',
+                style: TextStyle(fontSize: 20),
               ),
             ),
             Padding(
@@ -189,6 +179,15 @@ class _CashRegistryScreenState extends State<CashRegistryScreen> {
         ),
       ),
     );
+  }
+
+  ///
+  ///
+  ///
+  @override
+  void dispose() {
+    super.dispose();
+    cashRegistryOpenValueController.dispose();
   }
 }
 
@@ -231,7 +230,7 @@ class FloatActionButtonAddDespesas extends StatelessWidget {
         color: Colors.white,
         size: 45,
       ),
-      backgroundColor: kRadicalRedColor,
+      backgroundColor: Config.radicalRedColor,
       tooltip: 'Adiciona uma nova despesa ao caixa',
     );
   }

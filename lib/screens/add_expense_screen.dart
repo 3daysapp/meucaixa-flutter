@@ -1,12 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
-import 'package:meu_caixa_flutter/contantes.dart';
 import 'package:meu_caixa_flutter/components/default_text_field.dart';
 import 'package:meu_caixa_flutter/models/expense.dart';
 import 'package:meu_caixa_flutter/models/supplier.dart';
+import 'package:meu_caixa_flutter/utils/config.dart';
 
 ///
 ///
@@ -136,7 +135,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                   expense.description = descriptionController.text;
                   Navigator.pop(context, expense);
                 },
-                color: kRadicalRedColor,
+                color: Config.radicalRedColor,
                 elevation: 5,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(5),

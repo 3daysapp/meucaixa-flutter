@@ -1,9 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 ///
 ///
-///
+/// TODO - Utilizar o NewDefaultTextField
+@deprecated
 class DefaultTextField extends StatelessWidget {
   final Function(String) callback;
   final String hintText;

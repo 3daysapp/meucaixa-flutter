@@ -4,6 +4,7 @@ import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:meu_caixa_flutter/components/display_alert.dart';
+import 'package:meu_caixa_flutter/components/logo.dart';
 import 'package:meu_caixa_flutter/components/new_default_textfield.dart';
 import 'package:meu_caixa_flutter/screens/main_screen.dart';
 import 'package:meu_caixa_flutter/screens/register_screen.dart';
@@ -27,6 +28,7 @@ class Login extends StatefulWidget {
   ///
   ///
   final bool logoff;
+
   const Login({Key key, this.logoff = false}) : super(key: key);
 
   ///
@@ -60,25 +62,14 @@ class _LoginState extends State<Login> {
   ///
   ///
   void _loadData() async {
-    // TODO - Shared Preferences.
-    bool automaticLogin = await _shouldAutomaticalyLogin();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool automaticLogin = await prefs.getBool('automaticLogin') ?? false;
     if (automaticLogin &&
         (_auth.currentUser != null && widget.logoff == false)) {
       _controller.add(LoginStatus.go);
     } else {
       _controller.add(LoginStatus.form);
     }
-  }
-
-  ///
-  ///
-  ///
-  Future<bool> _shouldAutomaticalyLogin() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (prefs.containsKey('automaticLogin')) {
-      return await prefs.getBool('automaticLogin');
-    }
-    return false;
   }
 
   ///
@@ -121,10 +112,7 @@ class _LoginState extends State<Login> {
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: <Widget>[
                             /// Logo
-                            Image.asset(
-                              'images/meucaixa-logo.png',
-                              height: 250,
-                            ),
+                            Logo(),
 
                             /// E-mail
                             NewDefaultTextField(
@@ -171,8 +159,9 @@ class _LoginState extends State<Login> {
                               onPressed: () {
                                 Navigator.of(context).push(
                                   MaterialPageRoute<RegisterScreen>(
-                                      builder: (BuildContext context) =>
-                                          RegisterScreen()),
+                                    builder: (BuildContext context) =>
+                                        RegisterScreen(),
+                                  ),
                                 );
                               },
                             )

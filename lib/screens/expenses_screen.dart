@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:meu_caixa_flutter/components/expense_card.dart';
 import 'package:meu_caixa_flutter/models/cash_registry.dart';
@@ -6,7 +5,6 @@ import 'package:meu_caixa_flutter/models/expense.dart';
 import 'package:meu_caixa_flutter/screens/add_expense_screen.dart';
 import 'package:meu_caixa_flutter/screens/credit_cards_screen.dart';
 import 'package:meu_caixa_flutter/screens/supplier_edit_screen.dart';
-import 'package:meu_caixa_flutter/screens/supplier_screen.dart';
 
 ///
 ///

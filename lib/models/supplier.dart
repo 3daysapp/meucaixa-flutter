@@ -29,7 +29,6 @@ class Supplier {
     if (name != null) map['name'] = name;
     if (telephone != null) map['telephone'] = telephone;
     map['isActive'] = isActive;
-
     return map;
   }
 }
