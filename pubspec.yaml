@@ -31,6 +31,8 @@ dependencies:
   package_info: 0.4.3+2
   # https://pub.dev/packages/email_validator
   email_validator: 1.0.6
+  # https://pub.dev/packages/image_picker/install
+  image_picker: 0.6.7+12
 
 dev_dependencies:
   flutter_test:
