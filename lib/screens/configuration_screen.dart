@@ -121,6 +121,11 @@ class _ConfigurationScreenState extends State<ConfigurationScreen> {
                             ),
                           ),
                         ),
+
+                        /// TODO Essa tela esta dando um bug quando altera a imagem
+                        /// do usuario, acredito que seja esse trecho abaixo
+                        /// pois a imagem aparece menos essa parte de baixo
+                        /// requer investigação futura
                         StreamBuilder<bool>(
                           stream: _automaticLoginController.stream,
                           builder: (BuildContext context,
