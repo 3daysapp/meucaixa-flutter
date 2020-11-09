@@ -31,8 +31,10 @@ dependencies:
   package_info: 0.4.3+2
   # https://pub.dev/packages/email_validator
   email_validator: 1.0.6
-  # https://pub.dev/packages/image_picker/install
+  # https://pub.dev/packages/image_picker
   image_picker: 0.6.7+12
+  # https://pub.dev/packages/firebase_storage
+  firebase_storage: 5.0.1
 
 dev_dependencies:
   flutter_test:
