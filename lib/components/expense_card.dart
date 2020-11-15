@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
+import 'package:intl/intl.dart';
 import 'package:meu_caixa_flutter/models/expense.dart';
+import 'package:meu_caixa_flutter/utils/config.dart';
 
 ///
 ///
@@ -13,6 +15,8 @@ class ExpenseCard extends StatelessWidget {
     decimalSeparator: ',',
     thousandSeparator: '.',
   );
+
+  final Config config = Config();
 
   ///
   ///
