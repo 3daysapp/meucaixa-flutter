@@ -82,7 +82,10 @@ class _AddCreditCardMachineScreenState
             initialValue: _creditCardMachine.name,
             validator: (String value) =>
                 value.isEmpty ? 'Por favor, informe o nome da máquina' : null,
-            onSaved: (String value) => _creditCardMachine.name = value,
+            onSaved: (String value) {
+              print(value);
+              _creditCardMachine.name = value;
+            },
           ),
           Padding(
             padding: const EdgeInsets.only(left: 20, right: 20, top: 10),

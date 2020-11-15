@@ -11,10 +11,6 @@ class ExpenseCard extends StatelessWidget {
   final Expense expense;
   final Function callback;
   final bool finalResult;
-  final MoneyMaskedTextController controller = MoneyMaskedTextController(
-    decimalSeparator: ',',
-    thousandSeparator: '.',
-  );
 
   final Config config = Config();
 
@@ -32,8 +28,6 @@ class ExpenseCard extends StatelessWidget {
   ///
   @override
   Widget build(BuildContext context) {
-    controller.updateValue(expense.value);
-    print(controller.value.text);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 6),
       child: Card(
@@ -51,7 +45,8 @@ class ExpenseCard extends StatelessWidget {
                     '${expense.supplier != null ? '- ${expense.supplier.name}' : ''}',
                   ),
                   // TODO - User money format
-                  Text('R\$ ${controller.value.text}'),
+                  Text(NumberFormat.simpleCurrency(locale: 'pt_BR')
+                      .format(expense.value)),
                 ],
               ),
             ),

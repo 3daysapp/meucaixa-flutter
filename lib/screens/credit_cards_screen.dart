@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:meu_caixa_flutter/components/default_text_field.dart';
+import 'package:flutter_masked_text/flutter_masked_text.dart';
+import 'package:meu_caixa_flutter/components/new_default_textfield.dart';
 import 'package:meu_caixa_flutter/models/cash_registry.dart';
 import 'package:meu_caixa_flutter/models/credit_card_machine.dart';
 import 'package:meu_caixa_flutter/screens/add_credit_card_machine_screen.dart';
@@ -35,6 +36,9 @@ class CreditCardScreen extends StatefulWidget {
 class _CreditCardScreenState extends State<CreditCardScreen> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  final List<MoneyMaskedTextController> creditCardMachineControllerList =
+      <MoneyMaskedTextController>[];
 
   ///
   ///
@@ -92,11 +96,10 @@ class _CreditCardScreenState extends State<CreditCardScreen> {
                       final List<QueryDocumentSnapshot> machines =
                           snapshot.data.docs;
 
-                      List<DefaultTextField> creditCardMachineList =
-                          <DefaultTextField>[];
-
                       widget.cashRegistry.creditCardMachineList =
                           <CreditCardMachine>[];
+                      final List<NewDefaultTextField> creditCardMachineList =
+                          <NewDefaultTextField>[];
 
                       for (QueryDocumentSnapshot machine in machines.reversed) {
                         Map<String, dynamic> machineData = machine.data();
@@ -107,18 +110,21 @@ class _CreditCardScreenState extends State<CreditCardScreen> {
                         if (machineData['name'] != null) {
                           creditCardMachine.name = machineData['name'];
 
-                          print(machineData);
-
                           /// TODO Tirei o controller de dentro do model
                           /// Agora, é preciso achar uma maneira de recuperar
                           /// o valor digitado pelo usuário
-                          final DefaultTextField defaultTextField =
-                              DefaultTextField(
-                            hintText: creditCardMachine.name,
-                            controller: TextEditingController(),
-                          );
+                          MoneyMaskedTextController controller =
+                              MoneyMaskedTextController(
+                                  decimalSeparator: ',',
+                                  thousandSeparator: '.');
 
+                          final NewDefaultTextField defaultTextField =
+                              NewDefaultTextField(
+                            labelText: creditCardMachine.name,
+                            controller: controller,
+                          );
                           creditCardMachineList.add(defaultTextField);
+                          creditCardMachineControllerList.add(controller);
 
                           widget.cashRegistry.creditCardMachineList
                               .add(creditCardMachine);
@@ -134,6 +140,13 @@ class _CreditCardScreenState extends State<CreditCardScreen> {
                   /// TODO - O que acha de jogar no actions do AppBar?
                   FlatButton(
                     onPressed: () {
+                      int index = 0;
+                      for (CreditCardMachine machine
+                          in widget.cashRegistry.creditCardMachineList) {
+                        machine.value =
+                            creditCardMachineControllerList[index].numberValue;
+                        index++;
+                      }
                       Navigator.of(context).push(
                         MaterialPageRoute<CashRegistryScreen>(
                           builder: (BuildContext context) => CashRegistryScreen(

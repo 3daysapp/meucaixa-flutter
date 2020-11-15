@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
+import 'package:intl/intl.dart';
 import 'package:meu_caixa_flutter/components/display_alert.dart';
 import 'package:meu_caixa_flutter/components/normal_card.dart';
 import 'package:meu_caixa_flutter/models/cash_registry.dart';
@@ -43,18 +44,7 @@ class _DayResultScreenState extends State<DayResultScreen> {
     List<Widget> expList = <Widget>[];
 
     for (Expense exp in widget.cashRegistry.expenseList) {
-      final MoneyMaskedTextController mask = MoneyMaskedTextController(
-        decimalSeparator: ',',
-        thousandSeparator: '.',
-      );
-
-      mask.text = exp.value.toString();
-
-      final ExpenseResultCard expContainer = ExpenseResultCard(
-        exp: exp,
-        mask: mask,
-      );
-
+      final ExpenseResultCard expContainer = ExpenseResultCard(exp: exp);
       expList.add(expContainer);
     }
 
@@ -198,23 +188,19 @@ class _DayResultScreenState extends State<DayResultScreen> {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: <Widget>[
                       Text(
-                        'Máquinas de cartão:  '
-                        'R\$ ${widget.cashRegistry.getTotalCreditCardMachine.toStringAsFixed(2)}',
+                        'Máquinas de cartão: ${NumberFormat.simpleCurrency(locale: 'pt_BR').format(widget.cashRegistry.getTotalCreditCardMachine)}',
                         style: TextStyle(fontSize: 18),
                       ),
                       Text(
-                        'Dinheiro:  '
-                        'R\$ ${widget.cashRegistry.getTotalMoney.toStringAsFixed(2)}',
+                        'Dinheiro: ${NumberFormat.simpleCurrency(locale: 'pt_BR').format(widget.cashRegistry.getTotalMoney)}',
                         style: TextStyle(fontSize: 18),
                       ),
                       Text(
-                        'Abertura do caixa:  '
-                        'R\$ ${widget.cashRegistry.openValue.toStringAsFixed(2)}',
+                        'Abertura do caixa: ${NumberFormat.simpleCurrency(locale: 'pt_BR').format(widget.cashRegistry.openValue)}',
                         style: TextStyle(fontSize: 18),
                       ),
                       Text(
-                        'Despesas:  '
-                        'R\$ ${widget.cashRegistry.getTotalExpenses.toStringAsFixed(2)}',
+                        'Despesas: ${NumberFormat.simpleCurrency(locale: 'pt_BR').format(widget.cashRegistry.getTotalExpenses)}',
                         style: TextStyle(fontSize: 18),
                       ),
                       SizedBox(
@@ -225,8 +211,7 @@ class _DayResultScreenState extends State<DayResultScreen> {
                         ),
                       ),
                       Text(
-                        'Lucro:  '
-                        'R\$ ${widget.cashRegistry.total.toStringAsFixed(2)}',
+                        'Lucro:  ${NumberFormat.simpleCurrency(locale: 'pt_BR').format(widget.cashRegistry.total)}',
                         style: TextStyle(fontSize: 18),
                       ),
                     ],
@@ -317,7 +302,8 @@ class CreditCardMachineCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Text(cardMachine.name.toUpperCase()),
-                Text('R\$ ${cardMachine.value}'),
+                Text(NumberFormat.simpleCurrency(locale: 'pt_BR')
+                    .format(cardMachine.value)),
               ],
             ),
           ),
@@ -332,16 +318,11 @@ class CreditCardMachineCard extends StatelessWidget {
 ///
 class ExpenseResultCard extends StatelessWidget {
   final Expense exp;
-  final MoneyMaskedTextController mask;
 
   ///
   ///
   ///
-  const ExpenseResultCard({
-    Key key,
-    @required this.exp,
-    @required this.mask,
-  }) : super(key: key);
+  const ExpenseResultCard({Key key, @required this.exp}) : super(key: key);
 
   ///
   ///
@@ -360,7 +341,8 @@ class ExpenseResultCard extends StatelessWidget {
               children: <Widget>[
                 Text(exp.description.toUpperCase()),
                 exp.supplier != null ? Text(exp.supplier.name) : Text(''),
-                Text('R\$ ${mask.value.text}')
+                Text(NumberFormat.simpleCurrency(locale: 'pt_BR')
+                    .format(exp.value))
               ],
             ),
           ),

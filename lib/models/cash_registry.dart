@@ -12,6 +12,7 @@ class CashRegistry {
   int note20 = 0;
   int note50 = 0;
   int note100 = 0;
+
   /// TODO - E a nota de R$ 200
   DateTime date = DateTime.now();
   double totalCreditCardMachine;
@@ -62,10 +63,13 @@ class CashRegistry {
   ///
   ///
   ///
-  double get getTotalCreditCardMachine => creditCardMachineList.fold<double>(
-      0.0,
-      (double previousValue, CreditCardMachine machine) =>
-          previousValue + machine.value);
+  double get getTotalCreditCardMachine {
+    double total = 0.0;
+    for (CreditCardMachine machine in creditCardMachineList) {
+      total += machine.value;
+    }
+    return total;
+  }
 
   ///
   ///

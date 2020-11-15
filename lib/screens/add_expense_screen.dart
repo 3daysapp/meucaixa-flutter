@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
-import 'package:meu_caixa_flutter/components/default_text_field.dart';
+import 'package:meu_caixa_flutter/components/new_default_textfield.dart';
 import 'package:meu_caixa_flutter/models/expense.dart';
 import 'package:meu_caixa_flutter/models/supplier.dart';
 import 'package:meu_caixa_flutter/utils/config.dart';
@@ -61,12 +61,12 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
               ),
             ),
           ),
-          DefaultTextField(
-            hintText: 'Descrição',
+          NewDefaultTextField(
+            labelText: 'Descrição',
             controller: descriptionController,
           ),
-          DefaultTextField(
-            hintText: 'Valor da despesa',
+          NewDefaultTextField(
+            labelText: 'Valor da despesa',
             controller: valueController,
           ),
           Padding(
